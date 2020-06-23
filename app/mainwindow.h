@@ -16,15 +16,5 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-public slots:
-    void setConnectionState(Controller::ConnectionState);
-signals:
-    void connectClicked();
-    void listAlbumsClicked();
-
-private:
-    QPushButton *m_connectButton;
-    QPushButton *m_listAbumsButton;
-    QProgressBar *m_busyIndicator;
 };
 #endif // MAINWINDOW_H

@@ -1,56 +1,69 @@
 #include "mainwindow.h"
 #include "connectionstate.h"
+#include <QKeySequence>
 #include <QPushButton>
+#include <QSlider>
+#include <QSplitter>
 #include <QStatusBar>
+#include <QToolBar>
+#include <QTreeView>
 #include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setWindowTitle(tr("Qt/libmpdclient Demo"));
-    auto widget = new QWidget();
+    setWindowTitle(tr("Quetzalcoatl"));
+    setWindowIcon(QIcon::fromTheme("multimedia-player"));
+
+    auto toolBar = addToolBar("ToolBar");
+    toolBar->setMovable(false);
+
+    toolBar->addAction(QIcon::fromTheme("configure"), "Configure");
+    toolBar->addAction(QIcon::fromTheme("network-connect"), "Connect to MPD");
+
+    toolBar->addSeparator();
+
+    auto stopAction = toolBar->addAction(QIcon::fromTheme("media-playback-stop"), "Stop");
+    stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
+    auto playAction = toolBar->addAction(QIcon::fromTheme("media-playback-start"), "Play");
+    playAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPlay));
+    auto pauseAction = toolBar->addAction(QIcon::fromTheme("media-playback-pause"), "Pause");
+    pauseAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPause));
+    auto skipBackAction = toolBar->addAction(QIcon::fromTheme("media-skip-backward"), "Previous");
+    skipBackAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPrevious));
+    auto skipForthAction = toolBar->addAction(QIcon::fromTheme("media-skip-forward"), "Next");
+    skipForthAction->setShortcut(QKeySequence(Qt::Key::Key_MediaNext));
+
+    toolBar->addSeparator();
+
+    auto shuffleAction = toolBar->addAction(QIcon::fromTheme("media-playlist-shuffle"), "Shuffle");
+    shuffleAction->setCheckable(true);
+    auto repeatAction = toolBar->addAction(QIcon::fromTheme("media-playlist-repeat"), "Repeat");
+    repeatAction->setCheckable(true);
+
+    toolBar->addSeparator();
+
+    auto deleteAction = toolBar->addAction(QIcon::fromTheme("list-remove"),
+                                           "[DEL]ete selected playlist items");
+
+    deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
+    auto savePlaylistAction = toolBar->addAction(QIcon::fromTheme("document-save-all"),
+                                                 "[CTRL-S]ave playlist");
+    savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
+
     auto layout = new QVBoxLayout();
-    m_connectButton = new QPushButton(tr("&Connect"));
-    connect(m_connectButton, &QPushButton::clicked, [=]() {
-        setConnectionState(Controller::ConnectionState::Connecting);
-        emit connectClicked();
-    });
-    layout->addWidget(m_connectButton);
-    m_listAbumsButton = new QPushButton(tr("&List Albums"));
-    connect(m_listAbumsButton, &QPushButton::clicked, [=]() { emit listAlbumsClicked(); });
-    m_listAbumsButton->setEnabled(false);
-    layout->addWidget(m_listAbumsButton);
-
-    m_busyIndicator = new QProgressBar();
-    m_busyIndicator->setMinimum(0);
-    m_busyIndicator->setMaximum(1);
-    layout->addWidget(m_busyIndicator);
-
+    auto slider = new QSlider(Qt::Horizontal);
+    slider->setTracking(false);
+    layout->addWidget(slider);
+    auto splitter = new QSplitter();
+    splitter->addWidget(new QTreeView());
+    splitter->addWidget(new QTreeView());
+    layout->addWidget(splitter);
+    auto widget = new QWidget();
     widget->setLayout(layout);
-
     setCentralWidget(widget);
+
+    statusBar()->addWidget(new QLabel());
 }
 
 MainWindow::~MainWindow() {}
-
-void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
-{
-    switch (connectionState) {
-    case Controller::ConnectionState::Disconnected:
-        m_connectButton->setEnabled(true);
-        m_listAbumsButton->setEnabled(false);
-        m_busyIndicator->setMaximum(1);
-        break;
-
-    case Controller::ConnectionState::Connecting:
-        m_connectButton->setEnabled(false);
-        m_listAbumsButton->setEnabled(false);
-        m_busyIndicator->setMaximum(0);
-        break;
-    case Controller::ConnectionState::Connected:
-        m_connectButton->setEnabled(false);
-        m_listAbumsButton->setEnabled(true);
-        m_busyIndicator->setMaximum(1);
-        break;
-    }
-}
