@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << ":icons");
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     MainWindow w;
     w.show();
     return a.exec();

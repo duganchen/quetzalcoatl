@@ -18,37 +18,38 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);
+    toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    toolBar->addAction(QIcon::fromTheme("configure"), "Configure");
-    toolBar->addAction(QIcon::fromTheme("network-connect"), "Connect to MPD");
+    toolBar->addAction(QIcon(":/icons/configure.svg"), "Configure");
+    toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD");
 
     toolBar->addSeparator();
 
-    auto stopAction = toolBar->addAction(QIcon::fromTheme("media-playback-stop"), "Stop");
+    auto stopAction = toolBar->addAction(QIcon(":/icons/media-playback-stop"), "Stop");
     stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
-    auto playAction = toolBar->addAction(QIcon::fromTheme("media-playback-start"), "Play");
+    auto playAction = toolBar->addAction(QIcon(":/icons/media-playback-start"), "Play");
     playAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPlay));
-    auto pauseAction = toolBar->addAction(QIcon::fromTheme("media-playback-pause"), "Pause");
+    auto pauseAction = toolBar->addAction(QIcon(":/icons/media-playback-pause"), "Pause");
     pauseAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPause));
-    auto skipBackAction = toolBar->addAction(QIcon::fromTheme("media-skip-backward"), "Previous");
+    auto skipBackAction = toolBar->addAction(QIcon(":/icons/media-skip-backward"), "Previous");
     skipBackAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPrevious));
-    auto skipForthAction = toolBar->addAction(QIcon::fromTheme("media-skip-forward"), "Next");
+    auto skipForthAction = toolBar->addAction(QIcon(":/icons/media-skip-forward"), "Next");
     skipForthAction->setShortcut(QKeySequence(Qt::Key::Key_MediaNext));
 
     toolBar->addSeparator();
 
-    auto shuffleAction = toolBar->addAction(QIcon::fromTheme("media-playlist-shuffle"), "Shuffle");
+    auto shuffleAction = toolBar->addAction(QIcon(":/icons/media-playlist-shuffle"), "Shuffle");
     shuffleAction->setCheckable(true);
-    auto repeatAction = toolBar->addAction(QIcon::fromTheme("media-playlist-repeat"), "Repeat");
+    auto repeatAction = toolBar->addAction(QIcon(":/icons/media-playlist-repeat"), "Repeat");
     repeatAction->setCheckable(true);
 
     toolBar->addSeparator();
 
-    auto deleteAction = toolBar->addAction(QIcon::fromTheme("list-remove"),
+    auto deleteAction = toolBar->addAction(QIcon(":/icons/list-remove"),
                                            "[DEL]ete selected playlist items");
 
     deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
-    auto savePlaylistAction = toolBar->addAction(QIcon::fromTheme("document-save-all"),
+    auto savePlaylistAction = toolBar->addAction(QIcon(":/icons/document-save-all"),
                                                  "[CTRL-S]ave playlist");
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
 
