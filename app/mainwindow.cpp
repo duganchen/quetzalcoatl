@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "connectionstate.h"
 #include <QKeySequence>
+#include <QProgressBar>
 #include <QPushButton>
 #include <QSlider>
 #include <QSplitter>
@@ -63,7 +64,9 @@ MainWindow::MainWindow(QWidget *parent)
     widget->setLayout(layout);
     setCentralWidget(widget);
 
-    statusBar()->addWidget(new QLabel());
+    auto status = statusBar();
+    status->addWidget(new QProgressBar());
+    status->addWidget(new QLabel());
 }
 
 MainWindow::~MainWindow() {}
