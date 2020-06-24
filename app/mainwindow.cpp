@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "configurationdialog.h"
 #include "connectionstate.h"
+#include "saveplaylistdialog.h"
 #include <QKeySequence>
 #include <QProgressBar>
 #include <QPushButton>
@@ -52,8 +53,10 @@ MainWindow::MainWindow(QWidget *parent)
                                            "[DEL]ete selected playlist items");
 
     deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
+    auto savePlaylistDialog = new SavePlaylistDialog(this);
     auto savePlaylistAction = toolBar->addAction(QIcon(":/icons/document-save-all"),
-                                                 "[CTRL-S]ave playlist");
+                                                 "[CTRL-S]ave playlist",
+                                                 [=]() { savePlaylistDialog->exec(); });
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
 
     auto layout = new QVBoxLayout();

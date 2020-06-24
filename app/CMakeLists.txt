@@ -6,6 +6,7 @@ add_executable(quetzalcoatl
   mainwindow.cpp
   mainwindow.h
   icons.qrc
+  saveplaylistdialog.cpp
 )
 
 
