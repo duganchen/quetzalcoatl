@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "configurationdialog.h"
 #include "connectionstate.h"
 #include <QKeySequence>
 #include <QProgressBar>
@@ -14,13 +15,15 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("Quetzalcoatl"));
-    setWindowIcon(QIcon::fromTheme("multimedia-player"));
+    setWindowIcon(QIcon(":/icons/multimedia-player.svg"));
 
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);
     toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    toolBar->addAction(QIcon(":/icons/configure.svg"), "Configure");
+    auto cfgDlg = new ConfigurationDialog(this);
+    toolBar->addAction(QIcon(":/icons/configure.svg"), "Configure", [=]() { cfgDlg->exec(); });
+
     toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD");
 
     toolBar->addSeparator();
