@@ -2,6 +2,7 @@
 #include "configurationdialog.h"
 #include "connectionstate.h"
 #include "databasemodel.h"
+#include "playlistmodel.h"
 #include "saveplaylistdialog.h"
 #include <QKeySequence>
 #include <QProgressBar>
@@ -86,14 +87,18 @@ MainWindow::MainWindow(QWidget *parent)
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
     splitter->addWidget(databaseView);
-    splitter->addWidget(new QTreeView());
+
+    auto playlistRoot = new Item(QIcon(), "");
+    auto playlistModel = new PlaylistModel(playlistRoot);
+    auto playlistView = new QTreeView();
+    playlistView->setModel(playlistModel);
+    splitter->addWidget(playlistView);
     layout->addWidget(splitter);
     auto widget = new QWidget();
     widget->setLayout(layout);
     setCentralWidget(widget);
 
     auto status = statusBar();
-    status->addWidget(new QProgressBar());
     status->addWidget(new QLabel());
 }
 

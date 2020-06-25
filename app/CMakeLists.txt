@@ -4,9 +4,11 @@ add_executable(quetzalcoatl
   item.cpp
   configurationdialog.cpp
   databasemodel.cpp
+  itemmodel.cpp
   main.cpp
   mainwindow.cpp
   mainwindow.h
+  playlistmodel.cpp
   icons.qrc
   saveplaylistdialog.cpp
 )

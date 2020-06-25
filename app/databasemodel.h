@@ -1,29 +1,17 @@
 #ifndef DATABASEMODEL_H
 #define DATABASEMODEL_H
 
-#include "item.h"
-#include <QAbstractItemModel>
-#include <QModelIndex>
-#include <QVariant>
+#include "itemmodel.h"
 
-class DatabaseModel : public QAbstractItemModel
+class DatabaseModel : public ItemModel
 {
     Q_OBJECT
 
 public:
     explicit DatabaseModel(Item *rootItem, QObject *parent = nullptr);
-    ~DatabaseModel();
-
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    bool canFetchMore(const QModelIndex &parent) const override;
 
 private:
-    Item *m_rootItem;
 };
 
 #endif // DATABASEMODEL_H
