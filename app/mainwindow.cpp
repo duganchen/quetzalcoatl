@@ -24,10 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     auto cfgDlg = new ConfigurationDialog(this);
-    toolBar->addAction(QIcon(":/icons/configure.svg"), "Configure", [=]() { cfgDlg->exec(); });
 
     toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD");
-
     toolBar->addSeparator();
 
     auto stopAction = toolBar->addAction(QIcon(":/icons/media-playback-stop"), "Stop");
@@ -58,6 +56,12 @@ MainWindow::MainWindow(QWidget *parent)
     auto savePlaylistAction = toolBar->addAction(QIcon(":/icons/document-save-all"),
                                                  "[CTRL-S]ave playlist",
                                                  [=]() { savePlaylistDialog->exec(); });
+
+    toolBar->addSeparator();
+    toolBar->addAction(QIcon(":/icons/configure.svg"), "Playback Settings", [=]() {
+        cfgDlg->exec();
+    });
+
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
 
     auto layout = new QVBoxLayout();
