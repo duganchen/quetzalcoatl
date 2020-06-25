@@ -1,21 +1,10 @@
 #include "databasemodel.h"
 #include <QDebug>
 
-DatabaseModel::DatabaseModel(QObject *parent)
+DatabaseModel::DatabaseModel(Item *rootItem, QObject *parent)
     : QAbstractItemModel(parent)
-{
-    m_rootItem = new Item(QIcon(), "");
-    m_rootItem->append(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
-    auto artistsItem = new Item(QIcon(":/icons/server-database.svg"), "Artists");
-    artistsItem->append(new Item(QIcon(":/icons/server-database.svg"), "Johnny Cash"));
-    m_rootItem->append(artistsItem);
-    m_rootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Albums"));
-    m_rootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Compilations"));
-    m_rootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Songs"));
-    m_rootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Genres"));
-    m_rootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Composers"));
-    m_rootItem->append(new Item(QIcon(":/icons/drive-harddisk"), "/"));
-}
+    , m_rootItem(rootItem)
+{}
 
 DatabaseModel::~DatabaseModel()
 {
@@ -72,6 +61,9 @@ QModelIndex DatabaseModel::index(int row, int column, const QModelIndex &parent)
     }
 
     auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_rootItem;
+    if (!parentItem) {
+        return QModelIndex();
+    }
 
     auto childItem = parentItem->at(row);
     if (childItem) {
@@ -102,5 +94,8 @@ int DatabaseModel::rowCount(const QModelIndex &parent) const
     }
 
     auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_rootItem;
+    if (!parentItem) {
+        return 0;
+    }
     return parentItem->count();
 }

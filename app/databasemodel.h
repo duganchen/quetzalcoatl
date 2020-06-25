@@ -11,7 +11,7 @@ class DatabaseModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit DatabaseModel(QObject *parent = nullptr);
+    explicit DatabaseModel(Item *rootItem, QObject *parent = nullptr);
     ~DatabaseModel();
 
     QVariant data(const QModelIndex &index, int role) const override;

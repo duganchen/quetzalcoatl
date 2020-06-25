@@ -69,7 +69,19 @@ MainWindow::MainWindow(QWidget *parent)
     slider->setTracking(false);
     layout->addWidget(slider);
     auto splitter = new QSplitter();
-    auto databaseModel = new DatabaseModel();
+
+    auto dbRootItem = new Item(QIcon(), "");
+    dbRootItem->append(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
+    auto artistsItem = new Item(QIcon(":/icons/server-database.svg"), "Artists");
+    artistsItem->append(new Item(QIcon(":/icons/server-database.svg"), "Johnny Cash"));
+    dbRootItem->append(artistsItem);
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Albums"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Compilations"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Songs"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Genres"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Composers"));
+    dbRootItem->append(new Item(QIcon(":/icons/drive-harddisk"), "/"));
+    auto databaseModel = new DatabaseModel(dbRootItem);
     auto databaseView = new QTreeView();
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
