@@ -9,6 +9,7 @@ Controller::Controller(QObject *parent)
     : QObject(parent)
     , m_connection(nullptr)
     , m_notifier(nullptr)
+    , m_queueVersion(0)
 {
     qRegisterMetaType<Controller::ConnectionState>();
 
@@ -136,6 +137,9 @@ void Controller::handleIdle(mpd_idle idle)
 
     if (!idle && mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
         // This means we lost the connection.
+
+        m_queueVersion = 0;
+
         qDebug() << mpd_connection_get_error_message(m_connection);
         mpd_connection_free(m_connection);
         m_connection = nullptr;

@@ -2,10 +2,10 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
+#include "itemmodelcontroller.h"
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
-#include "itemmodelcontroller.h"
 
 class CONTROLLER_EXPORT Controller : public QObject
 {
@@ -66,6 +66,8 @@ private:
     ItemModelController *m_playlists;
 
     ItemModelController *m_queue;
+
+    unsigned m_queueVersion;
 
 private slots:
     void handleActivation();
