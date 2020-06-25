@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "configurationdialog.h"
 #include "connectionstate.h"
+#include "databasemodel.h"
 #include "saveplaylistdialog.h"
 #include <QKeySequence>
 #include <QProgressBar>
@@ -64,7 +65,11 @@ MainWindow::MainWindow(QWidget *parent)
     slider->setTracking(false);
     layout->addWidget(slider);
     auto splitter = new QSplitter();
-    splitter->addWidget(new QTreeView());
+    auto databaseModel = new DatabaseModel();
+    auto databaseView = new QTreeView();
+    databaseView->setHeaderHidden(true);
+    databaseView->setModel(databaseModel);
+    splitter->addWidget(databaseView);
     splitter->addWidget(new QTreeView());
     layout->addWidget(splitter);
     auto widget = new QWidget();
