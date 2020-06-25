@@ -1,4 +1,5 @@
 #include "configurationdialog.h"
+#include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QIcon>
@@ -26,6 +27,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     portSpinner->setMaximum(65535);
     connectionWidget->setLayout(connectionLayout);
     connectionLayout->addRow("&Port:", portSpinner);
+    connectionLayout->addRow("&Use Password:", new QCheckBox());
     auto passwordEdit = new QLineEdit();
     passwordEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
     connectionLayout->addRow("Pass&word:", passwordEdit);

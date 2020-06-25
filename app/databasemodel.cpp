@@ -1,11 +1,14 @@
 #include "databasemodel.h"
+#include <QDebug>
 
 DatabaseModel::DatabaseModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
     rootItem = new Item(QIcon(), "");
     rootItem->appendChild(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
-    rootItem->appendChild(new Item(QIcon(":/icons/server-database.svg"), "Artists"));
+    auto artistsItem = new Item(QIcon(":/icons/server-database.svg"), "Artists");
+    artistsItem->appendChild(new Item(QIcon(":/icons/server-database.svg"), "Johnny Cash"));
+    rootItem->appendChild(artistsItem);
     rootItem->appendChild(new Item(QIcon(":/icons/server-database.svg"), "Albums"));
     rootItem->appendChild(new Item(QIcon(":/icons/server-database.svg"), "Compilations"));
     rootItem->appendChild(new Item(QIcon(":/icons/server-database.svg"), "Songs"));
@@ -23,6 +26,15 @@ int DatabaseModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return 1;
+}
+
+bool DatabaseModel::canFetchMore(const QModelIndex &parent) const
+{
+    if (parent.isValid()) {
+        auto item = static_cast<Item *>(parent.internalPointer());
+        qDebug() << item->label();
+    }
+    return false;
 }
 
 QVariant DatabaseModel::data(const QModelIndex &index, int role) const
