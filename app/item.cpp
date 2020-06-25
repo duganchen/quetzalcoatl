@@ -3,30 +3,31 @@
 Item::Item(QIcon icon, QString label, Item *parent)
     : m_icon(icon)
     , m_label(label)
-    , m_parentItem(nullptr)
+    , m_parent(parent)
 {}
 
 Item::~Item()
 {
-    qDeleteAll(m_childItems);
+    qDeleteAll(m_children);
 }
 
-void Item::appendChild(Item *item)
+void Item::append(Item *item)
 {
     item->setParent(this);
-    m_childItems.append(item);
+    m_children.append(item);
 }
 
-Item *Item::child(int row)
+Item *Item::at(int row)
 {
-    if (row < 0 || row >= m_childItems.size())
+    if (row < 0 || row >= m_children.size()) {
         return nullptr;
-    return m_childItems.at(row);
+    }
+    return m_children.at(row);
 }
 
-int Item::childCount() const
+int Item::count() const
 {
-    return m_childItems.count();
+    return m_children.count();
 }
 
 QIcon Item::icon() const
@@ -39,20 +40,20 @@ QString Item::label() const
     return m_label;
 }
 
-Item *Item::parentItem()
+Item *Item::parent()
 {
-    return m_parentItem;
+    return m_parent;
 }
 
 void Item::setParent(Item *parent)
 {
-    m_parentItem = parent;
+    m_parent = parent;
 }
 
 int Item::row() const
 {
-    if (m_parentItem)
-        return m_parentItem->m_childItems.indexOf(const_cast<Item *>(this));
+    if (m_parent)
+        return m_parent->m_children.indexOf(const_cast<Item *>(this));
 
     return 0;
 }

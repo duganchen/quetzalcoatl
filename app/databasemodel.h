@@ -23,7 +23,7 @@ public:
     bool canFetchMore(const QModelIndex &parent) const override;
 
 private:
-    Item *rootItem;
+    Item *m_rootItem;
 };
 
 #endif // DATABASEMODEL_H

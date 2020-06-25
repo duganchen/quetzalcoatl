@@ -2,31 +2,30 @@
 #define ITEM_H
 
 #include <QIcon>
-#include <QList>
 #include <QVariant>
+#include <QVector>
 
 class Item
 {
 public:
-    explicit Item(QIcon icon, QString label, Item *parentItem = nullptr);
+    explicit Item(QIcon icon, QString label, Item *parent = nullptr);
     ~Item();
 
-    void appendChild(Item *child);
+    void append(Item *at);
 
-    Item *child(int row);
-    int childCount() const;
+    Item *at(int row);
+    int count() const;
     QIcon icon() const;
     QString label() const;
     int row() const;
-    Item *parentItem();
-
+    Item *parent();
     void setParent(Item *parent);
 
 private:
-    QList<Item *> m_childItems;
+    QVector<Item *> m_children;
     QIcon m_icon;
     QString m_label;
-    Item *m_parentItem;
+    Item *m_parent;
 };
 
 #endif // ITEM_H
