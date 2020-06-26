@@ -55,6 +55,13 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
         m_passwordEdit->setText(settings.value("password").toString());
     }
 
+    connect(m_passwordCheck, &QCheckBox::stateChanged, [=](int state) {
+        m_passwordEdit->setEnabled(state != Qt::Unchecked);
+        if (state == Qt::Unchecked) {
+            m_passwordEdit->setText("");
+        }
+    });
+
     connectionLayout->addRow("Pass&word:", m_passwordEdit);
     layout->addLayout(connectionLayout);
 
@@ -65,6 +72,11 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
 
     auto buttonBox = new QDialogButtonBox();
     auto connectButton = new QPushButton("Connect to &MPD");
+
+    connect(m_hostEdit, &QLineEdit::textChanged, [=](const QString &text) {
+        connectButton->setEnabled(!text.trimmed().isEmpty());
+    });
+
     buttonBox->addButton(connectButton, QDialogButtonBox::AcceptRole);
     connect(connectButton, &QPushButton::clicked, this, &QDialog::accept);
     auto cancelButton = buttonBox->addButton(QDialogButtonBox::Cancel);
