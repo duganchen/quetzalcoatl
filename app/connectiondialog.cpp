@@ -66,12 +66,6 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
 
     m_errorLabel = new QLabel();
     layout->addWidget(m_errorLabel);
-    m_progressBar = new QProgressBar();
-
-    m_progressBar->setMinimum(0);
-    m_progressBar->setMaximum(1);
-
-    layout->addWidget(m_progressBar);
 
     auto buttonBox = new QDialogButtonBox();
     m_connectButton = new QPushButton("Connect to &MPD");
@@ -92,6 +86,12 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
         m_portSpinner->setValue(m_controller->defaultPort());
     });
     layout->addWidget(buttonBox);
+
+    m_progressBar = new QProgressBar();
+    m_progressBar->setMinimum(0);
+    m_progressBar->setMaximum(1);
+    layout->addWidget(m_progressBar);
+
     setLayout(layout);
 }
 
