@@ -13,6 +13,7 @@ class CONTROLLER_EXPORT Controller : public QObject
 
 public:
     explicit Controller(QObject *parent = nullptr);
+    ~Controller();
 
     enum class ConnectionState { Disconnected, Connecting, Connected };
     Q_ENUM(ConnectionState)

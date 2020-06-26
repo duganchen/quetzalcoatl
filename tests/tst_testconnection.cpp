@@ -35,7 +35,13 @@ void TestConnection::test_cannotConnect()
     controller.connectToMPD("locahost", 6600, 200);
     // On my Fedora 32 box, it takes around 7 seconds to time out.
     spy.wait(10000);
-    QCOMPARE(spy.last()[0].value<QString>(), QString{"Host not found"});
+
+    QVERIFY(spy.last().count());
+    if (spy.last().count())
+    {
+
+        QCOMPARE(spy.last()[0].value<QString>(), QString{"Host not found"});
+    }
 }
 
 void TestConnection::test_spinUpMPD()
@@ -59,9 +65,13 @@ void TestConnection::test_spinUpMPD()
     spy.wait();
     spy.wait();
     QTest::qWait(1000);
-    auto endState = spy.last()[0].value<Controller::ConnectionState>();
 
-    QCOMPARE(endState, Controller::ConnectionState::Connected);
+    QCOMPARE(spy.last().count(), 1);
+    if (spy.last().count())
+    {
+        auto endState = spy.last()[0].value<Controller::ConnectionState>();
+        QCOMPARE(endState, Controller::ConnectionState::Connected);
+    }
 }
 
 QTEST_MAIN(TestConnection)

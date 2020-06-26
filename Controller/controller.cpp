@@ -44,6 +44,14 @@ Controller::Controller(QObject *parent)
     mpd_settings_free(settings);
 }
 
+Controller::~Controller()
+{
+    if (m_connection)
+    {
+        mpd_connection_free(m_connection);
+    }
+}
+
 void Controller::connectToMPD(QString host, int port, int timeout_ms)
 {
     emit connectionState(ConnectionState::Connecting);
