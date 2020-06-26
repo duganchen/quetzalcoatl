@@ -36,8 +36,8 @@ void TestConnection::test_cannotConnect()
     // On my Fedora 32 box, it takes around 7 seconds to time out.
     spy.wait(10000);
 
-    QVERIFY(spy.last().count());
-    if (spy.last().count())
+    QVERIFY(!spy.isEmpty());
+    if (!spy.isEmpty())
     {
 
         QCOMPARE(spy.last()[0].value<QString>(), QString{"Host not found"});
@@ -66,8 +66,8 @@ void TestConnection::test_spinUpMPD()
     spy.wait();
     QTest::qWait(1000);
 
-    QCOMPARE(spy.last().count(), 1);
-    if (spy.last().count())
+    QVERIFY(!spy.isEmpty());
+    if (!spy.isEmpty())
     {
         auto endState = spy.last()[0].value<Controller::ConnectionState>();
         QCOMPARE(endState, Controller::ConnectionState::Connected);
