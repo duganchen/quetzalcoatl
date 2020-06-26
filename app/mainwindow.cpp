@@ -104,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_connectedWidgets.append(m_slider);
 
     auto splitter = new QSplitter();
+    splitter->setEnabled(false);
 
     auto databaseModel = new DatabaseModel(controller->databaseController());
     auto databaseView = new QTreeView();
