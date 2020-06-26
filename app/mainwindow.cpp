@@ -95,8 +95,6 @@ MainWindow::MainWindow(QWidget *parent)
     auto dbRootItem = new Item(QIcon(), "");
     dbRootItem->append(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
     auto artistsItem = new Item(QIcon(":/icons/server-database.svg"), "Artists");
-    artistsItem->append(new Item(QIcon(":/icons/server-database.svg"), "Johnny Cash"));
-    dbRootItem->append(artistsItem);
     dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Albums"));
     dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Compilations"));
     dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Songs"));
