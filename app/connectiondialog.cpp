@@ -12,9 +12,8 @@
 
 ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::WindowFlags f)
     : QDialog(parent, f)
+    , m_controller(controller)
 {
-    Q_UNUSED(controller)
-
     setWindowIcon(QIcon(":/icons/network-connect.svg"));
     setWindowTitle("Connect to MPD");
     auto layout = new QVBoxLayout();
@@ -30,7 +29,7 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
 
     connectionLayout->addRow("&Host:", m_hostEdit);
     m_portSpinner = new QSpinBox();
-    m_portSpinner->setMinimum(1024);
+    m_portSpinner->setMinimum(0);
     m_portSpinner->setMaximum(65535);
 
     if (settings.contains("port")) {
@@ -81,7 +80,11 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     connect(connectButton, &QPushButton::clicked, this, &QDialog::accept);
     auto cancelButton = buttonBox->addButton(QDialogButtonBox::Cancel);
     connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
-    buttonBox->addButton(QDialogButtonBox::RestoreDefaults);
+    auto defaultsButton = buttonBox->addButton(QDialogButtonBox::RestoreDefaults);
+    connect(defaultsButton, &QPushButton::clicked, [=]() {
+        m_hostEdit->setText(m_controller->defaultHost());
+        m_portSpinner->setValue(m_controller->defaultPort());
+    });
     layout->addWidget(buttonBox);
     setLayout(layout);
 }

@@ -28,6 +28,7 @@ private:
     QLineEdit *m_passwordEdit;
     QProgressBar *m_progressBar;
     QLabel *m_errorLabel;
+    Controller *m_controller;
 signals:
 };
 

@@ -24,6 +24,7 @@ public:
     QVector<QString> getAlbumList();
 
     QString defaultHost();
+    unsigned defaultPort();
 
 signals:
     void errorMessage(QString);

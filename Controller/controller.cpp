@@ -21,8 +21,7 @@ Controller::Controller(QObject *parent)
 
 Controller::~Controller()
 {
-    if (m_connection)
-    {
+    if (m_connection) {
         mpd_connection_free(m_connection);
     }
 }
@@ -109,6 +108,11 @@ QVector<QString> Controller::getAlbumList()
 QString Controller::defaultHost()
 {
     return m_defaultHost;
+}
+
+unsigned Controller::defaultPort()
+{
+    return m_defaultPort;
 }
 
 void Controller::handleIdle(mpd_idle idle)
