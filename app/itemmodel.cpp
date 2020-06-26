@@ -31,7 +31,11 @@ ItemModel::ItemModel(ItemModelController *itemModelController, QObject *parent)
     connect(m_itemModelController,
             &ItemModelController::modelAboutToBeReset,
             this,
-            &ItemModel::modelReset);
+            &ItemModel::beginResetModel);
+    connect(m_itemModelController,
+            &ItemModelController::modelReset,
+            this,
+            &ItemModel::endResetModel);
 }
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const

@@ -67,6 +67,10 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     m_errorLabel = new QLabel();
     layout->addWidget(m_errorLabel);
     m_progressBar = new QProgressBar();
+
+    m_progressBar->setMinimum(0);
+    m_progressBar->setMaximum(1);
+
     layout->addWidget(m_progressBar);
 
     auto buttonBox = new QDialogButtonBox();
@@ -99,6 +103,12 @@ void ConnectionDialog::setConnectionState(Controller::ConnectionState connection
     m_passwordEdit->setEnabled(Controller::ConnectionState::Disconnected == connectionState
                                && m_passwordCheck->isChecked());
     m_defaultsButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
+
+    if (Controller::ConnectionState::Connecting == connectionState) {
+        m_progressBar->setMaximum(1);
+    } else {
+        m_progressBar->setMaximum(0);
+    }
 }
 
 void ConnectionDialog::accept()
