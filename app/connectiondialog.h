@@ -29,6 +29,8 @@ private:
     QProgressBar *m_progressBar;
     QLabel *m_errorLabel;
     Controller *m_controller;
+    QPushButton *m_connectButton;
+    QPushButton *m_defaultsButton;
 signals:
 };
 

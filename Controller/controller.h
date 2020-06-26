@@ -26,9 +26,12 @@ public:
     QString defaultHost();
     unsigned defaultPort();
 
+    ConnectionState connectionState() const;
+    void setConnectionState(ConnectionState);
+
 signals:
     void errorMessage(QString);
-    void connectionState(Controller::ConnectionState connectionState);
+    void connectionStateChanged(Controller::ConnectionState connectionState);
 
     void beginMPDCommand();
     void endMPDCommand();
@@ -49,6 +52,8 @@ private:
     QSocketNotifier *m_notifier;
 
     unsigned m_queueVersion;
+
+    ConnectionState m_connectionState;
 
 private slots:
     void handleActivation();

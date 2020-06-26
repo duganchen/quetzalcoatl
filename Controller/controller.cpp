@@ -9,6 +9,7 @@ Controller::Controller(QObject *parent)
     , m_connection(nullptr)
     , m_notifier(nullptr)
     , m_queueVersion(0)
+    , m_connectionState(ConnectionState::Disconnected)
 {
     qRegisterMetaType<Controller::ConnectionState>();
 
@@ -28,7 +29,7 @@ Controller::~Controller()
 
 void Controller::connectToMPD(QString host, int port, int timeout_ms)
 {
-    emit connectionState(ConnectionState::Connecting);
+    setConnectionState(ConnectionState::Connecting);
 
     // This is literally how libmpdclient determines if a host is a Unix socket,
     // at least as of 2.18.
@@ -45,7 +46,7 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
             Q_UNUSED(error);
             emit errorMessage(socket->errorString());
             socket->deleteLater();
-            emit connectionState(ConnectionState::Disconnected);
+            setConnectionState(ConnectionState::Disconnected);
         });
 
         connect(socket, &QTcpSocket::connected, [=]() {
@@ -130,7 +131,7 @@ void Controller::handleIdle(mpd_idle idle)
         qDebug() << mpd_connection_get_error_message(m_connection);
         mpd_connection_free(m_connection);
         m_connection = nullptr;
-        emit connectionState(ConnectionState::Disconnected);
+        setConnectionState(ConnectionState::Disconnected);
     }
 
     if (idle & MPD_IDLE_QUEUE) {
@@ -166,14 +167,27 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         connect(m_notifier, &QSocketNotifier::activated, this, &Controller::handleActivation);
 
         mpd_send_idle(m_connection);
-        emit connectionState(ConnectionState::Connected);
+        setConnectionState(ConnectionState::Connected);
     } else {
         emit errorMessage(mpd_connection_get_error_message(m_connection));
-        emit connectionState(ConnectionState::Disconnected);
+        setConnectionState(ConnectionState::Disconnected);
     }
 }
 
 void Controller::handleActivation()
 {
     handleIdle(mpd_recv_idle(m_connection, false));
+}
+
+Controller::ConnectionState Controller::connectionState() const
+{
+    return m_connectionState;
+}
+
+void Controller::setConnectionState(Controller::ConnectionState state)
+{
+    if (m_connectionState != state) {
+        m_connectionState = state;
+        emit connectionStateChanged(state);
+    }
 }

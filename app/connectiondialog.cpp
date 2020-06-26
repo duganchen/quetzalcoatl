@@ -70,18 +70,20 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     layout->addWidget(m_progressBar);
 
     auto buttonBox = new QDialogButtonBox();
-    auto connectButton = new QPushButton("Connect to &MPD");
+    m_connectButton = new QPushButton("Connect to &MPD");
 
     connect(m_hostEdit, &QLineEdit::textChanged, [=](const QString &text) {
-        connectButton->setEnabled(!text.trimmed().isEmpty());
+        m_connectButton->setEnabled(!text.trimmed().isEmpty()
+                                    && m_controller->connectionState()
+                                           == Controller::ConnectionState::Disconnected);
     });
 
-    buttonBox->addButton(connectButton, QDialogButtonBox::AcceptRole);
-    connect(connectButton, &QPushButton::clicked, this, &QDialog::accept);
+    buttonBox->addButton(m_connectButton, QDialogButtonBox::AcceptRole);
+    connect(m_connectButton, &QPushButton::clicked, this, &QDialog::accept);
     auto cancelButton = buttonBox->addButton(QDialogButtonBox::Cancel);
     connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
-    auto defaultsButton = buttonBox->addButton(QDialogButtonBox::RestoreDefaults);
-    connect(defaultsButton, &QPushButton::clicked, [=]() {
+    m_defaultsButton = buttonBox->addButton(QDialogButtonBox::RestoreDefaults);
+    connect(m_defaultsButton, &QPushButton::clicked, [=]() {
         m_hostEdit->setText(m_controller->defaultHost());
         m_portSpinner->setValue(m_controller->defaultPort());
     });
@@ -89,7 +91,15 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     setLayout(layout);
 }
 
-void ConnectionDialog::setConnectionState(Controller::ConnectionState) {}
+void ConnectionDialog::setConnectionState(Controller::ConnectionState connectionState)
+{
+    m_connectButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
+    m_portSpinner->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
+    m_passwordCheck->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
+    m_passwordEdit->setEnabled(Controller::ConnectionState::Disconnected == connectionState
+                               && m_passwordCheck->isChecked());
+    m_defaultsButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
+}
 
 void ConnectionDialog::accept()
 {

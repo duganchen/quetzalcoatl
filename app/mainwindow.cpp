@@ -34,32 +34,39 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto stopAction = toolBar->addAction(QIcon(":/icons/stop_circle-24px.svg"), "Stop");
     stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
+    stopAction->setEnabled(false);
     m_connectedActions.append(stopAction);
 
     auto playAction = toolBar->addAction(QIcon(":/icons/play_circle_outline-24px.svg"), "Play");
     playAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPlay));
+    playAction->setEnabled(false);
     m_connectedActions.append(playAction);
 
     auto pauseAction = toolBar->addAction(QIcon(":/icons/pause_circle_outline-24px.svg"), "Pause");
     pauseAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPause));
+    pauseAction->setEnabled(false);
     m_connectedActions.append(pauseAction);
 
     auto skipBackAction = toolBar->addAction(QIcon(":/icons/skip_previous-24px.svg"), "Previous");
     skipBackAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPrevious));
+    skipBackAction->setEnabled(false);
     m_connectedActions.append(skipBackAction);
 
     auto skipForthAction = toolBar->addAction(QIcon(":/icons/skip_next-24px.svg"), "Next");
     skipForthAction->setShortcut(QKeySequence(Qt::Key::Key_MediaNext));
+    skipForthAction->setEnabled(false);
     m_connectedActions.append(skipForthAction);
 
     toolBar->addSeparator();
 
     auto shuffleAction = toolBar->addAction(QIcon(":icons/shuffle-24px.svg"), "Shuffle");
     shuffleAction->setCheckable(true);
+    shuffleAction->setEnabled(false);
     m_connectedActions.append(shuffleAction);
 
     auto repeatAction = toolBar->addAction(QIcon(":/icons/repeat-24px.svg"), "Repeat");
     repeatAction->setCheckable(true);
+    repeatAction->setEnabled(false);
     m_connectedActions.append(repeatAction);
 
     toolBar->addSeparator();
@@ -82,15 +89,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto playbackSettingsDialog = new PlaybackSettingsDialog(controller, this);
     m_connectedWidgets.append(playbackSettingsDialog);
+    playbackSettingsDialog->setEnabled(false);
     auto playbackSettingsAction = toolBar->addAction(QIcon(":/icons/configure.svg"),
                                                      "Playback Settings",
                                                      [=]() { playbackSettingsDialog->exec(); });
+    playbackSettingsAction->setEnabled(false);
     m_connectedActions.append(playbackSettingsAction);
 
     auto layout = new QVBoxLayout();
     m_slider = new QSlider(Qt::Horizontal);
     m_slider->setTracking(false);
     layout->addWidget(m_slider);
+    m_slider->setEnabled(false);
     m_connectedWidgets.append(m_slider);
 
     auto splitter = new QSplitter();
@@ -123,14 +133,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto status = statusBar();
     status->addWidget(new QLabel());
-
-    setConnectionState(Controller::ConnectionState::Disconnected);
 }
 
 MainWindow::~MainWindow() {}
 
 void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
 {
+    m_connectionDialog->setConnectionState(connectionState);
+
     m_slider->setMinimum(0);
     m_slider->setMaximum(1);
     m_slider->setValue(0);
@@ -143,5 +153,7 @@ void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
         action->setEnabled(Controller::ConnectionState::Connected == connectionState);
     }
 
-    m_connectionDialog->setConnectionState(connectionState);
+    if (Controller::ConnectionState::Disconnected == connectionState) {
+        m_connectionDialog->exec();
+    }
 }
