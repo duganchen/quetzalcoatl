@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "configurationdialog.h"
+#include "connectiondialog.h"
 #include "connectionstate.h"
 #include "databasemodel.h"
 #include "playlistmodel.h"
@@ -25,8 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     auto cfgDlg = new ConfigurationDialog(this);
+    auto connectionDialog = new ConnectionDialog(this);
 
-    toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD");
+    toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD", [=]() {
+        connectionDialog->exec();
+    });
     toolBar->addSeparator();
 
     auto stopAction = toolBar->addAction(QIcon(":/icons/media-playback-stop"), "Stop");
