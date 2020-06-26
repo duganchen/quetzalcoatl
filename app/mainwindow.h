@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QSlider>
 #include <QVector>
 #include <QWidget>
 
@@ -25,8 +26,11 @@ private:
     QVector<QWidget *> m_connectedWidgets;
     QVector<QAction *> m_connectedActions;
 
+    QSlider *m_slider;
+
     ConnectionDialog *m_connectionDialog;
 
+private:
 private slots:
     void setConnectionState(Controller::ConnectionState);
 };

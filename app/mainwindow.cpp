@@ -6,7 +6,6 @@
 #include <QKeySequence>
 #include <QProgressBar>
 #include <QPushButton>
-#include <QSlider>
 #include <QSplitter>
 #include <QStatusBar>
 #include <QToolBar>
@@ -86,13 +85,12 @@ MainWindow::MainWindow(QWidget *parent)
     m_connectedActions.append(playbackSettingsAction);
 
     auto layout = new QVBoxLayout();
-    auto slider = new QSlider(Qt::Horizontal);
-    slider->setTracking(false);
-    layout->addWidget(slider);
-    m_connectedWidgets.append(slider);
+    m_slider = new QSlider(Qt::Horizontal);
+    m_slider->setTracking(false);
+    layout->addWidget(m_slider);
+    m_connectedWidgets.append(m_slider);
 
     auto splitter = new QSplitter();
-    m_connectedWidgets.append(splitter);
 
     auto dbRootItem = new Item(QIcon(), "");
     dbRootItem->append(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
@@ -109,12 +107,14 @@ MainWindow::MainWindow(QWidget *parent)
     auto databaseView = new QTreeView();
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
+    m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
     auto playlistRoot = new Item(QIcon(), "");
     auto playlistModel = new PlaylistModel(playlistRoot);
     auto playlistView = new QTreeView();
     playlistView->setModel(playlistModel);
+    m_connectedWidgets.append(playlistView);
     splitter->addWidget(playlistView);
     layout->addWidget(splitter);
     auto widget = new QWidget();
@@ -131,6 +131,10 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
 {
+    m_slider->setMinimum(0);
+    m_slider->setMaximum(1);
+    m_slider->setValue(0);
+
     for (auto widget : m_connectedWidgets) {
         widget->setEnabled(Controller::ConnectionState::Connected == connectionState);
     }
