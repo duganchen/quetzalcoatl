@@ -1,9 +1,9 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include <QIcon>
 #include <QVariant>
 #include <QVector>
+#include <QtGui/QIcon>
 
 class Item
 {

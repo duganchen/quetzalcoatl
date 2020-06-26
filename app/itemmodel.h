@@ -3,6 +3,7 @@
 
 #include "controller.h"
 #include "item.h"
+#include "itemmodelcontroller.h"
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>

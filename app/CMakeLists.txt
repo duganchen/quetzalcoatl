@@ -1,7 +1,6 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 add_executable(quetzalcoatl
-  item.cpp
   connectiondialog.cpp
   databasemodel.cpp
   itemmodel.cpp
