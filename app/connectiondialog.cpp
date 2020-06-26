@@ -18,22 +18,25 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     auto layout = new QVBoxLayout();
     auto connectionLayout = new QFormLayout();
     m_hostEdit = new QLineEdit();
+    m_hostEdit->setText("localhost");
     connectionLayout->addRow("&Host:", m_hostEdit);
     m_portSpinner = new QSpinBox();
     m_portSpinner->setMinimum(0);
     m_portSpinner->setMaximum(65535);
+    m_portSpinner->setValue(6600);
     connectionLayout->addRow("&Port:", m_portSpinner);
     m_passwordCheck = new QCheckBox();
     connectionLayout->addRow("&Use Password:", m_passwordCheck);
     m_passwordEdit = new QLineEdit();
+    m_passwordEdit->setEnabled(false);
     m_passwordEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
     connectionLayout->addRow("Pass&word:", m_passwordEdit);
     layout->addLayout(connectionLayout);
 
-    m_progressBar = new QProgressBar();
-    layout->addWidget(m_progressBar);
     m_errorLabel = new QLabel();
     layout->addWidget(m_errorLabel);
+    m_progressBar = new QProgressBar();
+    layout->addWidget(m_progressBar);
 
     auto buttonBox = new QDialogButtonBox();
     auto okButton = buttonBox->addButton(QDialogButtonBox::Ok);
