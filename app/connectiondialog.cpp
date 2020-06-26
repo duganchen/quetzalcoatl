@@ -1,16 +1,11 @@
 #include "connectiondialog.h"
-#include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QIcon>
-#include <QLabel>
-#include <QLineEdit>
-#include <QProgressBar>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QTabWidget>
 #include <QVBoxLayout>
-#include <QWidget>
 
 ConnectionDialog::ConnectionDialog(QWidget *parent, Qt::WindowFlags f)
     : QDialog(parent, f)
@@ -19,20 +14,23 @@ ConnectionDialog::ConnectionDialog(QWidget *parent, Qt::WindowFlags f)
     setWindowTitle("Connect to MPD");
     auto layout = new QVBoxLayout();
     auto connectionLayout = new QFormLayout();
-    auto hostEdit = new QLineEdit();
-    connectionLayout->addRow("&Host:", hostEdit);
-    auto portSpinner = new QSpinBox();
-    portSpinner->setMinimum(0);
-    portSpinner->setMaximum(65535);
-    connectionLayout->addRow("&Port:", portSpinner);
-    connectionLayout->addRow("&Use Password:", new QCheckBox());
-    auto passwordEdit = new QLineEdit();
-    passwordEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    connectionLayout->addRow("Pass&word:", passwordEdit);
+    m_hostEdit = new QLineEdit();
+    connectionLayout->addRow("&Host:", m_hostEdit);
+    m_portSpinner = new QSpinBox();
+    m_portSpinner->setMinimum(0);
+    m_portSpinner->setMaximum(65535);
+    connectionLayout->addRow("&Port:", m_portSpinner);
+    m_passwordCheck = new QCheckBox();
+    connectionLayout->addRow("&Use Password:", m_passwordCheck);
+    m_passwordEdit = new QLineEdit();
+    m_passwordEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+    connectionLayout->addRow("Pass&word:", m_passwordEdit);
     layout->addLayout(connectionLayout);
 
-    layout->addWidget(new QProgressBar());
-    layout->addWidget(new QLabel());
+    m_progressBar = new QProgressBar();
+    layout->addWidget(m_progressBar);
+    m_errorLabel = new QLabel();
+    layout->addWidget(m_errorLabel);
 
     auto buttonBox = new QDialogButtonBox();
     auto okButton = buttonBox->addButton(QDialogButtonBox::Ok);
@@ -43,3 +41,5 @@ ConnectionDialog::ConnectionDialog(QWidget *parent, Qt::WindowFlags f)
     layout->addWidget(buttonBox);
     setLayout(layout);
 }
+
+void ConnectionDialog::setConnectionState(Controller::ConnectionState) {}

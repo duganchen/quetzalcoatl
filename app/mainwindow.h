@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "connectiondialog.h"
 #include "controller.h"
 #include <QAction>
 #include <QLabel>
@@ -23,6 +24,8 @@ public:
 private:
     QVector<QWidget *> m_connectedWidgets;
     QVector<QAction *> m_connectedActions;
+
+    ConnectionDialog *m_connectionDialog;
 
 private slots:
     void setConnectionState(Controller::ConnectionState);

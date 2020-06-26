@@ -7,4 +7,5 @@ Watch this space.
 It currently uses:
 
 * Breeze icons
-* Qt Creator's .clang-format
+* [material.io icons](https://material.io/)
+* [Qt Creator's .clang-format](https://github.com/qt-creator/qt-creator/blob/master/.clang-format)
