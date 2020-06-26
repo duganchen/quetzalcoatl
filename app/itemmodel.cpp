@@ -6,8 +6,33 @@ ItemModel::ItemModel(ItemModelController *itemModelController, QObject *parent)
     , m_itemModelController(itemModelController)
 {
     m_itemModelController->setParent(this);
-}
 
+    connect(m_itemModelController,
+            &ItemModelController::rowsAboutToBeInserted,
+            this,
+            &ItemModel::beginInsertRows);
+    connect(m_itemModelController,
+            &ItemModelController::rowsInserted,
+            this,
+            &ItemModel::endInsertRows);
+    connect(m_itemModelController,
+            &ItemModelController::rowsAboutToBeMoved,
+            this,
+            &ItemModel::beginMoveRows);
+    connect(m_itemModelController, &ItemModelController::rowsMoved, this, &ItemModel::endMoveRows);
+    connect(m_itemModelController,
+            &ItemModelController::rowsAboutToBeRemoved,
+            this,
+            &ItemModel::beginRemoveRows);
+    connect(m_itemModelController,
+            &ItemModelController::rowsRemoved,
+            this,
+            &ItemModel::endRemoveRows);
+    connect(m_itemModelController,
+            &ItemModelController::modelAboutToBeReset,
+            this,
+            &ItemModel::modelReset);
+}
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
 {
@@ -52,7 +77,8 @@ QModelIndex ItemModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_itemModelController->rootItem();
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
+                                       : m_itemModelController->rootItem();
     if (!parentItem) {
         return QModelIndex();
     }
@@ -85,7 +111,8 @@ int ItemModel::rowCount(const QModelIndex &parent) const
         return 0;
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_itemModelController->rootItem();
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
+                                       : m_itemModelController->rootItem();
     if (!parentItem) {
         return 0;
     }
