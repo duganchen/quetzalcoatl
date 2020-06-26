@@ -103,6 +103,7 @@ void ConnectionDialog::setConnectionState(Controller::ConnectionState connection
 
 void ConnectionDialog::accept()
 {
+    m_hostEdit->setText(m_hostEdit->text().trimmed());
     qDebug() << "Accepted";
     QDialog::accept();
 }
