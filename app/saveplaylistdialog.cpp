@@ -5,8 +5,9 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-SavePlaylistDialog::SavePlaylistDialog(QWidget *parent, Qt::WindowFlags f)
+SavePlaylistDialog::SavePlaylistDialog(Controller *controller, QWidget *parent, Qt::WindowFlags f)
     : QDialog(parent, f)
+    , m_controller(controller)
 {
     setWindowTitle("Save Playlist");
     auto layout = new QVBoxLayout();

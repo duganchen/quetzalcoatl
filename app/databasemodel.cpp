@@ -1,7 +1,7 @@
 #include "databasemodel.h"
 
-DatabaseModel::DatabaseModel(Item *rootItem, QObject *parent)
-    : ItemModel(rootItem, parent)
+DatabaseModel::DatabaseModel(Controller *controller, Item *rootItem, QObject *parent)
+    : ItemModel(controller, rootItem, parent)
 {}
 
 int DatabaseModel::columnCount(const QModelIndex &parent) const

@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "controller.h"
 #include "databasemodel.h"
 #include "playbacksettingsdialog.h"
 #include "playlistmodel.h"
@@ -18,11 +19,13 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr("Quetzalcoatl"));
     setWindowIcon(QIcon(":/icons/multimedia-player.svg"));
 
+    auto controller = new Controller(this);
+
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);
     toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    m_connectionDialog = new ConnectionDialog(this);
+    m_connectionDialog = new ConnectionDialog(controller, this);
 
     toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD", [=]() {
         m_connectionDialog->exec();
@@ -66,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     deleteAction->setEnabled(false);
 
     deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
-    auto savePlaylistDialog = new SavePlaylistDialog(this);
+    auto savePlaylistDialog = new SavePlaylistDialog(controller, this);
     savePlaylistDialog->setEnabled(false);
     auto savePlaylistAction = toolBar->addAction(QIcon(":/icons/save-24px.svg"),
                                                  "[CTRL-S]ave playlist",
@@ -77,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     toolBar->addSeparator();
 
-    auto playbackSettingsDialog = new PlaybackSettingsDialog();
+    auto playbackSettingsDialog = new PlaybackSettingsDialog(controller, this);
     m_connectedWidgets.append(playbackSettingsDialog);
     auto playbackSettingsAction = toolBar->addAction(QIcon(":/icons/configure.svg"),
                                                      "Playback Settings",
@@ -100,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
     dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Genres"));
     dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Composers"));
     dbRootItem->append(new Item(QIcon(":/icons/drive-harddisk"), "/"));
-    auto databaseModel = new DatabaseModel(dbRootItem);
+    auto databaseModel = new DatabaseModel(controller, dbRootItem);
     auto databaseView = new QTreeView();
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
@@ -108,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->addWidget(databaseView);
 
     auto playlistRoot = new Item(QIcon(), "");
-    auto playlistModel = new PlaylistModel(playlistRoot);
+    auto playlistModel = new PlaylistModel(controller, playlistRoot);
     auto playlistView = new QTreeView();
     playlistView->setModel(playlistModel);
     m_connectedWidgets.append(playlistView);

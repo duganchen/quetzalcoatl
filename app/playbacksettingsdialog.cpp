@@ -10,8 +10,11 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-PlaybackSettingsDialog::PlaybackSettingsDialog(QWidget *parent, Qt::WindowFlags f)
+PlaybackSettingsDialog::PlaybackSettingsDialog(Controller *controller,
+                                               QWidget *parent,
+                                               Qt::WindowFlags f)
     : QDialog(parent, f)
+    , m_controller(controller)
 {
     setWindowIcon(QIcon(":/icons/configure.svg"));
     setWindowTitle("Playback Settings");

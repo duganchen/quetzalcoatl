@@ -1,4 +1,5 @@
 #include "connectiondialog.h"
+#include "controller.h"
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QIcon>
@@ -7,9 +8,11 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 
-ConnectionDialog::ConnectionDialog(QWidget *parent, Qt::WindowFlags f)
+ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::WindowFlags f)
     : QDialog(parent, f)
 {
+    Q_UNUSED(controller)
+
     setWindowIcon(QIcon(":/icons/network-connect.svg"));
     setWindowTitle("Connect to MPD");
     auto layout = new QVBoxLayout();

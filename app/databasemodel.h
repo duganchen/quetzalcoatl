@@ -8,7 +8,7 @@ class DatabaseModel : public ItemModel
     Q_OBJECT
 
 public:
-    explicit DatabaseModel(Item *rootItem, QObject *parent = nullptr);
+    explicit DatabaseModel(Controller *, Item *, QObject *parent = nullptr);
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
 private:

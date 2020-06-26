@@ -1,8 +1,9 @@
 #include "itemmodel.h"
 #include <QDebug>
 
-ItemModel::ItemModel(Item *rootItem, QObject *parent)
+ItemModel::ItemModel(Controller *controller, Item *rootItem, QObject *parent)
     : QAbstractItemModel(parent)
+    , m_controller(controller)
     , m_rootItem(rootItem)
 {}
 

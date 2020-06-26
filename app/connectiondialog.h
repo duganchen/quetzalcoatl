@@ -14,7 +14,9 @@ class ConnectionDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ConnectionDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit ConnectionDialog(Controller *,
+                              QWidget *parent = nullptr,
+                              Qt::WindowFlags f = Qt::WindowFlags());
 public slots:
     void setConnectionState(Controller::ConnectionState);
 
