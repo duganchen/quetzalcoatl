@@ -1,7 +1,7 @@
 #include "playlistmodel.h"
 
-PlaylistModel::PlaylistModel(Controller *controller, Item *rootItem, QObject *parent)
-    : ItemModel(controller, rootItem, parent)
+PlaylistModel::PlaylistModel(ItemModelController *itemModelController, QObject *parent)
+    : ItemModel(itemModelController, parent)
 {}
 
 QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int role) const

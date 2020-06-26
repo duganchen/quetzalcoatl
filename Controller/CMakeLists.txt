@@ -1,5 +1,6 @@
 add_library(Controller SHARED
   item.cpp
+  itemmodelcontroller.cpp
   controller.cpp
 )
 

@@ -13,8 +13,7 @@ class ItemModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit ItemModel(Controller *, Item *, QObject *parent = nullptr);
-    ~ItemModel();
+    explicit ItemModel(ItemModelController *, QObject *parent = nullptr);
 
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
@@ -23,11 +22,8 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     bool canFetchMore(const QModelIndex &parent) const override;
 
-protected:
-    Controller *m_controller;
-
 private:
-    Item *m_rootItem;
+    ItemModelController *m_itemModelController;
 };
 
 #endif // ITEMMODEL_H

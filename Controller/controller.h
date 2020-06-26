@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
+#include "itemmodelcontroller.h"
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
@@ -29,6 +30,9 @@ public:
     ConnectionState connectionState() const;
     void setConnectionState(ConnectionState);
 
+    ItemModelController *databaseController() const;
+    ItemModelController *playlistController() const;
+
 signals:
     void errorMessage(QString);
     void connectionStateChanged(Controller::ConnectionState connectionState);
@@ -54,6 +58,9 @@ private:
     unsigned m_queueVersion;
 
     ConnectionState m_connectionState;
+
+    ItemModelController *m_databaseController;
+    ItemModelController *m_playlistController;
 
 private slots:
     void handleActivation();

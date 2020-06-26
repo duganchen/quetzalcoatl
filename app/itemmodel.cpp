@@ -1,16 +1,13 @@
 #include "itemmodel.h"
 #include <QDebug>
 
-ItemModel::ItemModel(Controller *controller, Item *rootItem, QObject *parent)
+ItemModel::ItemModel(ItemModelController *itemModelController, QObject *parent)
     : QAbstractItemModel(parent)
-    , m_controller(controller)
-    , m_rootItem(rootItem)
-{}
-
-ItemModel::~ItemModel()
+    , m_itemModelController(itemModelController)
 {
-    delete m_rootItem;
+    m_itemModelController->setParent(this);
 }
+
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
 {
@@ -55,7 +52,7 @@ QModelIndex ItemModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_rootItem;
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_itemModelController->rootItem();
     if (!parentItem) {
         return QModelIndex();
     }
@@ -76,7 +73,7 @@ QModelIndex ItemModel::parent(const QModelIndex &index) const
     auto childItem = static_cast<Item *>(index.internalPointer());
     auto parentItem = childItem->parent();
 
-    if (parentItem == m_rootItem)
+    if (m_itemModelController->rootItem() == parentItem)
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -88,7 +85,7 @@ int ItemModel::rowCount(const QModelIndex &parent) const
         return 0;
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_rootItem;
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_itemModelController->rootItem();
     if (!parentItem) {
         return 0;
     }

@@ -8,7 +8,7 @@ class PlaylistModel : public ItemModel
     Q_OBJECT
 
 public:
-    explicit PlaylistModel(Controller *, Item *, QObject *parent = nullptr);
+    explicit PlaylistModel(ItemModelController *, QObject *parent = nullptr);
 
     QVariant headerData(int section,
                         Qt::Orientation orientation,

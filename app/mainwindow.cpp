@@ -105,6 +105,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto splitter = new QSplitter();
 
+#if 0
     auto dbRootItem = new Item(QIcon(), "");
     dbRootItem->append(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
     dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Albums"));
@@ -114,6 +115,8 @@ MainWindow::MainWindow(QWidget *parent)
     dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Composers"));
     dbRootItem->append(new Item(QIcon(":/icons/drive-harddisk"), "/"));
     auto databaseModel = new DatabaseModel(controller, dbRootItem);
+#endif
+    auto databaseModel = new DatabaseModel(controller->databaseController());
     auto databaseView = new QTreeView();
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
@@ -121,7 +124,10 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->addWidget(databaseView);
 
     auto playlistRoot = new Item(QIcon(), "");
+#if 0
     auto playlistModel = new PlaylistModel(controller, playlistRoot);
+#endif
+    auto playlistModel = new PlaylistModel(controller->playlistController());
     auto playlistView = new QTreeView();
     playlistView->setModel(playlistModel);
     m_connectedWidgets.append(playlistView);

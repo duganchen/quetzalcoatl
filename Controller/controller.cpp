@@ -11,6 +11,18 @@ Controller::Controller(QObject *parent)
     , m_queueVersion(0)
     , m_connectionState(ConnectionState::Disconnected)
 {
+    m_databaseController = new ItemModelController();
+    auto dbRootItem = m_databaseController->rootItem();
+    dbRootItem->append(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Albums"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Compilations"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Songs"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Genres"));
+    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Composers"));
+    dbRootItem->append(new Item(QIcon(":/icons/drive-harddisk"), "/"));
+
+    m_playlistController = new ItemModelController();
+
     qRegisterMetaType<Controller::ConnectionState>();
 
     auto settings = mpd_settings_new(nullptr, 0, 0, nullptr, nullptr);
@@ -190,4 +202,14 @@ void Controller::setConnectionState(Controller::ConnectionState state)
         m_connectionState = state;
         emit connectionStateChanged(state);
     }
+}
+
+ItemModelController *Controller::databaseController() const
+{
+    return m_databaseController;
+}
+
+ItemModelController *Controller::playlistController() const
+{
+    return m_playlistController;
 }
