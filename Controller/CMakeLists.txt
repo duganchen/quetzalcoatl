@@ -1,7 +1,5 @@
 add_library(Controller SHARED
   controller.cpp
-  itemmodelcontroller.cpp
-  tagitem.cpp
 )
 
 target_include_directories(Controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})

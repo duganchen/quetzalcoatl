@@ -1,5 +1,4 @@
 #include "controller.h"
-#include "tagitem.h"
 #include <mpd/client.h>
 #include <QDebug>
 #include <QtNetwork/QLocalSocket>
@@ -12,30 +11,6 @@ Controller::Controller(QObject *parent)
     , m_queueVersion(0)
 {
     qRegisterMetaType<Controller::ConnectionState>();
-
-    m_tags = new ItemModelController(this);
-    m_tags->items.push_back(new TagItem("artist"));
-    m_tags->items.push_back(new TagItem("albumartist"));
-    m_tags->items.push_back(new TagItem("composer"));
-
-    m_artists = new ItemModelController(this);
-    m_artists->items.push_back(new TagItem("an artist"));
-
-    m_albums = new ItemModelController(this);
-    m_albums->items.push_back(new TagItem("An album"));
-    m_songs = new ItemModelController(this);
-
-    for (int i = 0; i < 100; i++) {
-        QString label = "song %1";
-        m_songs->items.push_back(new TagItem(label.arg(i)));
-    }
-    m_playlists = new ItemModelController(this);
-    m_playlists->items.push_back(new TagItem("A stored playlist"));
-    m_playlists->items.push_back(new TagItem("Another stored playlist"));
-
-    m_queue = new ItemModelController(this);
-    m_queue->items.push_back(new TagItem("A queued song"));
-    m_queue->items.push_back(new TagItem("Another queued song"));
 
     auto settings = mpd_settings_new(nullptr, 0, 0, nullptr, nullptr);
     m_defaultHost = mpd_settings_get_host(settings);
@@ -197,34 +172,4 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 void Controller::handleActivation()
 {
     handleIdle(mpd_recv_idle(m_connection, false));
-}
-
-ItemModelController *Controller::tags() const
-{
-    return m_tags;
-}
-
-ItemModelController *Controller::artists() const
-{
-    return m_artists;
-}
-
-ItemModelController *Controller::albums() const
-{
-    return m_albums;
-}
-
-ItemModelController *Controller::songs() const
-{
-    return m_songs;
-}
-
-ItemModelController *Controller::playlists() const
-{
-    return m_playlists;
-}
-
-ItemModelController *Controller::queue() const
-{
-    return m_queue;
 }

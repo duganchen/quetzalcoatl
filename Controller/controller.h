@@ -2,7 +2,6 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
-#include "itemmodelcontroller.h"
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
@@ -26,12 +25,6 @@ public:
 
     QString defaultHost();
 
-    ItemModelController *tags() const;
-    ItemModelController *artists() const;
-    ItemModelController *albums() const;
-    ItemModelController *songs() const;
-    ItemModelController *playlists() const;
-    ItemModelController *queue() const;
 signals:
     void errorMessage(QString);
     void connectionState(Controller::ConnectionState connectionState);
@@ -53,20 +46,6 @@ private:
 
     mpd_connection *m_connection;
     QSocketNotifier *m_notifier;
-
-    // artist, albumartist, composer
-    ItemModelController *m_tags;
-
-    ItemModelController *m_artists;
-
-    ItemModelController *m_albums;
-
-    ItemModelController *m_songs;
-
-    // stored playlists
-    ItemModelController *m_playlists;
-
-    ItemModelController *m_queue;
 
     unsigned m_queueVersion;
 
