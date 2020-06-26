@@ -1,8 +1,8 @@
 #include "mainwindow.h"
-#include "configurationdialog.h"
 #include "connectiondialog.h"
 #include "connectionstate.h"
 #include "databasemodel.h"
+#include "playbacksettingsdialog.h"
 #include "playlistmodel.h"
 #include "saveplaylistdialog.h"
 #include <QKeySequence>
@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar->setMovable(false);
     toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    auto cfgDlg = new ConfigurationDialog(this);
     auto connectionDialog = new ConnectionDialog(this);
 
     toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD", [=]() {
@@ -63,8 +62,9 @@ MainWindow::MainWindow(QWidget *parent)
                                                  [=]() { savePlaylistDialog->exec(); });
 
     toolBar->addSeparator();
+    auto playbackSettingsDialog = new PlaybackSettingsDialog();
     toolBar->addAction(QIcon(":/icons/configure.svg"), "Playback Settings", [=]() {
-        cfgDlg->exec();
+        playbackSettingsDialog->exec();
     });
 
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
