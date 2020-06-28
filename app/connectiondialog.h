@@ -19,7 +19,7 @@ public:
                               Qt::WindowFlags f = Qt::WindowFlags());
 public slots:
     void setConnectionState(Controller::ConnectionState);
-    void accept() override;
+    void connectToMPD();
 
 private:
     QCheckBox *m_passwordCheck;

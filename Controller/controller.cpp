@@ -1,6 +1,7 @@
 #include "controller.h"
 #include <mpd/client.h>
 #include <QDebug>
+#include <QtNetwork/QHostInfo>
 #include <QtNetwork/QLocalSocket>
 #include <QtNetwork/QTcpSocket>
 
@@ -41,6 +42,7 @@ Controller::~Controller()
 
 void Controller::connectToMPD(QString host, int port, int timeout_ms)
 {
+    qDebug() << "Connecting to MPD";
     setConnectionState(ConnectionState::Connecting);
 
     // This is literally how libmpdclient determines if a host is a Unix socket,
@@ -49,6 +51,21 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
         createMPD(host, port, timeout_ms);
 
     } else {
+        // If it's a Tcp socket, then we first use Qt to asynchronously check if we can actually
+        // connect, because libmpdclient's internal host address resolution is blocking and
+        // can take a long time to return if it fails
+        qDebug() << "looking up locahost";
+        QHostInfo::lookupHost(host, [=](QHostInfo hostInfo) {
+            if (hostInfo.error() == QHostInfo::NoError) {
+                createMPD(host, port, timeout_ms);
+            } else {
+                // The expected error is QHostInfo::HostNotFound, "Host not found".
+                qDebug() << "Emitted error";
+                emit connectionErrorMessage(hostInfo.errorString());
+                setConnectionState(ConnectionState::Disconnected);
+            }
+        });
+#if 0
         // If it's a Tcp socket, then we first use Qt to asynchronously check if we can actually
         // connect, because libmpdclient's internal host address resolution is blocking and
         // can take a long time to return if it fails..
@@ -70,7 +87,12 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
             socket->disconnectFromHost();
         });
 
+        connect(socket, &QTcpSocket::stateChanged, [=](QTcpSocket::SocketState tcpSocketState) {
+            qDebug() << tcpSocketState;
+        });
+
         socket->connectToHost(host, port);
+#endif
     }
 }
 
@@ -154,10 +176,12 @@ void Controller::handleIdle(mpd_idle idle)
 
 void Controller::createMPD(QString host, int port, int timeout_ms)
 {
+    qDebug() << "Creating MPD";
     auto connection = mpd_connection_new(host.toUtf8().constData(), port, timeout_ms);
 
     if (!connection) {
         // OOM
+        qDebug() << "Out of memory";
         emit unrecoverableError();
     }
 
@@ -172,6 +196,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
     m_connection = connection;
 
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_SUCCESS) {
+        qDebug() << "MPD connected";
         m_notifier = new QSocketNotifier(mpd_connection_get_fd(m_connection),
                                          QSocketNotifier::Read,
                                          this);
@@ -181,8 +206,12 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         mpd_send_idle(m_connection);
         setConnectionState(ConnectionState::Connected);
     } else {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        // In the case where MPD is not running at the port, which is the expected error,
+        // we get MPD_ERROR_SYSTEM and "Connection refused"
+        emit connectionErrorMessage(mpd_connection_get_error_message(m_connection));
         setConnectionState(ConnectionState::Disconnected);
+        // and we don't need to free it. I checked.
+        m_connection = nullptr;
     }
 }
 

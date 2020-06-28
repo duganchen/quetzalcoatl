@@ -4,6 +4,7 @@
 #include "playbacksettingsdialog.h"
 #include "playlistmodel.h"
 #include "saveplaylistdialog.h"
+#include <QDebug>
 #include <QKeySequence>
 #include <QProgressBar>
 #include <QPushButton>
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon(":/icons/multimedia-player.svg"));
 
     auto controller = new Controller(this);
+    connect(controller, &Controller::connectionStateChanged, this, &MainWindow::setConnectionState);
 
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);
@@ -104,20 +106,21 @@ MainWindow::MainWindow(QWidget *parent)
     m_connectedWidgets.append(m_slider);
 
     auto splitter = new QSplitter();
-    splitter->setEnabled(false);
 
     auto databaseModel = new DatabaseModel(controller->databaseController());
     auto databaseView = new QTreeView();
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
+    databaseView->setEnabled(false);
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
     auto playlistModel = new PlaylistModel(controller->playlistController());
     auto playlistView = new QTreeView();
     playlistView->setModel(playlistModel);
-    m_connectedWidgets.append(playlistView);
     splitter->addWidget(playlistView);
+    playlistView->setEnabled(false);
+    m_connectedWidgets.append(playlistView);
     layout->addWidget(splitter);
     auto widget = new QWidget();
     widget->setLayout(layout);
@@ -133,19 +136,23 @@ void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
 {
     m_connectionDialog->setConnectionState(connectionState);
 
-    m_slider->setMinimum(0);
-    m_slider->setMaximum(1);
-    m_slider->setValue(0);
+    qDebug() << connectionState;
 
-    for (auto widget : m_connectedWidgets) {
-        widget->setEnabled(Controller::ConnectionState::Connected == connectionState);
-    }
+    if (Controller::ConnectionState::Connected == connectionState) {
+        for (auto widget : m_connectedWidgets) {
+            widget->setEnabled(true);
+        }
 
-    for (auto action : m_connectedActions) {
-        action->setEnabled(Controller::ConnectionState::Connected == connectionState);
-    }
+        for (auto action : m_connectedActions) {
+            action->setEnabled(true);
+        }
+    } else {
+        for (auto widget : m_connectedWidgets) {
+            widget->setEnabled(false);
+        }
 
-    if (Controller::ConnectionState::Disconnected == connectionState) {
-        m_connectionDialog->exec();
+        for (auto action : m_connectedActions) {
+            action->setEnabled(false);
+        }
     }
 }

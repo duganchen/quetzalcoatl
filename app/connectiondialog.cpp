@@ -14,6 +14,11 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     : QDialog(parent, f)
     , m_controller(controller)
 {
+    connect(m_controller,
+            &Controller::connectionStateChanged,
+            this,
+            &ConnectionDialog::setConnectionState);
+
     setWindowIcon(QIcon(":/icons/network-connect.svg"));
     setWindowTitle("Connect to MPD");
     auto layout = new QVBoxLayout();
@@ -64,9 +69,6 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     connectionLayout->addRow("Pass&word:", m_passwordEdit);
     layout->addLayout(connectionLayout);
 
-    m_errorLabel = new QLabel();
-    layout->addWidget(m_errorLabel);
-
     auto buttonBox = new QDialogButtonBox();
     m_connectButton = new QPushButton("Connect to &MPD");
 
@@ -77,11 +79,15 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     });
 
     buttonBox->addButton(m_connectButton, QDialogButtonBox::AcceptRole);
-    connect(m_connectButton, &QPushButton::clicked, this, &QDialog::accept);
+    connect(m_connectButton, &QPushButton::clicked, this, &ConnectionDialog::connectToMPD);
     auto cancelButton = buttonBox->addButton(QDialogButtonBox::Cancel);
-    connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
+    connect(cancelButton, &QPushButton::clicked, this, [=]() {
+        m_errorLabel->setText("");
+        QDialog::reject();
+    });
     m_defaultsButton = buttonBox->addButton(QDialogButtonBox::RestoreDefaults);
     connect(m_defaultsButton, &QPushButton::clicked, [=]() {
+        m_errorLabel->setText("");
         m_hostEdit->setText(m_controller->defaultHost());
         m_portSpinner->setValue(m_controller->defaultPort());
     });
@@ -91,12 +97,15 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     m_progressBar->setMinimum(0);
     m_progressBar->setMaximum(1);
     layout->addWidget(m_progressBar);
-
+    m_errorLabel = new QLabel();
+    layout->addWidget(m_errorLabel);
+    connect(m_controller, &Controller::connectionErrorMessage, m_errorLabel, &QLabel::setText);
     setLayout(layout);
 }
 
 void ConnectionDialog::setConnectionState(Controller::ConnectionState connectionState)
 {
+    m_hostEdit->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
     m_connectButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
     m_portSpinner->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
     m_passwordCheck->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
@@ -105,15 +114,24 @@ void ConnectionDialog::setConnectionState(Controller::ConnectionState connection
     m_defaultsButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
 
     if (Controller::ConnectionState::Connecting == connectionState) {
-        m_progressBar->setMaximum(1);
-    } else {
         m_progressBar->setMaximum(0);
+    } else {
+        m_progressBar->setMaximum(1);
+    }
+
+    if (Controller::ConnectionState::Connected == connectionState) {
+        qDebug() << "Yay we're connected";
+
+        QSettings settings;
+        settings.setValue("host", m_hostEdit->text());
+        settings.setValue("port", m_portSpinner->value());
+        QDialog::accept();
     }
 }
 
-void ConnectionDialog::accept()
+void ConnectionDialog::connectToMPD()
 {
+    m_errorLabel->setText("");
     m_hostEdit->setText(m_hostEdit->text().trimmed());
-    qDebug() << "Accepted";
-    QDialog::accept();
+    m_controller->connectToMPD(m_hostEdit->text(), m_portSpinner->value(), 200);
 }
