@@ -1,6 +1,5 @@
 #include "connectiondialog.h"
 #include "controller.h"
-#include <QDebug>
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QIcon>
@@ -120,8 +119,6 @@ void ConnectionDialog::setConnectionState(Controller::ConnectionState connection
     }
 
     if (Controller::ConnectionState::Connected == connectionState) {
-        qDebug() << "Yay we're connected";
-
         QSettings settings;
         settings.setValue("host", m_hostEdit->text());
         settings.setValue("port", m_portSpinner->value());

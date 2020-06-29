@@ -42,7 +42,6 @@ Controller::~Controller()
 
 void Controller::connectToMPD(QString host, int port, int timeout_ms)
 {
-    qDebug() << "Connecting to MPD";
     setConnectionState(ConnectionState::Connecting);
 
     // This is literally how libmpdclient determines if a host is a Unix socket,
@@ -51,10 +50,9 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
         createMPD(host, port, timeout_ms);
 
     } else {
-        // If it's a Tcp socket, then we first use Qt to asynchronously check if we can actually
-        // connect, because libmpdclient's internal host address resolution is blocking and
-        // can take a long time to return if it fails
-        qDebug() << "looking up locahost";
+        // libmpdclient's internal host address resolution is blocking and
+        // can take a long time to return if it fails. We use Qt to confirm that we
+        // can resolve the host first.
         QHostInfo::lookupHost(host, [=](QHostInfo hostInfo) {
             if (hostInfo.error() == QHostInfo::NoError) {
                 createMPD(host, port, timeout_ms);
@@ -123,25 +121,28 @@ unsigned Controller::defaultPort()
 
 void Controller::handleIdle(mpd_idle idle)
 {
-    qDebug() << "Controller has received an idle";
     if (!m_connection) {
         return;
     }
 
-    if (!idle && mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
-        // This means we lost the connection.
+    if (mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
+        m_notifier->deleteLater();
+        m_notifier = nullptr;
 
         m_queueVersion = 0;
 
-        qDebug() << mpd_connection_get_error_message(m_connection);
+        // The expected error message, should you query it with
+        // mpd_connection_get_error_message, is
+        // "Connection closed by the server"
+
         mpd_connection_free(m_connection);
         m_connection = nullptr;
         setConnectionState(ConnectionState::Disconnected);
-    }
-
-    if (idle & MPD_IDLE_QUEUE) {
-        qDebug() << "THE QUEUE HAS CHANGED";
-        emit queueChanged();
+    } else {
+        if (idle & MPD_IDLE_QUEUE) {
+            qDebug() << "THE QUEUE HAS CHANGED";
+            emit queueChanged();
+        }
     }
 }
 
@@ -152,14 +153,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
     if (!connection) {
         // I'm not really sure how I'm supposed to handle this, but for now...
         emit connectionErrorMessage("Out of memory");
-    }
-
-    if (m_connection) {
-        mpd_connection_free(m_connection);
-    }
-
-    if (m_notifier) {
-        delete m_notifier;
+        return;
     }
 
     m_connection = connection;

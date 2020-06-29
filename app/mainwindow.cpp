@@ -4,7 +4,6 @@
 #include "playbacksettingsdialog.h"
 #include "playlistmodel.h"
 #include "saveplaylistdialog.h"
-#include <QDebug>
 #include <QKeySequence>
 #include <QProgressBar>
 #include <QPushButton>
@@ -135,8 +134,6 @@ MainWindow::~MainWindow() {}
 void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
 {
     m_connectionDialog->setConnectionState(connectionState);
-
-    qDebug() << connectionState;
 
     if (Controller::ConnectionState::Connected == connectionState) {
         for (auto widget : m_connectedWidgets) {
