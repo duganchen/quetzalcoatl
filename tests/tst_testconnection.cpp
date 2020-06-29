@@ -17,9 +17,7 @@ public:
     ~TestConnection();
 
 private slots:
-#if 0
     void test_spinUpMPD();
-#endif
     void test_cannotConnect();
 };
 
@@ -46,7 +44,6 @@ void TestConnection::test_cannotConnect()
     }
 }
 
-#if 0
 void TestConnection::test_spinUpMPD()
 {
     MPDProcess proc;
@@ -63,7 +60,7 @@ void TestConnection::test_spinUpMPD()
     }
 
     Controller controller;
-    QSignalSpy spy(&controller, &Controller::connectionState);
+    QSignalSpy spy(&controller, &Controller::connectionStateChanged);
     controller.connectToMPD(proc.socketPath().toUtf8().constData(), 0, 0);
     spy.wait();
     spy.wait();
@@ -76,7 +73,6 @@ void TestConnection::test_spinUpMPD()
         QCOMPARE(endState, Controller::ConnectionState::Connected);
     }
 }
-#endif
 
 QTEST_MAIN(TestConnection)
 

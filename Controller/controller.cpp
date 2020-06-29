@@ -148,6 +148,7 @@ void Controller::handleIdle(mpd_idle idle)
 
 void Controller::createMPD(QString host, int port, int timeout_ms)
 {
+    qDebug() << "CREAATING MPD";
     auto connection = mpd_connection_new(host.toUtf8().constData(), port, timeout_ms);
 
     if (!connection) {
@@ -166,12 +167,14 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         connect(m_notifier, &QSocketNotifier::activated, this, &Controller::handleActivation);
 
         mpd_send_idle(m_connection);
+        qDebug() << "WE ARE CONNECTEd";
         setConnectionState(ConnectionState::Connected);
     } else {
         // In the case where MPD is not running at the port, which is the expected error,
         // we get a MPD_ERROR_SYSTEM with a "Connection refused" message. On Linux and
         // Windows.
         emit connectionErrorMessage(mpd_connection_get_error_message(m_connection));
+        qDebug() << "WE ARE DISCONNECTED";
         setConnectionState(ConnectionState::Disconnected);
         // and we don't need to free it. I checked.
         m_connection = nullptr;
