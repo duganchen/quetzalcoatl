@@ -1,3 +1,4 @@
+file(COPY icons DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 add_executable(quetzalcoatl
