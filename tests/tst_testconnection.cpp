@@ -17,7 +17,9 @@ public:
     ~TestConnection();
 
 private slots:
+#if 0
     void test_spinUpMPD();
+#endif
     void test_cannotConnect();
 };
 
@@ -30,7 +32,7 @@ void TestConnection::test_cannotConnect()
     Controller controller;
     // Note: For this to work, mpd must not be running and "locahost"
     // (note deliberate typo) must not be resolvable.
-    QSignalSpy spy(&controller, &Controller::errorMessage);
+    QSignalSpy spy(&controller, &Controller::connectionErrorMessage);
 
     controller.connectToMPD("locahost", 6600, 200);
     // On my Fedora 32 box, it takes around 7 seconds to time out.
@@ -44,6 +46,7 @@ void TestConnection::test_cannotConnect()
     }
 }
 
+#if 0
 void TestConnection::test_spinUpMPD()
 {
     MPDProcess proc;
@@ -73,6 +76,7 @@ void TestConnection::test_spinUpMPD()
         QCOMPARE(endState, Controller::ConnectionState::Connected);
     }
 }
+#endif
 
 QTEST_MAIN(TestConnection)
 
