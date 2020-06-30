@@ -6,6 +6,7 @@
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
+#include <QtWidgets/QSlider>
 
 class CONTROLLER_EXPORT Controller : public QObject
 {
@@ -20,6 +21,8 @@ public:
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
+
+    void pollForStatus();
 
 public:
     QVector<QString> getAlbumList();
@@ -45,6 +48,9 @@ signals:
     void queueChanged();
 
     QString connectionErrorMessage(QString);
+
+    void tickInterval(int);
+    void tickPosition(QSlider::TickPosition);
 
 private:
     void handleIdle(mpd_idle);

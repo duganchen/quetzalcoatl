@@ -65,6 +65,8 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
     }
 }
 
+void Controller::pollForStatus() {}
+
 void Controller::handleListAlbumsClick()
 {
     if (!m_connection) {

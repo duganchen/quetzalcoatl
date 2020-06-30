@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QSplitter>
 #include <QStatusBar>
+#include <QTimer>
 #include <QToolBar>
 #include <QTreeView>
 #include <QVBoxLayout>
@@ -100,6 +101,10 @@ MainWindow::MainWindow(QWidget *parent)
     auto layout = new QVBoxLayout();
     m_slider = new QSlider(Qt::Horizontal);
     m_slider->setTracking(false);
+
+    connect(controller, &Controller::tickInterval, m_slider, &QSlider::setTickInterval);
+    connect(controller, &Controller::tickPosition, m_slider, &QSlider::setTickPosition);
+
     layout->addWidget(m_slider);
     m_slider->setEnabled(false);
     m_connectedWidgets.append(m_slider);
@@ -127,6 +132,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto status = statusBar();
     status->addWidget(new QLabel());
+
+    auto timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, controller, &Controller::pollForStatus);
 }
 
 MainWindow::~MainWindow() {}
