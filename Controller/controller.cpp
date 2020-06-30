@@ -67,9 +67,7 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
 
 void Controller::pollForStatus()
 {
-    qDebug() << "Polling for status";
     if (!m_connection) {
-        qDebug() << "Connection is null";
         return;
     }
 
@@ -78,12 +76,14 @@ void Controller::pollForStatus()
         return;
     }
 
-    qDebug() << "m_connection is " << m_connection;
-
+    qDebug() << "Shutting down idle";
     m_notifier->setEnabled(false);
-    mpd_run_noidle(m_connection);
+    auto idle = mpd_run_noidle(m_connection);
+    handleIdle(idle);
 
+    qDebug() << "Getting status";
     auto status = mpd_run_status(m_connection);
+    qDebug() << "Got status";
     if (nullptr == status) {
         qDebug() << "Status is null";
         auto msg = mpd_connection_get_error_message(m_connection);
@@ -101,6 +101,7 @@ void Controller::pollForStatus()
     emit sliderValue(elapsed);
     mpd_status_free(status);
 
+    qDebug() << "Turning idle back on";
     m_notifier->setEnabled(true);
     mpd_send_idle(m_connection);
 }
@@ -161,6 +162,8 @@ unsigned Controller::defaultPort()
 
 void Controller::handleIdle(mpd_idle idle)
 {
+    qDebug() << "idle was " << idle;
+    qDebug() << "Handling idle";
     if (!m_connection) {
         return;
     }
@@ -225,6 +228,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 void Controller::handleActivation()
 {
     handleIdle(mpd_recv_idle(m_connection, false));
+    mpd_send_idle(m_connection);
 }
 
 Controller::ConnectionState Controller::connectionState() const
