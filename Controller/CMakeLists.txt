@@ -5,5 +5,5 @@ add_library(Controller SHARED
 )
 
 target_include_directories(Controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})
-target_link_libraries(Controller PRIVATE Qt5::Network Qt5::Gui Qt5::Widgets PkgConfig::LIBMPDCLIENT)
+target_link_libraries(Controller PRIVATE Qt5::Network Qt5::Gui PkgConfig::LIBMPDCLIENT)
 target_compile_definitions(Controller PRIVATE CONTROLLER_LIBRARY)

@@ -5,6 +5,7 @@
 #include "playlistmodel.h"
 #include "saveplaylistdialog.h"
 #include <QKeySequence>
+#include <QMessageBox>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QSplitter>
@@ -22,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto controller = new Controller(this);
     connect(controller, &Controller::connectionStateChanged, this, &MainWindow::setConnectionState);
+    connect(controller, &Controller::errorMessage, [=](QString message) {
+        QMessageBox::critical(this, "Error", message);
+    });
 
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);
@@ -102,8 +106,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_slider = new QSlider(Qt::Horizontal);
     m_slider->setTracking(false);
 
-    connect(controller, &Controller::tickInterval, m_slider, &QSlider::setTickInterval);
-    connect(controller, &Controller::tickPosition, m_slider, &QSlider::setTickPosition);
+    connect(controller, &Controller::sliderMax, m_slider, &QSlider::setMaximum);
+    connect(controller, &Controller::sliderValue, m_slider, &QSlider::setValue);
 
     layout->addWidget(m_slider);
     m_slider->setEnabled(false);
@@ -135,6 +139,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto timer = new QTimer(this);
     connect(timer, &QTimer::timeout, controller, &Controller::pollForStatus);
+    timer->start(1000);
 }
 
 MainWindow::~MainWindow() {}

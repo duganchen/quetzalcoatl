@@ -47,7 +47,7 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
     // This is literally how libmpdclient determines if a host is a Unix socket,
     // at least as of 2.18.
     if (host.startsWith("/") || host.startsWith("@")) {
-        createMPD(host, port, timeout_ms);
+        createMPD(host, port, 0);
 
     } else {
         // libmpdclient's internal host address resolution is blocking and
@@ -55,7 +55,7 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
         // can resolve the host first.
         QHostInfo::lookupHost(host, [=](QHostInfo hostInfo) {
             if (hostInfo.error() == QHostInfo::NoError) {
-                createMPD(host, port, timeout_ms);
+                createMPD(host, port, 0);
             } else {
                 // The expected error is QHostInfo::HostNotFound, "Host not found".
                 emit connectionErrorMessage(hostInfo.errorString());
@@ -65,7 +65,45 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
     }
 }
 
-void Controller::pollForStatus() {}
+void Controller::pollForStatus()
+{
+    qDebug() << "Polling for status";
+    if (!m_connection) {
+        qDebug() << "Connection is null";
+        return;
+    }
+
+    if (m_connectionState != Controller::ConnectionState::Connected) {
+        qDebug() << "State is not connected";
+        return;
+    }
+
+    qDebug() << "m_connection is " << m_connection;
+
+    m_notifier->setEnabled(false);
+    mpd_run_noidle(m_connection);
+
+    auto status = mpd_run_status(m_connection);
+    if (nullptr == status) {
+        qDebug() << "Status is null";
+        auto msg = mpd_connection_get_error_message(m_connection);
+        qDebug() << msg;
+        emit errorMessage(msg);
+        return;
+    }
+
+    qDebug() << "Emitting signals";
+    auto total = mpd_status_get_total_time(status);
+    qDebug() << "Total is " << total;
+    emit sliderMax(total);
+    auto elapsed = mpd_status_get_elapsed_time(status);
+    qDebug() << "Elapsed is " << elapsed;
+    emit sliderValue(elapsed);
+    mpd_status_free(status);
+
+    m_notifier->setEnabled(true);
+    mpd_send_idle(m_connection);
+}
 
 void Controller::handleListAlbumsClick()
 {
@@ -171,6 +209,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         mpd_send_idle(m_connection);
         qDebug() << "WE ARE CONNECTEd";
         setConnectionState(ConnectionState::Connected);
+        pollForStatus();
     } else {
         // In the case where MPD is not running at the port, which is the expected error,
         // we get a MPD_ERROR_SYSTEM with a "Connection refused" message. On Linux and

@@ -6,7 +6,6 @@
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
-#include <QtWidgets/QSlider>
 
 class CONTROLLER_EXPORT Controller : public QObject
 {
@@ -47,10 +46,10 @@ signals:
 
     void queueChanged();
 
-    QString connectionErrorMessage(QString);
+    void connectionErrorMessage(QString);
 
-    void tickInterval(int);
-    void tickPosition(QSlider::TickPosition);
+    void sliderMax(int);
+    void sliderValue(int);
 
 private:
     void handleIdle(mpd_idle);
