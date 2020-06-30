@@ -72,36 +72,26 @@ void Controller::pollForStatus()
     }
 
     if (m_connectionState != Controller::ConnectionState::Connected) {
-        qDebug() << "State is not connected";
         return;
     }
 
-    qDebug() << "Shutting down idle";
     m_notifier->setEnabled(false);
     auto idle = mpd_run_noidle(m_connection);
     handleIdle(idle);
 
-    qDebug() << "Getting status";
     auto status = mpd_run_status(m_connection);
-    qDebug() << "Got status";
     if (nullptr == status) {
-        qDebug() << "Status is null";
         auto msg = mpd_connection_get_error_message(m_connection);
-        qDebug() << msg;
         emit errorMessage(msg);
         return;
     }
 
-    qDebug() << "Emitting signals";
     auto total = mpd_status_get_total_time(status);
-    qDebug() << "Total is " << total;
     emit sliderMax(total);
     auto elapsed = mpd_status_get_elapsed_time(status);
-    qDebug() << "Elapsed is " << elapsed;
     emit sliderValue(elapsed);
     mpd_status_free(status);
 
-    qDebug() << "Turning idle back on";
     m_notifier->setEnabled(true);
     mpd_send_idle(m_connection);
 }
@@ -162,8 +152,6 @@ unsigned Controller::defaultPort()
 
 void Controller::handleIdle(mpd_idle idle)
 {
-    qDebug() << "idle was " << idle;
-    qDebug() << "Handling idle";
     if (!m_connection) {
         return;
     }
@@ -191,11 +179,9 @@ void Controller::handleIdle(mpd_idle idle)
 
 void Controller::createMPD(QString host, int port, int timeout_ms)
 {
-    qDebug() << "CREAATING MPD";
     auto connection = mpd_connection_new(host.toUtf8().constData(), port, timeout_ms);
 
     if (!connection) {
-        // I'm not really sure how I'm supposed to handle this, but for now...
         emit connectionErrorMessage("Out of memory");
         return;
     }
@@ -210,7 +196,6 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         connect(m_notifier, &QSocketNotifier::activated, this, &Controller::handleActivation);
 
         mpd_send_idle(m_connection);
-        qDebug() << "WE ARE CONNECTEd";
         setConnectionState(ConnectionState::Connected);
         pollForStatus();
     } else {
@@ -218,7 +203,6 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         // we get a MPD_ERROR_SYSTEM with a "Connection refused" message. On Linux and
         // Windows.
         emit connectionErrorMessage(mpd_connection_get_error_message(m_connection));
-        qDebug() << "WE ARE DISCONNECTED";
         setConnectionState(ConnectionState::Disconnected);
         // and we don't need to free it. I checked.
         m_connection = nullptr;
