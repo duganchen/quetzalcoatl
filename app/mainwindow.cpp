@@ -23,9 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto controller = new Controller(this);
     connect(controller, &Controller::connectionStateChanged, this, &MainWindow::setConnectionState);
-    connect(controller, &Controller::errorMessage, [=](QString message) {
-        QMessageBox::critical(this, "Error", message);
-    });
 
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);
@@ -33,10 +30,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_connectionDialog = new ConnectionDialog(controller, this);
 
-    toolBar->addAction(QIcon(":/icons/network-connect.svg"), "Connect to MPD", [=]() {
-        m_connectionDialog->exec();
-    });
+    auto connectAction = toolBar->addAction(QIcon(":/icons/network-connect.svg"),
+                                            "Connect to MPD",
+                                            [=]() { m_connectionDialog->exec(); });
     toolBar->addSeparator();
+
+    // Error messages from the Controller are unforeseen and unrecoverable. If we get one, then we just
+    // let the user shut the program down.
+    connect(controller, &Controller::errorMessage, [=](QString message) {
+        QMessageBox::critical(this, "Critical error", message);
+        setConnectionState(Controller::ConnectionState::Disconnected);
+        connectAction->setEnabled(false);
+    });
 
     auto stopAction = toolBar->addAction(QIcon(":/icons/stop_circle-24px.svg"), "Stop");
     stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
