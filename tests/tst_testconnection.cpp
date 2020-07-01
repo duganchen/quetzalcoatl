@@ -60,7 +60,7 @@ void TestConnection::test_spinUpMPD()
     }
 
     Controller controller;
-    QSignalSpy spy(&controller, &Controller::connectionStateChanged);
+    QSignalSpy spy(&controller, &Controller::connectionState);
     controller.connectToMPD(proc.socketPath().toUtf8().constData(), 0, 0);
     spy.wait();
     spy.wait();

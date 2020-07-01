@@ -29,15 +29,12 @@ public:
     QString defaultHost();
     unsigned defaultPort();
 
-    ConnectionState connectionState() const;
-    void setConnectionState(ConnectionState);
-
     ItemModelController *databaseController() const;
     ItemModelController *playlistController() const;
 
 signals:
     void errorMessage(QString);
-    void connectionStateChanged(Controller::ConnectionState connectionState);
+    void connectionState(Controller::ConnectionState connectionState);
 
     void beginMPDCommand();
     void endMPDCommand();

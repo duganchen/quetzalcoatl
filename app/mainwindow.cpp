@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon(":/icons/multimedia-player.svg"));
 
     auto controller = new Controller(this);
-    connect(controller, &Controller::connectionStateChanged, this, &MainWindow::setConnectionState);
+    connect(controller, &Controller::connectionState, this, &MainWindow::setConnectionState);
 
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);

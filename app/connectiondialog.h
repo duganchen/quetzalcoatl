@@ -31,6 +31,8 @@ private:
     Controller *m_controller;
     QPushButton *m_connectButton;
     QPushButton *m_defaultsButton;
+
+    Controller::ConnectionState m_connectionState;
 signals:
 };
 

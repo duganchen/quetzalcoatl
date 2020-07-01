@@ -10,7 +10,6 @@ Controller::Controller(QObject *parent)
     , m_connection(nullptr)
     , m_notifier(nullptr)
     , m_queueVersion(0)
-    , m_connectionState(ConnectionState::Disconnected)
 {
     m_databaseController = new ItemModelController();
     auto dbRootItem = m_databaseController->rootItem();
@@ -42,7 +41,7 @@ Controller::~Controller()
 
 void Controller::connectToMPD(QString host, int port, int timeout_ms)
 {
-    setConnectionState(ConnectionState::Connecting);
+    emit connectionState(ConnectionState::Connecting);
 
     // This is literally how libmpdclient determines if a host is a Unix socket,
     // at least as of 2.18.
@@ -59,7 +58,7 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
             } else {
                 // The expected error is QHostInfo::HostNotFound, "Host not found".
                 emit connectionErrorMessage(hostInfo.errorString());
-                setConnectionState(ConnectionState::Disconnected);
+                emit connectionState(ConnectionState::Disconnected);
             }
         });
     }
@@ -68,10 +67,6 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
 void Controller::pollForStatus()
 {
     if (!m_connection) {
-        return;
-    }
-
-    if (m_connectionState != Controller::ConnectionState::Connected) {
         return;
     }
 
@@ -157,6 +152,7 @@ void Controller::handleIdle(mpd_idle idle)
     }
 
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
+        m_notifier->setEnabled(false);
         m_notifier->deleteLater();
         m_notifier = nullptr;
 
@@ -168,7 +164,9 @@ void Controller::handleIdle(mpd_idle idle)
 
         mpd_connection_free(m_connection);
         m_connection = nullptr;
-        setConnectionState(ConnectionState::Disconnected);
+        emit connectionState(ConnectionState::Disconnected);
+        emit sliderMax(0);
+        emit sliderValue(0);
     } else {
         if (idle & MPD_IDLE_QUEUE) {
             qDebug() << "THE QUEUE HAS CHANGED";
@@ -196,14 +194,14 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         connect(m_notifier, &QSocketNotifier::activated, this, &Controller::handleActivation);
 
         mpd_send_idle(m_connection);
-        setConnectionState(ConnectionState::Connected);
+        emit connectionState(ConnectionState::Connected);
         pollForStatus();
     } else {
         // In the case where MPD is not running at the port, which is the expected error,
         // we get a MPD_ERROR_SYSTEM with a "Connection refused" message. On Linux and
         // Windows.
         emit connectionErrorMessage(mpd_connection_get_error_message(m_connection));
-        setConnectionState(ConnectionState::Disconnected);
+        emit connectionState(ConnectionState::Disconnected);
         // and we don't need to free it. I checked.
         m_connection = nullptr;
     }
@@ -212,19 +210,8 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 void Controller::handleActivation()
 {
     handleIdle(mpd_recv_idle(m_connection, false));
-    mpd_send_idle(m_connection);
-}
-
-Controller::ConnectionState Controller::connectionState() const
-{
-    return m_connectionState;
-}
-
-void Controller::setConnectionState(Controller::ConnectionState state)
-{
-    if (m_connectionState != state) {
-        m_connectionState = state;
-        emit connectionStateChanged(state);
+    if (m_connection) {
+        mpd_send_idle(m_connection);
     }
 }
 

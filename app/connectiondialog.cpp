@@ -12,11 +12,9 @@
 ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::WindowFlags f)
     : QDialog(parent, f)
     , m_controller(controller)
+    , m_connectionState(Controller::ConnectionState::Disconnected)
 {
-    connect(m_controller,
-            &Controller::connectionStateChanged,
-            this,
-            &ConnectionDialog::setConnectionState);
+    connect(m_controller, &Controller::connectionState, this, &ConnectionDialog::setConnectionState);
 
     setWindowIcon(QIcon(":/icons/network-connect.svg"));
     setWindowTitle("Connect to MPD");
@@ -73,7 +71,7 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
 
     connect(m_hostEdit, &QLineEdit::textChanged, [=](const QString &text) {
         m_connectButton->setEnabled(!text.trimmed().isEmpty()
-                                    && m_controller->connectionState()
+                                    && m_connectionState
                                            == Controller::ConnectionState::Disconnected);
     });
 
@@ -104,6 +102,12 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
 
 void ConnectionDialog::setConnectionState(Controller::ConnectionState connectionState)
 {
+    if (m_connectionState == connectionState) {
+        return;
+    }
+
+    m_connectionState = connectionState;
+
     m_hostEdit->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
     m_connectButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
     m_portSpinner->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
