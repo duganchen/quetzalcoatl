@@ -2,15 +2,12 @@
     <qresource prefix="/">
         <file>icons/audio-x-generic.svg</file>
         <file>icons/configure.svg</file>
-        <file>icons/drive-harddisk.svg</file>
         <file>icons/folder-documents.svg</file>
-        <file>icons/folder-favorites.svg</file>
         <file>icons/folder-sound.svg</file>
         <file>icons/media-optical-audio.svg</file>
         <file>icons/multimedia-player.svg</file>
         <file>icons/network-connect.svg</file>
         <file>icons/network-disconnect.svg</file>
-        <file>icons/server-database.svg</file>
         <file>icons/view-media-playlist.svg</file>
         <file>icons/pause_circle_outline-24px.svg</file>
         <file>icons/play_circle_outline-24px.svg</file>

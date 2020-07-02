@@ -66,7 +66,6 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
 
 void Controller::updateStatus()
 {
-    qDebug() << "Calling updateStatus";
     disableIdle();
     pollForStatus();
     enableIdle();

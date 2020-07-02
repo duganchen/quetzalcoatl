@@ -1,4 +1,5 @@
 add_library(Controller SHARED
+  icons.qrc
   item.cpp
   itemmodelcontroller.cpp
   controller.cpp
