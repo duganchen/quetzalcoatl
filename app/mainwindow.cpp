@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QSettings>
 #include <QSplitter>
 #include <QStatusBar>
 #include <QTimer>
@@ -149,6 +150,11 @@ MainWindow::MainWindow(QWidget *parent)
         // Not sure how good an idea this is, but whatever...
         controller->deleteLater();
     });
+
+    QSettings settings;
+    if (settings.contains("host") && settings.contains("port")) {
+        m_connectionDialog->connectToMPD();
+    }
 }
 
 MainWindow::~MainWindow() {}
