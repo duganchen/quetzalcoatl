@@ -1,20 +1,20 @@
 #ifndef ITEMMODELCONTROLLER_H
 #define ITEMMODELCONTROLLER_H
 
-#include <QObject>
+#include "dbitem.h"
 #include <QModelIndex>
-#include "item.h"
+#include <QObject>
 
 class ItemModelController : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ItemModelController(QObject *parent = nullptr);
+    explicit ItemModelController(AbstractItem *, QObject *parent = nullptr);
     ~ItemModelController();
 
 public:
-    Item *rootItem() const;
+    AbstractItem *rootItem() const;
 signals:
     void rowsAboutToBeInserted(const QModelIndex &, int, int);
     void rowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int);
@@ -26,8 +26,7 @@ signals:
     void modelReset();
 
 private:
-    Item *m_rootItem;
+    AbstractItem *m_rootItem;
 };
-
 
 #endif // ITEMMODELCONTROLLER_H

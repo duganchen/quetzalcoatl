@@ -1,19 +1,17 @@
-#include <QtGui/QIcon>
 #include "itemmodelcontroller.h"
+#include <QtGui/QIcon>
 
-ItemModelController::ItemModelController(QObject *parent)
+ItemModelController::ItemModelController(AbstractItem *rootItem, QObject *parent)
     : QObject(parent)
-{
-    m_rootItem = new Item(QIcon(), "");
-}
+    , m_rootItem(rootItem)
+{}
 
 ItemModelController::~ItemModelController()
 {
     delete m_rootItem;
 }
 
-Item * ItemModelController::rootItem() const
+AbstractItem *ItemModelController::rootItem() const
 {
     return m_rootItem;
 }
-

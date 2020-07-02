@@ -40,10 +40,6 @@ ItemModel::ItemModel(ItemModelController *itemModelController, QObject *parent)
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
 {
-    if (parent.isValid()) {
-        auto item = static_cast<Item *>(parent.internalPointer());
-        qDebug() << item->label();
-    }
     return false;
 }
 
@@ -53,10 +49,10 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    auto item = static_cast<Item *>(index.internalPointer());
+    auto item = static_cast<AbstractItem *>(index.internalPointer());
 
     if (Qt::DisplayRole == role) {
-        return item->label();
+        return item->text(index.column());
     }
 
     if (Qt::DecorationRole == role) {
@@ -81,7 +77,7 @@ QModelIndex ItemModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
+    auto parentItem = parent.isValid() ? static_cast<AbstractItem *>(parent.internalPointer())
                                        : m_itemModelController->rootItem();
     if (!parentItem) {
         return QModelIndex();
@@ -100,7 +96,7 @@ QModelIndex ItemModel::parent(const QModelIndex &index) const
         return QModelIndex();
     }
 
-    auto childItem = static_cast<Item *>(index.internalPointer());
+    auto childItem = static_cast<AbstractItem *>(index.internalPointer());
     auto parentItem = childItem->parent();
 
     if (m_itemModelController->rootItem() == parentItem)
@@ -115,7 +111,7 @@ int ItemModel::rowCount(const QModelIndex &parent) const
         return 0;
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
+    auto parentItem = parent.isValid() ? static_cast<AbstractItem *>(parent.internalPointer())
                                        : m_itemModelController->rootItem();
     if (!parentItem) {
         return 0;

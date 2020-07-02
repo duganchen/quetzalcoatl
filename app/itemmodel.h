@@ -2,7 +2,6 @@
 #define ITEMMODEL_H
 
 #include "controller.h"
-#include "item.h"
 #include "itemmodelcontroller.h"
 #include <QAbstractItemModel>
 #include <QModelIndex>

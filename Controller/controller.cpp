@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "dbitem.h"
 #include <mpd/client.h>
 #include <QDebug>
 #include <QtNetwork/QHostInfo>
@@ -11,17 +12,19 @@ Controller::Controller(QObject *parent)
     , m_notifier(nullptr)
     , m_queueVersion(0)
 {
-    m_databaseController = new ItemModelController();
-    auto dbRootItem = m_databaseController->rootItem();
-    dbRootItem->append(new Item(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
-    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Albums"));
-    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Compilations"));
-    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Songs"));
-    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Genres"));
-    dbRootItem->append(new Item(QIcon(":/icons/server-database.svg"), "Composers"));
-    dbRootItem->append(new Item(QIcon(":/icons/drive-harddisk"), "/"));
+    auto dbRootItem = new DBItem(QIcon(), "");
+    dbRootItem->append(new DBItem(QIcon(":/icons/folder-favorites.svg"), "Playlists"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), "Albums"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), "Compilations"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), "Songs"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), "Genres"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), "Composers"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"), "/"));
+    m_databaseController = new ItemModelController(dbRootItem);
 
-    m_playlistController = new ItemModelController();
+    auto playlistRootItem = new DBItem(QIcon(), "");
+    playlistRootItem->append(new DBItem(QIcon(":/icons/audio-x-generic.svg"), "song title"));
+    m_playlistController = new ItemModelController(playlistRootItem);
 
     qRegisterMetaType<Controller::ConnectionState>();
 
