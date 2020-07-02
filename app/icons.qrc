@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/configure.svg</file>
-        <file>icons/folder-sound.svg</file>
-        <file>icons/media-optical-audio.svg</file>
         <file>icons/multimedia-player.svg</file>
         <file>icons/network-connect.svg</file>
         <file>icons/network-disconnect.svg</file>
