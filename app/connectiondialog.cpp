@@ -83,11 +83,7 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
         QDialog::reject();
     });
     m_defaultsButton = buttonBox->addButton(QDialogButtonBox::RestoreDefaults);
-    connect(m_defaultsButton, &QPushButton::clicked, [=]() {
-        m_errorLabel->setText("");
-        m_hostEdit->setText(m_controller->defaultHost());
-        m_portSpinner->setValue(m_controller->defaultPort());
-    });
+    connect(m_defaultsButton, &QPushButton::clicked, this, &ConnectionDialog::restoreDefaults);
     layout->addWidget(buttonBox);
 
     m_progressBar = new QProgressBar();
@@ -135,4 +131,13 @@ void ConnectionDialog::connectToMPD()
     m_errorLabel->setText("");
     m_hostEdit->setText(m_hostEdit->text().trimmed());
     m_controller->connectToMPD(m_hostEdit->text(), m_portSpinner->value(), 200);
+}
+
+void ConnectionDialog::restoreDefaults()
+{
+    m_errorLabel->setText("");
+    m_hostEdit->setText(m_controller->defaultHost());
+    m_portSpinner->setValue(m_controller->defaultPort());
+    QSettings settings;
+    settings.clear();
 }

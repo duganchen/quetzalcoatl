@@ -21,6 +21,8 @@ public slots:
     void setConnectionState(Controller::ConnectionState);
     void connectToMPD();
 
+    void restoreDefaults();
+
 private:
     QCheckBox *m_passwordCheck;
     QLineEdit *m_hostEdit;
