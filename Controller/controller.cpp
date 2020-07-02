@@ -64,15 +64,19 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
     }
 }
 
+void Controller::updateStatus()
+{
+    qDebug() << "Calling updateStatus";
+    disableIdle();
+    pollForStatus();
+    enableIdle();
+}
+
 void Controller::pollForStatus()
 {
     if (!m_connection) {
         return;
     }
-
-    m_notifier->setEnabled(false);
-    auto idle = mpd_run_noidle(m_connection);
-    handleIdle(idle);
 
     auto status = mpd_run_status(m_connection);
     if (nullptr == status) {
@@ -86,9 +90,6 @@ void Controller::pollForStatus()
     auto elapsed = mpd_status_get_elapsed_time(status);
     emit sliderValue(elapsed);
     mpd_status_free(status);
-
-    m_notifier->setEnabled(true);
-    mpd_send_idle(m_connection);
 }
 
 void Controller::handleListAlbumsClick()
@@ -110,8 +111,7 @@ QVector<QString> Controller::getAlbumList()
         return albums;
     }
 
-    m_notifier->setEnabled(false);
-    mpd_run_noidle(m_connection);
+    disableIdle();
 
     if (!mpd_search_db_tags(m_connection, MPD_TAG_ALBUM)) {
         qDebug() << mpd_connection_get_error_message(m_connection);
@@ -129,8 +129,7 @@ QVector<QString> Controller::getAlbumList()
         mpd_return_pair(m_connection, pair);
     }
 
-    m_notifier->setEnabled(true);
-    mpd_send_idle(m_connection);
+    enableIdle();
 
     return albums;
 }
@@ -173,7 +172,7 @@ void Controller::handleIdle(mpd_idle idle)
             emit queueChanged();
         } else if (idle & MPD_IDLE_PLAYER) {
             qDebug() << "the player state has changed: play, stop, pause, seek, ...";
-            // pollForStatus();
+            pollForStatus();
         } else if (idle & MPD_IDLE_MIXER) {
             qDebug() << "the volume has been modified";
         } else if (idle & MPD_IDLE_OUTPUT) {
@@ -204,6 +203,10 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
     m_connection = connection;
 
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_SUCCESS) {
+        emit connectionState(ConnectionState::Connected);
+
+        pollForStatus();
+
         m_notifier = new QSocketNotifier(mpd_connection_get_fd(m_connection),
                                          QSocketNotifier::Read,
                                          this);
@@ -211,8 +214,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         connect(m_notifier, &QSocketNotifier::activated, this, &Controller::handleActivation);
 
         mpd_send_idle(m_connection);
-        emit connectionState(ConnectionState::Connected);
-        pollForStatus();
+
     } else {
         // In the case where MPD is not running at the port, which is the expected error,
         // we get a MPD_ERROR_SYSTEM with a "Connection refused" message. On Linux and
@@ -226,10 +228,8 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 
 void Controller::handleActivation()
 {
-    qDebug() << "Handling activation";
     handleIdle(mpd_recv_idle(m_connection, false));
     if (m_connection) {
-        qDebug() << "Sending idle";
         mpd_send_idle(m_connection);
     }
 }
@@ -242,4 +242,26 @@ ItemModelController *Controller::databaseController() const
 ItemModelController *Controller::playlistController() const
 {
     return m_playlistController;
+}
+
+// Call these two before and after most synchronous MPD commands.
+// Make sure they're called OUTside the idle handler!
+
+void Controller::disableIdle()
+{
+    if (!m_notifier || !m_connection) {
+        return;
+    }
+    m_notifier->setEnabled(false);
+    auto idle = mpd_run_noidle(m_connection);
+    handleIdle(idle);
+}
+
+void Controller::enableIdle()
+{
+    if (!m_notifier || !m_connection) {
+        return;
+    }
+    m_notifier->setEnabled(true);
+    mpd_send_idle(m_connection);
 }

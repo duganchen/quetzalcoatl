@@ -136,7 +136,7 @@ MainWindow::MainWindow(QWidget *parent)
     status->addWidget(new QLabel());
 
     auto timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, controller, &Controller::pollForStatus);
+    connect(timer, &QTimer::timeout, controller, &Controller::updateStatus);
     timer->start(1000);
 
     // Error messages from the Controller are unforeseen and unrecoverable. If we get one, then we just

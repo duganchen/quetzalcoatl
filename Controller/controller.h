@@ -21,7 +21,7 @@ public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
 
-    void pollForStatus();
+    void updateStatus();
 
 public:
     QVector<QString> getAlbumList();
@@ -51,6 +51,11 @@ signals:
 private:
     void handleIdle(mpd_idle);
     void createMPD(QString, int, int);
+
+    void enableIdle();
+    void disableIdle();
+
+    void pollForStatus();
 
     QString m_defaultHost;
     unsigned m_defaultPort;
