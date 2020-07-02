@@ -147,10 +147,6 @@ unsigned Controller::defaultPort()
 
 void Controller::handleIdle(mpd_idle idle)
 {
-    if (!m_connection) {
-        return;
-    }
-
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
@@ -168,9 +164,30 @@ void Controller::handleIdle(mpd_idle idle)
         emit sliderMax(0);
         emit sliderValue(0);
     } else {
-        if (idle & MPD_IDLE_QUEUE) {
-            qDebug() << "THE QUEUE HAS CHANGED";
+        if (idle & MPD_IDLE_DATABASE) {
+            qDebug() << "song database has been updated";
+        } else if (idle & MPD_IDLE_STORED_PLAYLIST) {
+            qDebug() << "a stored playlist has been modified, created, deleted or renamed";
+        } else if (idle & MPD_IDLE_QUEUE) {
+            qDebug() << "the queue has been modified";
             emit queueChanged();
+        } else if (idle & MPD_IDLE_PLAYER) {
+            qDebug() << "the player state has changed: play, stop, pause, seek, ...";
+            // pollForStatus();
+        } else if (idle & MPD_IDLE_MIXER) {
+            qDebug() << "the volume has been modified";
+        } else if (idle & MPD_IDLE_OUTPUT) {
+            qDebug() << "an audio output device has been enabled or disabled";
+        } else if (idle & MPD_IDLE_OPTIONS) {
+            qDebug() << "options have changed: crossfade, random, repeat, ...";
+        } else if (idle & MPD_IDLE_UPDATE) {
+            qDebug() << "a database update has started or finished.";
+        } else if (idle & MPD_IDLE_STICKER) {
+            qDebug() << "a sticker has been modified.";
+        } else if (idle & MPD_IDLE_SUBSCRIPTION) {
+            qDebug() << "a client has subscribed to or unsubscribed from a channel";
+        } else if (idle & MPD_IDLE_MESSAGE) {
+            qDebug() << "a message on a subscribed channel was received";
         }
     }
 }
@@ -209,8 +226,10 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 
 void Controller::handleActivation()
 {
+    qDebug() << "Handling activation";
     handleIdle(mpd_recv_idle(m_connection, false));
     if (m_connection) {
+        qDebug() << "Sending idle";
         mpd_send_idle(m_connection);
     }
 }

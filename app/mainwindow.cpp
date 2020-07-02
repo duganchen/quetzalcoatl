@@ -146,9 +146,6 @@ MainWindow::MainWindow(QWidget *parent)
         setConnectionState(Controller::ConnectionState::Disconnected);
         connectAction->setEnabled(false);
         timer->stop();
-
-        // Not sure how good an idea this is, but whatever...
-        controller->deleteLater();
     });
 
     QSettings settings;
