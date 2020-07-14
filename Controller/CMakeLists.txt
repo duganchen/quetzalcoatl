@@ -4,6 +4,7 @@ add_library(Controller SHARED
   dbitem.cpp
   itemmodelcontroller.cpp
   controller.cpp
+  timeFormat.cpp
 )
 
 target_include_directories(Controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})
