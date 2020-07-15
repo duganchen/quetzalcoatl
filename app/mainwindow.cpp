@@ -124,6 +124,10 @@ MainWindow::MainWindow(QWidget *parent)
     auto playlistModel = new PlaylistModel(controller->playlistController());
     auto playlistView = new QTreeView();
     playlistView->setModel(playlistModel);
+    connect(playlistModel,
+            &ItemModel::columnResized,
+            playlistView,
+            &QTreeView::resizeColumnToContents);
     splitter->addWidget(playlistView);
     playlistView->setEnabled(false);
 

@@ -5,6 +5,7 @@ add_library(Controller SHARED
   itemmodelcontroller.cpp
   controller.cpp
   timeFormat.cpp
+  songitem.cpp
 )
 
 target_include_directories(Controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})

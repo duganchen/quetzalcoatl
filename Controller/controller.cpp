@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "dbitem.h"
+#include "songitem.h"
 #include <mpd/client.h>
 #include <QDebug>
 #include <QtNetwork/QHostInfo>
@@ -23,7 +24,6 @@ Controller::Controller(QObject *parent)
     m_databaseController = new ItemModelController(dbRootItem);
 
     auto playlistRootItem = new DBItem(QIcon(), "");
-    playlistRootItem->append(new DBItem(QIcon(":/icons/audio-x-generic.svg"), "song title"));
     m_playlistController = new ItemModelController(playlistRootItem);
 
     qRegisterMetaType<Controller::ConnectionState>();
@@ -212,6 +212,35 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         m_notifier = new QSocketNotifier(mpd_connection_get_fd(m_connection),
                                          QSocketNotifier::Read,
                                          this);
+
+        if (!mpd_send_list_queue_meta(m_connection)) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+
+        mpd_entity *entity = nullptr;
+        QVector<mpd_entity *> queue;
+        while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
+            if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
+                queue.append(entity);
+            }
+        }
+
+        int first = m_playlistController->rootItem()->count();
+        int last = first + queue.count();
+        emit m_playlistController->rowsAboutToBeInserted(first, last);
+
+        for (mpd_entity *entity : queue) {
+            m_playlistController->rootItem()->append(
+                new SongItem(QIcon(":/icons/audio-x-generic.svg"), entity));
+        }
+
+        emit m_playlistController->rowsInserted();
+
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
 
         connect(m_notifier, &QSocketNotifier::activated, this, &Controller::handleActivation);
 

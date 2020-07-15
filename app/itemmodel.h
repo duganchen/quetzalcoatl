@@ -20,6 +20,8 @@ public:
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     bool canFetchMore(const QModelIndex &parent) const override;
+signals:
+    void columnResized(int);
 
 private:
     ItemModelController *m_itemModelController;

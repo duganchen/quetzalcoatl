@@ -16,14 +16,18 @@ public:
 public:
     AbstractItem *rootItem() const;
 signals:
-    void rowsAboutToBeInserted(const QModelIndex &, int, int);
+
+    void rowsAboutToBeInserted(int, int);
+    void rowsInserted();
+
+#if 0
     void rowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int);
     void rowsAboutToBeRemoved(const QModelIndex &, int, int);
     void modelAboutToBeReset();
-    void rowsInserted();
     void rowsMoved();
     void rowsRemoved();
     void modelReset();
+#endif
 
 private:
     AbstractItem *m_rootItem;

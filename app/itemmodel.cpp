@@ -10,11 +10,19 @@ ItemModel::ItemModel(ItemModelController *itemModelController, QObject *parent)
     connect(m_itemModelController,
             &ItemModelController::rowsAboutToBeInserted,
             this,
-            &ItemModel::beginInsertRows);
+            [=](int first, int last) { beginInsertRows(QModelIndex(), first, last); });
+    connect(m_itemModelController, &ItemModelController::rowsInserted, this, [=]() {
+        endInsertRows();
+        emit columnResized(0);
+        emit columnResized(1);
+    });
+
+#if 0
     connect(m_itemModelController,
-            &ItemModelController::rowsInserted,
+            &ItemModelController::rowsAboutToBeInserted,
             this,
-            &ItemModel::endInsertRows);
+            &ItemModel::beginInsertRows);
+
     connect(m_itemModelController,
             &ItemModelController::rowsAboutToBeMoved,
             this,
@@ -36,6 +44,7 @@ ItemModel::ItemModel(ItemModelController *itemModelController, QObject *parent)
             &ItemModelController::modelReset,
             this,
             &ItemModel::endResetModel);
+#endif
 }
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
@@ -55,7 +64,7 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const
         return item->text(index.column());
     }
 
-    if (Qt::DecorationRole == role) {
+    if (Qt::DecorationRole == role && index.column() == 0) {
         return item->icon();
     }
 
