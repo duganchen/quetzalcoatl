@@ -7,6 +7,7 @@ ItemModel::ItemModel(Items *items, QObject *parent)
 {
     m_items->setParent(this);
 
+    // Just reset the model each time the data changes...
     // This is absolutely fine and fast enough for my purposes. It's possible to make it more
     // granular by, for example, responding to individual plchangesposid calls, and my
     // position on that is that if you feel it's important, you can send a pull request.
