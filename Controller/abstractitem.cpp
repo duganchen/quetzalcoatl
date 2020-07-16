@@ -7,7 +7,13 @@ AbstractItem::AbstractItem(QIcon icon, AbstractItem *parent)
 
 AbstractItem::~AbstractItem()
 {
+    clear();
+}
+
+void AbstractItem::clear()
+{
     qDeleteAll(m_children);
+    m_children.clear();
 }
 
 void AbstractItem::append(AbstractItem *item)

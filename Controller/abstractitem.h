@@ -21,6 +21,8 @@ public:
     AbstractItem *parent();
     void setParent(AbstractItem *parent);
 
+    void clear();
+
 private:
     QVector<AbstractItem *> m_children;
     QIcon m_icon;

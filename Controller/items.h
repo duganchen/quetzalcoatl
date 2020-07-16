@@ -22,10 +22,15 @@ public:
     AbstractItem *rootItem() const;
 signals:
 
-    void rowsAboutToBeInserted(int, int);
-    void rowsInserted();
+    void modelAboutToBeReset();
+    void modelReset();
 
 #if 0
+    void rowsAboutToBeInserted(int, int);
+    void rowsInserted();
+    void rowsMoved();
+    void rowsRemoved();
+
     void rowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int);
     void rowsAboutToBeRemoved(const QModelIndex &, int, int);
     void modelAboutToBeReset();

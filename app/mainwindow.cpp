@@ -131,9 +131,6 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->addWidget(playlistView);
     playlistView->setEnabled(false);
 
-    playlistView->resizeColumnToContents(0);
-    playlistView->resizeColumnToContents(1);
-
     m_connectedWidgets.append(playlistView);
     layout->addWidget(splitter);
     auto widget = new QWidget();

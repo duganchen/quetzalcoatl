@@ -7,44 +7,12 @@ ItemModel::ItemModel(Items *items, QObject *parent)
 {
     m_items->setParent(this);
 
-    connect(m_items,
-            &Items::rowsAboutToBeInserted,
-            this,
-            [=](int first, int last) { beginInsertRows(QModelIndex(), first, last); });
-    connect(m_items, &Items::rowsInserted, this, [=]() {
-        endInsertRows();
+    connect(m_items, &Items::modelAboutToBeReset, this, &ItemModel::beginResetModel);
+    connect(m_items, &Items::modelReset, this, [=]() {
+        endResetModel();
         emit columnResized(0);
         emit columnResized(1);
     });
-
-#if 0
-    connect(m_itemModelController,
-            &ItemModelController::rowsAboutToBeInserted,
-            this,
-            &ItemModel::beginInsertRows);
-
-    connect(m_itemModelController,
-            &ItemModelController::rowsAboutToBeMoved,
-            this,
-            &ItemModel::beginMoveRows);
-    connect(m_itemModelController, &ItemModelController::rowsMoved, this, &ItemModel::endMoveRows);
-    connect(m_itemModelController,
-            &ItemModelController::rowsAboutToBeRemoved,
-            this,
-            &ItemModel::beginRemoveRows);
-    connect(m_itemModelController,
-            &ItemModelController::rowsRemoved,
-            this,
-            &ItemModel::endRemoveRows);
-    connect(m_itemModelController,
-            &ItemModelController::modelAboutToBeReset,
-            this,
-            &ItemModel::beginResetModel);
-    connect(m_itemModelController,
-            &ItemModelController::modelReset,
-            this,
-            &ItemModel::endResetModel);
-#endif
 }
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const

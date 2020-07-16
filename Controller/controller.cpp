@@ -164,6 +164,11 @@ void Controller::handleIdle(mpd_idle idle)
         emit connectionState(ConnectionState::Disconnected);
         emit sliderMax(0);
         emit sliderValue(0);
+
+        emit m_playlistItems->modelAboutToBeReset();
+        m_playlistItems->rootItem()->clear();
+        emit m_playlistItems->modelReset();
+
     } else {
         if (idle & MPD_IDLE_DATABASE) {
             qDebug() << "song database has been updated";
@@ -218,24 +223,17 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
             return;
         }
 
+        emit m_playlistItems->modelAboutToBeReset();
+
         mpd_entity *entity = nullptr;
-        QVector<mpd_entity *> queue;
         while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
             if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
-                queue.append(entity);
+                m_playlistItems->rootItem()->append(
+                    new SongItem(QIcon(":/icons/audio-x-generic.svg"), entity));
             }
         }
 
-        int first = m_playlistItems->rootItem()->count();
-        int last = first + queue.count();
-        emit m_playlistItems->rowsAboutToBeInserted(first, last);
-
-        for (mpd_entity *entity : queue) {
-            m_playlistItems->rootItem()->append(
-                new SongItem(QIcon(":/icons/audio-x-generic.svg"), entity));
-        }
-
-        emit m_playlistItems->rowsInserted();
+        emit m_playlistItems->modelReset();
 
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
