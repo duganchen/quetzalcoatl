@@ -139,7 +139,8 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(widget);
 
     auto status = statusBar();
-    status->addWidget(new QLabel());
+    auto combinedTimeLabel = new QLabel();
+    status->addWidget(combinedTimeLabel);
 
     auto timer = new QTimer(this);
     connect(timer, &QTimer::timeout, controller, &Controller::updateStatus);
