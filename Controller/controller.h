@@ -46,6 +46,8 @@ signals:
     void sliderMax(int);
     void sliderValue(int);
 
+    void statusMessage(QString, int);
+
 private:
     void handleIdle(mpd_idle);
     void createMPD(QString, int, int);

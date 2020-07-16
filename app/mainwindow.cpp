@@ -106,6 +106,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(controller, &Controller::sliderMax, m_slider, &QSlider::setMaximum);
     connect(controller, &Controller::sliderValue, m_slider, &QSlider::setValue);
+    connect(controller, &Controller::statusMessage, statusBar(), &QStatusBar::showMessage);
 
     layout->addWidget(m_slider);
     m_slider->setEnabled(false);

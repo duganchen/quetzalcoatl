@@ -1,6 +1,7 @@
 #include "controller.h"
 #include "dbitem.h"
 #include "songitem.h"
+#include "timeformat.h"
 #include <mpd/client.h>
 #include <QDebug>
 #include <QtNetwork/QHostInfo>
@@ -89,8 +90,10 @@ void Controller::pollForStatus()
 
     auto total = mpd_status_get_total_time(status);
     emit sliderMax(total);
-    auto elapsed = mpd_status_get_elapsed_time(status);
+    auto elapsed = mpd_status_get_elapsed_ms(status) / 1000;
     emit sliderValue(elapsed);
+
+    emit statusMessage(QStringLiteral("%1/%2").arg(timeStr(elapsed), timeStr(total)), 0);
 
     unsigned queueVersion = mpd_status_get_queue_version(status);
     if (m_queueVersion != queueVersion) {
