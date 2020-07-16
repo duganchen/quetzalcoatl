@@ -124,6 +124,11 @@ void Controller::pollForStatus()
         }
     }
 
+    emit shuffled(mpd_status_get_random(status));
+    emit repeating(mpd_status_get_repeat(status));
+    emit volume(mpd_status_get_volume(status));
+    emit crossfade(mpd_status_get_crossfade(status));
+
     mpd_status_free(status);
 }
 

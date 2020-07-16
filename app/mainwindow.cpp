@@ -155,6 +155,17 @@ MainWindow::MainWindow(QWidget *parent)
         timer->stop();
     });
 
+    connect(controller, &Controller::repeating, repeatAction, &QAction::setChecked);
+    connect(controller, &Controller::shuffled, shuffleAction, &QAction::setChecked);
+    connect(controller,
+            &Controller::volume,
+            playbackSettingsDialog,
+            &PlaybackSettingsDialog::setVolume);
+    connect(controller,
+            &Controller::crossfade,
+            playbackSettingsDialog,
+            &PlaybackSettingsDialog::setCrossfade);
+
     QSettings settings;
     if (settings.contains("host") && settings.contains("port")) {
         m_connectionDialog->connectToMPD();

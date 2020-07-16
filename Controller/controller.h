@@ -50,6 +50,8 @@ signals:
 
     void shuffled(bool);
     void repeating(bool);
+    void crossfade(int);
+    void volume(int);
 
 private:
     void handleIdle(mpd_idle);

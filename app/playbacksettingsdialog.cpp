@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QSpinBox>
+
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -20,14 +20,14 @@ PlaybackSettingsDialog::PlaybackSettingsDialog(Controller *controller,
     setWindowTitle("Playback Settings");
     auto layout = new QVBoxLayout();
     auto playbackLayout = new QFormLayout();
-    auto fadeSpinner = new QSpinBox();
-    fadeSpinner->setMinimum(0);
-    fadeSpinner->setMaximum(20);
-    playbackLayout->addRow("&Crossfade (in seconds)", fadeSpinner);
-    auto volumeSpinner = new QSpinBox();
-    volumeSpinner->setMinimum(0);
-    volumeSpinner->setMaximum(100);
-    playbackLayout->addRow("&Volume", volumeSpinner);
+    m_fadeSpinner = new QSpinBox();
+    m_fadeSpinner->setMinimum(0);
+    m_fadeSpinner->setMaximum(20);
+    playbackLayout->addRow("&Crossfade (in seconds)", m_fadeSpinner);
+    m_volumeSpinner = new QSpinBox();
+    m_volumeSpinner->setMinimum(0);
+    m_volumeSpinner->setMaximum(100);
+    playbackLayout->addRow("&Volume", m_volumeSpinner);
     layout->addLayout(playbackLayout);
 
     auto buttonBox = new QDialogButtonBox();
@@ -37,4 +37,20 @@ PlaybackSettingsDialog::PlaybackSettingsDialog(Controller *controller,
     connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
     layout->addWidget(buttonBox);
     setLayout(layout);
+}
+
+void PlaybackSettingsDialog::setCrossfade(int value)
+{
+    m_fadeSpinner->setValue(value);
+}
+
+void PlaybackSettingsDialog::setVolume(int value)
+{
+    if (value == -1) {
+        m_volumeSpinner->setValue(0);
+        m_volumeSpinner->setEnabled(false);
+    } else {
+        m_volumeSpinner->setEnabled(true);
+        m_volumeSpinner->setValue(value);
+    }
 }
