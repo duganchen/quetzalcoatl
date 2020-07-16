@@ -11,6 +11,7 @@ SongItem::~SongItem()
 {
     if (m_entity) {
         mpd_entity_free(m_entity);
+        m_entity = nullptr;
     }
 }
 
@@ -21,6 +22,11 @@ QString SongItem::text(int column) const
     }
 
     const mpd_song *song = mpd_entity_get_song(m_entity);
+
+    if (!song) {
+        // Not really sure how this could happen, but it seems to...
+        return QString();
+    }
 
     if (column == 0) {
         const char *title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
