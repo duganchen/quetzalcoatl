@@ -48,6 +48,9 @@ signals:
 
     void statusMessage(QString, int);
 
+    void shuffled(bool);
+    void repeating(bool);
+
 private:
     void handleIdle(mpd_idle);
     void createMPD(QString, int, int);
