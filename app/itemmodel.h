@@ -1,8 +1,13 @@
 #ifndef ITEMMODEL_H
 #define ITEMMODEL_H
 
+// This closely follows the official Qt Simple Tree Model
+// example.
+// https://doc.qt.io/qt-5/qtwidgets-itemviews-simpletreemodel-example.html
+// The nodes are in items.h.
+
 #include "controller.h"
-#include "itemmodelcontroller.h"
+#include "items.h"
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
@@ -12,7 +17,7 @@ class ItemModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit ItemModel(ItemModelController *, QObject *parent = nullptr);
+    explicit ItemModel(Items *, QObject *parent = nullptr);
 
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
@@ -24,7 +29,7 @@ signals:
     void columnResized(int);
 
 private:
-    ItemModelController *m_itemModelController;
+    Items *m_items;
 };
 
 #endif // ITEMMODEL_H

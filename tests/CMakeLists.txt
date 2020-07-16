@@ -12,7 +12,7 @@ file(COPY resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 #target_include_directories(controllerTest PRIVATE Qt5::Test "${PROJECT_SOURCE_DIR}/Controller" ${LIBMPDCLIENT_INCLUDE_DIRS})
 #target_link_libraries(controllerTest PRIVATE Controller PkgConfig::LIBMPDCLIENT Qt5::Test)
 
-add_executable(timeFormatTest tst_testTimeFormat.cpp)
+add_executable(timeFormatTest tst_testtimeformat.cpp)
 add_test(NAME timeFormatTest COMMAND timeFormatTest)
 target_include_directories(timeFormatTest PRIVATE Qt5::Test "${PROJECT_SOURCE_DIR}/Controller")
 target_link_libraries(timeFormatTest PRIVATE Controller Qt5::Test)

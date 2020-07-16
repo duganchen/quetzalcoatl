@@ -2,7 +2,7 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
-#include "itemmodelcontroller.h"
+#include "items.h"
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
@@ -29,8 +29,8 @@ public:
     QString defaultHost();
     unsigned defaultPort();
 
-    ItemModelController *databaseController() const;
-    ItemModelController *playlistController() const;
+    Items *databaseItems() const;
+    Items *playlistItems() const;
 
 signals:
     void errorMessage(QString);
@@ -68,8 +68,8 @@ private:
 
     ConnectionState m_connectionState;
 
-    ItemModelController *m_databaseController;
-    ItemModelController *m_playlistController;
+    Items *m_databaseItems;
+    Items *m_playlistItems;
 
 private slots:
     void handleActivation();

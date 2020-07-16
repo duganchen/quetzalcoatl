@@ -1,5 +1,5 @@
 #include "songitem.h"
-#include "timeFormat.h"
+#include "timeformat.h"
 #include <QDebug>
 
 SongItem::SongItem(QIcon icon, mpd_entity *entity, AbstractItem *parent)

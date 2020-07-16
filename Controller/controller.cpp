@@ -21,10 +21,10 @@ Controller::Controller(QObject *parent)
     dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), "Genres"));
     dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), "Composers"));
     dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"), "/"));
-    m_databaseController = new ItemModelController(dbRootItem);
+    m_databaseItems = new Items(dbRootItem);
 
     auto playlistRootItem = new DBItem(QIcon(), "");
-    m_playlistController = new ItemModelController(playlistRootItem);
+    m_playlistItems = new Items(playlistRootItem);
 
     qRegisterMetaType<Controller::ConnectionState>();
 
@@ -226,16 +226,16 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
             }
         }
 
-        int first = m_playlistController->rootItem()->count();
+        int first = m_playlistItems->rootItem()->count();
         int last = first + queue.count();
-        emit m_playlistController->rowsAboutToBeInserted(first, last);
+        emit m_playlistItems->rowsAboutToBeInserted(first, last);
 
         for (mpd_entity *entity : queue) {
-            m_playlistController->rootItem()->append(
+            m_playlistItems->rootItem()->append(
                 new SongItem(QIcon(":/icons/audio-x-generic.svg"), entity));
         }
 
-        emit m_playlistController->rowsInserted();
+        emit m_playlistItems->rowsInserted();
 
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
@@ -265,14 +265,14 @@ void Controller::handleActivation()
     }
 }
 
-ItemModelController *Controller::databaseController() const
+Items *Controller::databaseItems() const
 {
-    return m_databaseController;
+    return m_databaseItems;
 }
 
-ItemModelController *Controller::playlistController() const
+Items *Controller::playlistItems() const
 {
-    return m_playlistController;
+    return m_playlistItems;
 }
 
 // Call these two before and after most synchronous MPD commands.

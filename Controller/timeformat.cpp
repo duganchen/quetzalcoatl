@@ -1,4 +1,4 @@
-#include "timeFormat.h"
+#include "timeformat.h"
 
 QString timeStr(unsigned duration)
 {

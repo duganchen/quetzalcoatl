@@ -1,17 +1,22 @@
-#ifndef ITEMMODELCONTROLLER_H
-#define ITEMMODELCONTROLLER_H
+#ifndef ITEMS_H
+#define ITEMS_H
+
+// This is largely from this video:
+// https://youtu.be/9BcAYDlpuT8
+// Which is embedded here:
+// https://doc.qt.io/qt-5/qtquick-modelviewsdata-cppmodels.html
 
 #include "dbitem.h"
 #include <QModelIndex>
 #include <QObject>
 
-class ItemModelController : public QObject
+class Items : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ItemModelController(AbstractItem *, QObject *parent = nullptr);
-    ~ItemModelController();
+    explicit Items(AbstractItem *, QObject *parent = nullptr);
+    ~Items();
 
 public:
     AbstractItem *rootItem() const;
@@ -33,4 +38,4 @@ private:
     AbstractItem *m_rootItem;
 };
 
-#endif // ITEMMODELCONTROLLER_H
+#endif // ITEMS_H

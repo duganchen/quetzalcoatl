@@ -1,17 +1,17 @@
 #include "itemmodel.h"
 #include <QDebug>
 
-ItemModel::ItemModel(ItemModelController *itemModelController, QObject *parent)
+ItemModel::ItemModel(Items *items, QObject *parent)
     : QAbstractItemModel(parent)
-    , m_itemModelController(itemModelController)
+    , m_items(items)
 {
-    m_itemModelController->setParent(this);
+    m_items->setParent(this);
 
-    connect(m_itemModelController,
-            &ItemModelController::rowsAboutToBeInserted,
+    connect(m_items,
+            &Items::rowsAboutToBeInserted,
             this,
             [=](int first, int last) { beginInsertRows(QModelIndex(), first, last); });
-    connect(m_itemModelController, &ItemModelController::rowsInserted, this, [=]() {
+    connect(m_items, &Items::rowsInserted, this, [=]() {
         endInsertRows();
         emit columnResized(0);
         emit columnResized(1);
@@ -87,7 +87,7 @@ QModelIndex ItemModel::index(int row, int column, const QModelIndex &parent) con
     }
 
     auto parentItem = parent.isValid() ? static_cast<AbstractItem *>(parent.internalPointer())
-                                       : m_itemModelController->rootItem();
+                                       : m_items->rootItem();
     if (!parentItem) {
         return QModelIndex();
     }
@@ -108,7 +108,7 @@ QModelIndex ItemModel::parent(const QModelIndex &index) const
     auto childItem = static_cast<AbstractItem *>(index.internalPointer());
     auto parentItem = childItem->parent();
 
-    if (m_itemModelController->rootItem() == parentItem)
+    if (m_items->rootItem() == parentItem)
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -121,7 +121,7 @@ int ItemModel::rowCount(const QModelIndex &parent) const
     }
 
     auto parentItem = parent.isValid() ? static_cast<AbstractItem *>(parent.internalPointer())
-                                       : m_itemModelController->rootItem();
+                                       : m_items->rootItem();
     if (!parentItem) {
         return 0;
     }

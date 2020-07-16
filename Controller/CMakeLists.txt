@@ -2,9 +2,9 @@ add_library(Controller SHARED
   abstractitem.cpp
   icons.qrc
   dbitem.cpp
-  itemmodelcontroller.cpp
+  items.cpp
   controller.cpp
-  timeFormat.cpp
+  timeformat.cpp
   songitem.cpp
 )
 

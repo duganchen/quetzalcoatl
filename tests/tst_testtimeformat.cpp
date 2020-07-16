@@ -1,4 +1,4 @@
-#include "timeFormat.h"
+#include "timeformat.h"
 #include <QObject>
 #include <QTest>
 
@@ -37,4 +37,4 @@ void TestTimeFormat::test_oneHourTenMinutesTwelveSeconds()
 
 QTEST_MAIN(TestTimeFormat)
 
-#include "tst_testTimeFormat.moc"
+#include "tst_testtimeformat.moc"
