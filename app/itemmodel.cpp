@@ -7,6 +7,9 @@ ItemModel::ItemModel(Items *items, QObject *parent)
 {
     m_items->setParent(this);
 
+    // This is absolutely fine and fast enough for my purposes. It's possible to make it more
+    // granular by, for example, responding to individual plchangesposid calls, and my
+    // position on that is that if you feel it's important, you can send a pull request.
     connect(m_items, &Items::modelAboutToBeReset, this, &ItemModel::beginResetModel);
     connect(m_items, &Items::modelReset, this, [=]() {
         endResetModel();
@@ -17,6 +20,7 @@ ItemModel::ItemModel(Items *items, QObject *parent)
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return false;
 }
 
