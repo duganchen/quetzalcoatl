@@ -41,8 +41,6 @@ signals:
 
     void unrecoverableError();
 
-    void queueChanged();
-
     void connectionErrorMessage(QString);
 
     void sliderMax(int);
@@ -56,6 +54,8 @@ private:
     void disableIdle();
 
     void pollForStatus();
+
+    void clearQueue();
 
     QString m_defaultHost;
     unsigned m_defaultPort;

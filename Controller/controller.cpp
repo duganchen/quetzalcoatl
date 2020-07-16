@@ -91,7 +91,44 @@ void Controller::pollForStatus()
     emit sliderMax(total);
     auto elapsed = mpd_status_get_elapsed_time(status);
     emit sliderValue(elapsed);
+
+    unsigned queueVersion = mpd_status_get_queue_version(status);
+    if (m_queueVersion != queueVersion) {
+        m_queueVersion = queueVersion;
+
+        if (!mpd_send_list_queue_meta(m_connection)) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+
+        emit m_playlistItems->modelAboutToBeReset();
+
+        clearQueue();
+
+        mpd_entity *entity = nullptr;
+        while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
+            if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
+                m_playlistItems->rootItem()->append(
+                    new SongItem(QIcon(":/icons/audio-x-generic.svg"), entity));
+            }
+        }
+
+        emit m_playlistItems->modelReset();
+
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+    }
+
     mpd_status_free(status);
+}
+
+void Controller::clearQueue()
+{
+    emit m_playlistItems->modelAboutToBeReset();
+    m_playlistItems->rootItem()->clear();
+    emit m_playlistItems->modelReset();
 }
 
 void Controller::handleListAlbumsClick()
@@ -165,34 +202,41 @@ void Controller::handleIdle(mpd_idle idle)
         emit sliderMax(0);
         emit sliderValue(0);
 
-        emit m_playlistItems->modelAboutToBeReset();
-        m_playlistItems->rootItem()->clear();
-        emit m_playlistItems->modelReset();
+        clearQueue();
 
     } else {
         if (idle & MPD_IDLE_DATABASE) {
             qDebug() << "song database has been updated";
-        } else if (idle & MPD_IDLE_STORED_PLAYLIST) {
+        }
+        if (idle & MPD_IDLE_STORED_PLAYLIST) {
             qDebug() << "a stored playlist has been modified, created, deleted or renamed";
-        } else if (idle & MPD_IDLE_QUEUE) {
-            qDebug() << "the queue has been modified";
-            emit queueChanged();
-        } else if (idle & MPD_IDLE_PLAYER) {
+        }
+        if (idle & MPD_IDLE_QUEUE) {
+            pollForStatus();
+        }
+        if (idle & MPD_IDLE_PLAYER) {
             qDebug() << "the player state has changed: play, stop, pause, seek, ...";
             pollForStatus();
-        } else if (idle & MPD_IDLE_MIXER) {
+        }
+        if (idle & MPD_IDLE_MIXER) {
             qDebug() << "the volume has been modified";
-        } else if (idle & MPD_IDLE_OUTPUT) {
+        }
+        if (idle & MPD_IDLE_OUTPUT) {
             qDebug() << "an audio output device has been enabled or disabled";
-        } else if (idle & MPD_IDLE_OPTIONS) {
+        }
+        if (idle & MPD_IDLE_OPTIONS) {
             qDebug() << "options have changed: crossfade, random, repeat, ...";
-        } else if (idle & MPD_IDLE_UPDATE) {
+        }
+        if (idle & MPD_IDLE_UPDATE) {
             qDebug() << "a database update has started or finished.";
-        } else if (idle & MPD_IDLE_STICKER) {
+        }
+        if (idle & MPD_IDLE_STICKER) {
             qDebug() << "a sticker has been modified.";
-        } else if (idle & MPD_IDLE_SUBSCRIPTION) {
+        }
+        if (idle & MPD_IDLE_SUBSCRIPTION) {
             qDebug() << "a client has subscribed to or unsubscribed from a channel";
-        } else if (idle & MPD_IDLE_MESSAGE) {
+        }
+        if (idle & MPD_IDLE_MESSAGE) {
             qDebug() << "a message on a subscribed channel was received";
         }
     }
@@ -218,36 +262,14 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
                                          QSocketNotifier::Read,
                                          this);
 
-        if (!mpd_send_list_queue_meta(m_connection)) {
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return;
-        }
-
-        emit m_playlistItems->modelAboutToBeReset();
-
-        mpd_entity *entity = nullptr;
-        while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
-            if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
-                m_playlistItems->rootItem()->append(
-                    new SongItem(QIcon(":/icons/audio-x-generic.svg"), entity));
-            }
-        }
-
-        emit m_playlistItems->modelReset();
-
-        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return;
-        }
-
         connect(m_notifier, &QSocketNotifier::activated, this, &Controller::handleActivation);
 
         mpd_send_idle(m_connection);
 
     } else {
         // In the case where MPD is not running at the port, which is the expected error,
-        // we get a MPD_ERROR_SYSTEM with a "Connection refused" message. On Linux and
-        // Windows.
+        // we get a MPD_ERROR_SYSTEM. On Linux and OS X (at least), the error message is
+        // "Connection refused".
         emit connectionErrorMessage(mpd_connection_get_error_message(m_connection));
         emit connectionState(ConnectionState::Disconnected);
         // and we don't need to free it. I checked.
