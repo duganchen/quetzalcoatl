@@ -182,5 +182,7 @@ void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
         for (auto action : m_connectedActions) {
             action->setEnabled(false);
         }
+
+        statusBar()->clearMessage();
     }
 }
