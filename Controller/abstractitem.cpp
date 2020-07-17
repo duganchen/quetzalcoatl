@@ -58,3 +58,8 @@ int AbstractItem::row() const
 
     return 0;
 }
+
+QVariant AbstractItem::tooltip()
+{
+    return QVariant();
+}

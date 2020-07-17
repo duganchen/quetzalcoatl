@@ -23,6 +23,8 @@ public:
 
     void clear();
 
+    virtual QVariant tooltip();
+
 private:
     QVector<AbstractItem *> m_children;
     QIcon m_icon;

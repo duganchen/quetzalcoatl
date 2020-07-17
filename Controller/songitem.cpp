@@ -1,6 +1,8 @@
 #include "songitem.h"
 #include "timeformat.h"
 #include <QDebug>
+#include <QStringBuilder>
+#include <QStringLiteral>
 
 SongItem::SongItem(QIcon icon, mpd_entity *entity, AbstractItem *parent)
     : AbstractItem(icon, parent)
@@ -44,4 +46,37 @@ QString SongItem::text(int column) const
     }
 
     return timeStr(duration);
+}
+
+QVariant SongItem::tooltip()
+{
+    if (!m_entity) {
+        return QVariant();
+    }
+
+    QStringList metadata;
+    auto song = mpd_entity_get_song(m_entity);
+
+    QVector<mpd_tag_type> tagTypes{MPD_TAG_TITLE,
+                                   MPD_TAG_TRACK,
+                                   MPD_TAG_ALBUM,
+                                   MPD_TAG_DISC,
+                                   MPD_TAG_ARTIST,
+                                   MPD_TAG_ALBUM_ARTIST,
+                                   MPD_TAG_COMPOSER,
+                                   MPD_TAG_GENRE};
+
+    QString tagValue;
+    QString tagName;
+    for (auto tagType : tagTypes) {
+        tagValue = mpd_song_get_tag(song, tagType, 0);
+        if (tagValue.isEmpty()) {
+            continue;
+        }
+
+        QString tagName = mpd_tag_name(tagType);
+        metadata.append(tagName % ": " % tagValue);
+    }
+
+    return metadata.join("\n");
 }

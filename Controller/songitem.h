@@ -12,6 +12,8 @@ public:
 
     QString text(int column) const override;
 
+    QVariant tooltip() override;
+
 private:
     mpd_entity *m_entity;
 };

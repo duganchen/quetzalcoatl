@@ -41,6 +41,10 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const
         return item->icon();
     }
 
+    if (Qt::ToolTipRole == role) {
+        return item->tooltip();
+    }
+
     return QVariant();
 }
 
