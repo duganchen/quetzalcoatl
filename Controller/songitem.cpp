@@ -80,3 +80,12 @@ QVariant SongItem::tooltip()
 
     return metadata.join("\n");
 }
+
+unsigned SongItem::id()
+{
+    if (!m_entity) {
+        return -1;
+    }
+
+    return mpd_song_get_id(mpd_entity_get_song(m_entity));
+}
