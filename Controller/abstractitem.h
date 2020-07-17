@@ -8,7 +8,7 @@
 class AbstractItem
 {
 public:
-    explicit AbstractItem(QIcon icon, AbstractItem *parent = nullptr);
+    explicit AbstractItem(QIcon icon, Qt::ItemFlags, AbstractItem *parent = nullptr);
     virtual ~AbstractItem();
 
     void append(AbstractItem *at);
@@ -25,10 +25,13 @@ public:
 
     virtual QVariant tooltip();
 
+    Qt::ItemFlags flags() const;
+
 private:
     QVector<AbstractItem *> m_children;
     QIcon m_icon;
     AbstractItem *m_parent;
+    Qt::ItemFlags m_flags;
 };
 
 #endif // ABSTRACTITEM_H

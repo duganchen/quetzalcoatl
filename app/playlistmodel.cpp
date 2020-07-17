@@ -1,4 +1,5 @@
 #include "playlistmodel.h"
+#include "songitem.h"
 
 PlaylistModel::PlaylistModel(Items *items, QObject *parent)
     : ItemModel(items, parent)
@@ -28,4 +29,18 @@ int PlaylistModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return 2;
+}
+
+Qt::ItemFlags PlaylistModel::flags(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        if (index.column() == 0) {
+            return static_cast<SongItem *>(index.internalPointer())->flags();
+        }
+
+        return Qt::ItemIsEnabled;
+    }
+
+    // The drop target is between rows.
+    return Qt::ItemIsDropEnabled;
 }

@@ -1,8 +1,9 @@
 #include "abstractitem.h"
 
-AbstractItem::AbstractItem(QIcon icon, AbstractItem *parent)
+AbstractItem::AbstractItem(QIcon icon, Qt::ItemFlags myFlags, AbstractItem *parent)
     : m_icon(icon)
     , m_parent(parent)
+    , m_flags(myFlags)
 {}
 
 AbstractItem::~AbstractItem()
@@ -62,4 +63,9 @@ int AbstractItem::row() const
 QVariant AbstractItem::tooltip()
 {
     return QVariant();
+}
+
+Qt::ItemFlags AbstractItem::flags() const
+{
+    return m_flags;
 }

@@ -82,12 +82,14 @@ MainWindow::MainWindow(QWidget *parent)
     deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
     auto savePlaylistDialog = new SavePlaylistDialog(controller, this);
     savePlaylistDialog->setEnabled(false);
+
     auto savePlaylistAction = toolBar->addAction(QIcon(":/icons/save-24px.svg"),
                                                  "[CTRL-S]ave playlist",
                                                  [=]() { savePlaylistDialog->exec(); });
 
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
     savePlaylistAction->setEnabled(false);
+    m_connectedActions.append(savePlaylistAction);
 
     toolBar->addSeparator();
 
@@ -119,12 +121,18 @@ MainWindow::MainWindow(QWidget *parent)
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
     databaseView->setEnabled(false);
+    databaseView->setSelectionMode(QTreeView::ExtendedSelection);
+    databaseView->setDragEnabled(true);
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
     auto playlistModel = new PlaylistModel(controller->playlistItems());
     auto playlistView = new QTreeView();
+    playlistView->setAcceptDrops(true);
+    playlistView->setDropIndicatorShown(true);
+    playlistView->setDragEnabled(true);
     playlistView->setModel(playlistModel);
+    playlistView->setSelectionMode(QTreeView::ExtendedSelection);
     connect(playlistModel,
             &ItemModel::columnResized,
             playlistView,

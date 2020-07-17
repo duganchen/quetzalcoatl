@@ -7,7 +7,7 @@
 class SongItem : public AbstractItem
 {
 public:
-    SongItem(QIcon, mpd_entity *, AbstractItem *parent = nullptr);
+    SongItem(QIcon, Qt::ItemFlags, mpd_entity *, AbstractItem *parent = nullptr);
     ~SongItem();
 
     QString text(int column) const override;

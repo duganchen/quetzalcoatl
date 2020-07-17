@@ -6,7 +6,7 @@
 class DBItem : public AbstractItem
 {
 public:
-    explicit DBItem(QIcon icon, QString text, AbstractItem *parent = nullptr);
+    explicit DBItem(QIcon icon, Qt::ItemFlags, QString text, AbstractItem *parent = nullptr);
     QString text(int) const override;
 
 private:
