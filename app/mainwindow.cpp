@@ -127,6 +127,9 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->addWidget(databaseView);
 
     auto playlistModel = new PlaylistModel(controller->playlistItems());
+
+    connect(playlistModel, &PlaylistModel::songsToMove, controller, &Controller::moveSongs);
+
     auto playlistView = new QTreeView();
     playlistView->setAcceptDrops(true);
     playlistView->setDropIndicatorShown(true);

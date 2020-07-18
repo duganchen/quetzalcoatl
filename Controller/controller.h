@@ -17,13 +17,7 @@ public:
 
     enum class ConnectionState { Disconnected, Connecting, Connected };
     Q_ENUM(ConnectionState)
-public slots:
-    void handleListAlbumsClick();
-    void connectToMPD(QString, int, int);
 
-    void updateStatus();
-
-public:
     QVector<QString> getAlbumList();
 
     QString defaultHost();
@@ -31,7 +25,13 @@ public:
 
     Items *databaseItems() const;
     Items *playlistItems() const;
+public slots:
+    void handleListAlbumsClick();
+    void connectToMPD(QString, int, int);
 
+    void updateStatus();
+
+    void moveSongs(QVector<unsigned>, unsigned);
 signals:
     void errorMessage(QString);
     void connectionState(Controller::ConnectionState connectionState);

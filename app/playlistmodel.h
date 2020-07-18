@@ -28,6 +28,9 @@ public:
 
     bool dropMimeData(const QMimeData *, Qt::DropAction, int, int, const QModelIndex &) override;
 
+signals:
+    void songsToMove(QVector<unsigned>, unsigned);
+
 private:
 };
 

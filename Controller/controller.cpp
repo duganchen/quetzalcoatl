@@ -76,7 +76,29 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
 void Controller::updateStatus()
 {
     disableIdle();
+
     pollForStatus();
+    enableIdle();
+}
+
+void Controller::moveSongs(QVector<unsigned> songids, unsigned to)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+
+    qDebug() << songids;
+
+    for (unsigned songid : songids) {
+        qDebug() << "Moving " << songid << " to " << to;
+        if (!mpd_run_move_id(m_connection, songid, to - 1)) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+    }
+
     enableIdle();
 }
 
@@ -200,6 +222,7 @@ unsigned Controller::defaultPort()
 
 void Controller::handleIdle(mpd_idle idle)
 {
+    qDebug() << "Handling idle";
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
@@ -294,6 +317,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 
 void Controller::handleActivation()
 {
+    qDebug() << "Handling activation";
     handleIdle(mpd_recv_idle(m_connection, false));
     if (m_connection) {
         mpd_send_idle(m_connection);

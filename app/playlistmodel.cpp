@@ -75,8 +75,11 @@ bool PlaylistModel::canDropMimeData(const QMimeData *data,
                                     const QModelIndex &parent) const
 {
     Q_UNUSED(action)
-    Q_UNUSED(row)
     Q_UNUSED(parent)
+
+    if (row < 0) {
+        return false;
+    }
 
     if (!data->hasFormat("x-application/vnd.mpd.songids")
         && !data->hasFormat("x-application/vnd.mpd.uris")) {
@@ -94,18 +97,22 @@ bool PlaylistModel::dropMimeData(
     const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(action)
-    Q_UNUSED(row)
     Q_UNUSED(column)
     Q_UNUSED(parent)
 
     if (data->hasFormat("x-application/vnd.mpd.songids")) {
         QByteArray encodedData = data->data("x-application/vnd.mpd.songids");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
-        unsigned id;
+        QVector<unsigned> songs;
+        unsigned song;
         while (!stream.atEnd()) {
-            stream >> id;
-            qDebug() << id;
+            stream >> song;
+            songs.append(song);
         }
+
+        qDebug() << "songs is " << songs;
+
+        emit songsToMove(songs, row);
     }
 
     return true;
