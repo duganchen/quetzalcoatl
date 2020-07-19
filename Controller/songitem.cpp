@@ -4,8 +4,8 @@
 #include <QStringBuilder>
 #include <QStringLiteral>
 
-SongItem::SongItem(QIcon icon, Qt::ItemFlags myFlags, mpd_entity *entity, AbstractItem *parent)
-    : AbstractItem(icon, myFlags, parent)
+SongItem::SongItem(QIcon icon, Qt::ItemFlags myFlags, mpd_entity *entity, Item *parent)
+    : Item(icon, myFlags, parent)
     , m_entity(entity)
 {}
 

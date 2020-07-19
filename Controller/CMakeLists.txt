@@ -1,5 +1,5 @@
 add_library(Controller SHARED
-  abstractitem.cpp
+  item.cpp
   icons.qrc
   dbitem.cpp
   items.cpp

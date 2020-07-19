@@ -1,13 +1,13 @@
 #ifndef SONGITEM_H
 #define SONGITEM_H
 
-#include "abstractitem.h"
+#include "item.h"
 #include <mpd/client.h>
 
-class SongItem : public AbstractItem
+class SongItem : public Item
 {
 public:
-    SongItem(QIcon, Qt::ItemFlags, mpd_entity *, AbstractItem *parent = nullptr);
+    SongItem(QIcon, Qt::ItemFlags, mpd_entity *, Item *parent = nullptr);
     ~SongItem();
 
     QString text(int column) const override;

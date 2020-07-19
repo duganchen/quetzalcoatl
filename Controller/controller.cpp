@@ -1,5 +1,5 @@
 #include "controller.h"
-#include "dbitem.h"
+#include "item.h"
 #include "songitem.h"
 #include "timeformat.h"
 #include <mpd/client.h>
@@ -14,7 +14,7 @@ Controller::Controller(QObject *parent)
     , m_notifier(nullptr)
     , m_queueVersion(0)
 {
-    auto dbRootItem = new DBItem(QIcon(), Qt::NoItemFlags, "");
+    auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags);
     dbRootItem->append(
         new DBItem(QIcon(":/icons/folder-favorites.svg"), Qt::ItemIsEnabled, "Playlists"));
     dbRootItem->append(
@@ -29,7 +29,7 @@ Controller::Controller(QObject *parent)
     dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"), Qt::ItemIsEnabled, "/"));
     m_databaseItems = new Items(dbRootItem);
 
-    auto playlistRootItem = new DBItem(QIcon(), Qt::NoItemFlags, "");
+    auto playlistRootItem = new Item(QIcon(), Qt::NoItemFlags);
     m_playlistItems = new Items(playlistRootItem);
 
     qRegisterMetaType<Controller::ConnectionState>();

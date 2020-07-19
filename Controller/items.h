@@ -15,11 +15,11 @@ class Items : public QObject
     Q_OBJECT
 
 public:
-    explicit Items(AbstractItem *, QObject *parent = nullptr);
+    explicit Items(Item *, QObject *parent = nullptr);
     ~Items();
 
 public:
-    AbstractItem *rootItem() const;
+    Item *rootItem() const;
 signals:
 
     void modelAboutToBeReset();
@@ -40,7 +40,7 @@ signals:
 #endif
 
 private:
-    AbstractItem *m_rootItem;
+    Item *m_rootItem;
 };
 
 #endif // ITEMS_H

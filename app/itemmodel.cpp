@@ -31,7 +31,7 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    auto item = static_cast<AbstractItem *>(index.internalPointer());
+    auto item = static_cast<Item *>(index.internalPointer());
 
     if (Qt::DisplayRole == role) {
         return item->text(index.column());
@@ -63,7 +63,7 @@ QModelIndex ItemModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    auto parentItem = parent.isValid() ? static_cast<AbstractItem *>(parent.internalPointer())
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
                                        : m_items->rootItem();
     if (!parentItem) {
         return QModelIndex();
@@ -82,7 +82,7 @@ QModelIndex ItemModel::parent(const QModelIndex &index) const
         return QModelIndex();
     }
 
-    auto childItem = static_cast<AbstractItem *>(index.internalPointer());
+    auto childItem = static_cast<Item *>(index.internalPointer());
     auto parentItem = childItem->parent();
 
     if (m_items->rootItem() == parentItem)
@@ -97,7 +97,7 @@ int ItemModel::rowCount(const QModelIndex &parent) const
         return 0;
     }
 
-    auto parentItem = parent.isValid() ? static_cast<AbstractItem *>(parent.internalPointer())
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
                                        : m_items->rootItem();
     if (!parentItem) {
         return 0;

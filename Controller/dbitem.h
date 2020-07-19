@@ -1,12 +1,12 @@
 #ifndef DBITEM_H
 #define DBITEM_H
 
-#include "abstractitem.h"
+#include "item.h"
 
-class DBItem : public AbstractItem
+class DBItem : public Item
 {
 public:
-    explicit DBItem(QIcon icon, Qt::ItemFlags, QString text, AbstractItem *parent = nullptr);
+    explicit DBItem(QIcon icon, Qt::ItemFlags, QString text, Item *parent = nullptr);
     QString text(int) const override;
 
 private:
