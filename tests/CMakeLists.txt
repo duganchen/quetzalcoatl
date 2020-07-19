@@ -14,6 +14,6 @@ file(COPY resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(timeFormatTest tst_testtimeformat.cpp)
 add_test(NAME timeFormatTest COMMAND timeFormatTest)
-target_include_directories(timeFormatTest PRIVATE Qt5::Test "${PROJECT_SOURCE_DIR}/Controller")
-target_link_libraries(timeFormatTest PRIVATE Controller Qt5::Test)
+target_include_directories(timeFormatTest PRIVATE Qt5::Test "${PROJECT_SOURCE_DIR}/controller")
+target_link_libraries(timeFormatTest PRIVATE controller Qt5::Test)
 

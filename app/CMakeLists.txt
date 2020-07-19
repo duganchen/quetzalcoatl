@@ -14,6 +14,6 @@ add_executable(quetzalcoatl
 )
 
 
-target_link_libraries(quetzalcoatl PRIVATE Controller Qt5::Widgets PkgConfig::LIBMPDCLIENT)
-target_include_directories(quetzalcoatl PUBLIC "../Controller" ${LIBMPDCLIENT_INCLUDE_DIRS})
+target_link_libraries(quetzalcoatl PRIVATE controller Qt5::Widgets PkgConfig::LIBMPDCLIENT)
+target_include_directories(quetzalcoatl PUBLIC "../controller" ${LIBMPDCLIENT_INCLUDE_DIRS})
 

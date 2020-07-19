@@ -12,7 +12,7 @@ find_package(Qt5 5.15 COMPONENTS Core Widgets Gui Network Test REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBMPDCLIENT REQUIRED IMPORTED_TARGET libmpdclient)
 
-add_subdirectory(Controller)
+add_subdirectory(controller)
 add_subdirectory(app)
 enable_testing()
 add_subdirectory(tests)
