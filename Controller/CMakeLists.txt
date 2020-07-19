@@ -1,5 +1,6 @@
 add_library(Controller SHARED
   item.cpp
+  genresitem.cpp
   icons.qrc
   dbitem.cpp
   items.cpp

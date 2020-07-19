@@ -25,6 +25,8 @@ public:
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     bool canFetchMore(const QModelIndex &parent) const override;
+    void fetchMore(const QModelIndex &parent) override;
+    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 signals:
     void columnResized(int);
 

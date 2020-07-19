@@ -6,11 +6,15 @@
 class DBItem : public Item
 {
 public:
-    explicit DBItem(QIcon icon, Qt::ItemFlags, QString text, Item *parent = nullptr);
+    explicit DBItem(QIcon, Qt::ItemFlags, bool, QString, Item *parent = nullptr);
     QString text(int) const override;
+
+    virtual bool canFetchMore() override;
+    virtual void fetchMore() override;
 
 private:
     QString m_label;
+    bool m_canFetchMore;
 };
 
 #endif // DBITEM_H

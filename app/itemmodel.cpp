@@ -21,8 +21,27 @@ ItemModel::ItemModel(Items *items, QObject *parent)
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
-    return false;
+    if (!parent.isValid()) {
+        return false;
+    }
+    return static_cast<Item *>(parent.internalPointer())->canFetchMore();
+}
+
+void ItemModel::fetchMore(const QModelIndex &parent)
+{
+    if (!parent.isValid()) {
+        return;
+    }
+    static_cast<Item *>(parent.internalPointer())->fetchMore();
+}
+
+bool ItemModel::hasChildren(const QModelIndex &parent) const
+{
+    if (!parent.isValid()) {
+        return true;
+    }
+
+    return static_cast<Item *>(parent.internalPointer())->hasChildren();
 }
 
 QVariant ItemModel::data(const QModelIndex &index, int role) const

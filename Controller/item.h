@@ -8,7 +8,7 @@
 class Item
 {
 public:
-    explicit Item(QIcon icon, Qt::ItemFlags, Item *parent = nullptr);
+    explicit Item(QIcon, Qt::ItemFlags, bool, Item *parent = nullptr);
     virtual ~Item();
 
     void append(Item *at);
@@ -27,11 +27,16 @@ public:
 
     Qt::ItemFlags flags() const;
 
+    virtual bool canFetchMore();
+    virtual void fetchMore();
+    virtual bool hasChildren();
+
 private:
     QVector<Item *> m_children;
     QIcon m_icon;
     Item *m_parent;
     Qt::ItemFlags m_flags;
+    bool m_hasChildren;
 };
 
 #endif // ITEM_H

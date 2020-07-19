@@ -1,9 +1,11 @@
 #include "item.h"
+#include <QDebug>
 
-Item::Item(QIcon icon, Qt::ItemFlags myFlags, Item *parent)
+Item::Item(QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, Item *parent)
     : m_icon(icon)
     , m_parent(parent)
     , m_flags(myFlags)
+    , m_hasChildren(hazChildren)
 {}
 
 Item::~Item()
@@ -43,9 +45,9 @@ QIcon Item::icon() const
 
 QString Item::text(int column) const
 {
+    Q_UNUSED(column)
     return QString();
 }
-
 
 Item *Item::parent()
 {
@@ -74,4 +76,19 @@ QVariant Item::tooltip()
 Qt::ItemFlags Item::flags() const
 {
     return m_flags;
+}
+
+bool Item::canFetchMore()
+{
+    return false;
+}
+
+void Item::fetchMore()
+{
+    qDebug() << "Fetching";
+}
+
+bool Item::hasChildren()
+{
+    return m_hasChildren;
 }

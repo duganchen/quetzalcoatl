@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "genresitem.h"
 #include "item.h"
 #include "songitem.h"
 #include "timeformat.h"
@@ -14,22 +15,23 @@ Controller::Controller(QObject *parent)
     , m_notifier(nullptr)
     , m_queueVersion(0)
 {
-    auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags);
+    auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags, true);
     dbRootItem->append(
-        new DBItem(QIcon(":/icons/folder-favorites.svg"), Qt::ItemIsEnabled, "Playlists"));
+        new DBItem(QIcon(":/icons/folder-favorites.svg"), Qt::ItemIsEnabled, true, "Playlists"));
     dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, "Albums"));
+        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Albums"));
     dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, "Compilations"));
-    dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, "Songs"));
+        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Compilations"));
     dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, "Genres"));
+        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Songs"));
     dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, "Composers"));
-    dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"), Qt::ItemIsEnabled, "/"));
+        new GenresItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Genres"));
+    dbRootItem->append(
+        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Composers"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"), Qt::ItemIsEnabled, true, "/"));
     m_databaseItems = new Items(dbRootItem);
 
-    auto playlistRootItem = new Item(QIcon(), Qt::NoItemFlags);
+    auto playlistRootItem = new Item(QIcon(), Qt::NoItemFlags, true);
     m_playlistItems = new Items(playlistRootItem);
 
     qRegisterMetaType<Controller::ConnectionState>();
@@ -141,6 +143,7 @@ void Controller::pollForStatus()
                 m_playlistItems->rootItem()->append(
                     new SongItem(QIcon(":/icons/audio-x-generic.svg"),
                                  Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
+                                 false,
                                  entity));
             }
         }
@@ -222,7 +225,6 @@ unsigned Controller::defaultPort()
 
 void Controller::handleIdle(mpd_idle idle)
 {
-    qDebug() << "Handling idle";
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
