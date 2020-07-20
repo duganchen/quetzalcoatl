@@ -19,10 +19,10 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
     if (orientation == Qt::Horizontal) {
         switch (section) {
         case 0:
-            return "Name";
+            return QStringLiteral("Name");
 
         case 1:
-            return "Time";
+            return QStringLiteral("Time");
 
         default:
             return QVariant();
