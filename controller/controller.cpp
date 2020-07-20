@@ -115,10 +115,6 @@ void Controller::pollForStatus()
             return;
         }
 
-#if 0
-        emit m_playlistItems->modelAboutToBeReset();
-        clearQueue();
-#endif
         QVector<SongItem *> queue;
 
         mpd_entity *entity = nullptr;
@@ -131,9 +127,6 @@ void Controller::pollForStatus()
                                  entity));
             }
         }
-#if 0
-        emit m_playlistItems->modelReset();
-#endif
 
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
@@ -150,17 +143,6 @@ void Controller::pollForStatus()
 
     mpd_status_free(status);
 }
-
-#if 0
-void Controller::clearQueue()
-{
-
-    emit m_playlistItems->modelAboutToBeReset();
-    m_playlistItems->rootItem()->clear();
-    emit m_playlistItems->modelReset();
-
-}
-#endif
 
 void Controller::handleListAlbumsClick()
 {
