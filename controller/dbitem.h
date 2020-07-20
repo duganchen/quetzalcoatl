@@ -11,6 +11,9 @@ public:
 
     virtual bool canFetchMore() override;
 
+protected:
+    virtual void setCanfetchMore(bool);
+
 private:
     QString m_label;
     bool m_canFetchMore;

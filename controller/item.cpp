@@ -83,10 +83,11 @@ bool Item::canFetchMore()
     return false;
 }
 
-void Item::fetchMore(QSocketNotifier *notifier, mpd_connection *mpd)
+QVector<Item *> Item::fetchMore(Controller *controller)
 {
-    Q_UNUSED(notifier)
-    Q_UNUSED(mpd)
+    Q_UNUSED(controller)
+    QVector<Item *> items;
+    return items;
 }
 
 bool Item::hasChildren()

@@ -7,6 +7,8 @@
 #include <QVector>
 #include <QtGui/QIcon>
 
+class Controller;
+
 class Item
 {
 public:
@@ -30,7 +32,7 @@ public:
     Qt::ItemFlags flags() const;
 
     virtual bool canFetchMore();
-    virtual void fetchMore(QSocketNotifier *, mpd_connection *);
+    virtual QVector<Item *> fetchMore(Controller *);
     virtual bool hasChildren();
 
 private:

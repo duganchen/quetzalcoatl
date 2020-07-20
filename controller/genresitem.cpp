@@ -7,10 +7,10 @@ GenresItem::GenresItem(
     : DBItem(icon, myFlags, hazChildren, text, parent)
 {}
 
-void GenresItem::fetchMore(QSocketNotifier *notifier, mpd_connection *mpd)
+QVector<Item *> GenresItem::fetchMore(Controller *controller)
 {
-    qDebug() << "Fetching more genres";
-    Q_UNUSED(notifier)
-    Q_UNUSED(mpd)
-    DBItem::fetchMore(notifier, mpd);
+    setCanfetchMore(false);
+    Q_UNUSED(controller)
+    QVector<Item *> items;
+    return items;
 }

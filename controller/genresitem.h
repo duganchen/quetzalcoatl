@@ -8,7 +8,7 @@ class GenresItem : public DBItem
 public:
     explicit GenresItem(QIcon, Qt::ItemFlags, bool, QString, Item *parent = nullptr);
 
-    void fetchMore(QSocketNotifier *, mpd_connection *) override;
+    QVector<Item *> fetchMore(Controller *) override;
 };
 
 #endif // GENRESITEM_H

@@ -25,8 +25,7 @@ void ItemModel::fetchMore(const QModelIndex &parent)
     if (!parent.isValid()) {
         return;
     }
-    static_cast<Item *>(parent.internalPointer())
-        ->fetchMore(m_controller->notifier(), m_controller->mpd());
+    static_cast<Item *>(parent.internalPointer())->fetchMore(m_controller);
 }
 
 bool ItemModel::hasChildren(const QModelIndex &parent) const
