@@ -122,7 +122,7 @@ bool PlaylistModel::dropMimeData(
     return true;
 }
 
-void PlaylistModel::setQueue(const QVector<SongItem *> &queue)
+void PlaylistModel::setQueue(const QVector<Item *> &queue)
 {
     beginResetModel();
     rootItem()->clear();

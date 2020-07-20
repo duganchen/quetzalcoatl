@@ -4,6 +4,7 @@
 #include "songitem.h"
 #include "timeformat.h"
 #include <mpd/client.h>
+#include <QCollator>
 #include <QDebug>
 #include <QtNetwork/QHostInfo>
 #include <QtNetwork/QLocalSocket>
@@ -115,7 +116,7 @@ void Controller::pollForStatus()
             return;
         }
 
-        QVector<SongItem *> queue;
+        QVector<Item *> queue;
 
         mpd_entity *entity = nullptr;
         while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
@@ -225,7 +226,7 @@ void Controller::handleIdle(mpd_idle idle)
         emit sliderMax(0);
         emit sliderValue(0);
 
-        QVector<SongItem *> emptyQueue;
+        QVector<Item *> emptyQueue;
         emit queueChanged(emptyQueue);
 
     } else {
@@ -329,4 +330,37 @@ void Controller::enableIdle()
     }
     m_notifier->setEnabled(true);
     mpd_send_idle(m_connection);
+}
+
+QVector<QString> Controller::searchTags(mpd_tag_type tagType)
+{
+    QVector<QString> tags;
+
+    if (!m_connection) {
+        return tags;
+    }
+
+    disableIdle();
+
+    if (!mpd_search_db_tags(m_connection, tagType)) {
+        qDebug() << mpd_connection_get_error_message(m_connection);
+        return tags;
+    }
+
+    if (!mpd_search_commit(m_connection)) {
+        qDebug() << mpd_connection_get_error_message(m_connection);
+        return tags;
+    }
+
+    struct mpd_pair *pair = nullptr;
+    while ((pair = mpd_recv_pair_tag(m_connection, tagType)) != nullptr) {
+        tags.push_back(pair->value);
+        mpd_return_pair(m_connection, pair);
+    }
+
+    enableIdle();
+
+    QCollator collator;
+    std::sort(tags.begin(), tags.end(), collator);
+    return tags;
 }

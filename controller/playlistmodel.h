@@ -29,7 +29,7 @@ public:
     bool dropMimeData(const QMimeData *, Qt::DropAction, int, int, const QModelIndex &) override;
 
 public slots:
-    void setQueue(const QVector<SongItem *> &);
+    void setQueue(const QVector<Item *> &);
 
 signals:
     void songsToMove(QVector<unsigned>, unsigned);

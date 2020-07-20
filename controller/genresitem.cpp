@@ -9,6 +9,7 @@ GenresItem::GenresItem(
 
 QVector<Item *> GenresItem::fetchMore(Controller *controller)
 {
+    qDebug() << "Fetching genres";
     setCanfetchMore(false);
     Q_UNUSED(controller)
     QVector<Item *> items;

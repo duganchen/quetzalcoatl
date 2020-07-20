@@ -2,7 +2,7 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
-#include "songitem.h"
+#include "item.h"
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
@@ -25,6 +25,9 @@ public:
 
     QSocketNotifier *notifier() const;
     mpd_connection *mpd() const;
+
+    QVector<QString> searchTags(mpd_tag_type);
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
@@ -53,7 +56,7 @@ signals:
     void crossfade(int);
     void volume(int);
 
-    void queueChanged(const QVector<SongItem *> &);
+    void queueChanged(const QVector<Item *> &);
 
 private:
     void handleIdle(mpd_idle);
