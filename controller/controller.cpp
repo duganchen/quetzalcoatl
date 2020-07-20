@@ -354,8 +354,11 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType)
 
     struct mpd_pair *pair = nullptr;
     while ((pair = mpd_recv_pair_tag(m_connection, tagType)) != nullptr) {
-        tags.push_back(pair->value);
+        QString tag{pair->value};
         mpd_return_pair(m_connection, pair);
+        if (!tag.isEmpty()) {
+            tags.push_back(tag);
+        }
     }
 
     enableIdle();
