@@ -3,7 +3,6 @@ add_library(controller SHARED
   databasemodel.cpp
   dbitem.cpp
   genresitem.cpp
-  icons.qrc
   item.cpp
   itemmodel.cpp
   playlistmodel.cpp
