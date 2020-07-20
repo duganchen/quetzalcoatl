@@ -1,4 +1,5 @@
 #include "genresitem.h"
+#include "controller.h"
 
 #include <QDebug>
 
@@ -9,9 +10,10 @@ GenresItem::GenresItem(
 
 QVector<Item *> GenresItem::fetchMore(Controller *controller)
 {
-    qDebug() << "Fetching genres";
     setCanfetchMore(false);
-    Q_UNUSED(controller)
     QVector<Item *> items;
+    for (auto value : controller->searchTags(MPD_TAG_GENRE)) {
+        items.append(new DBItem(QIcon(), Qt::ItemIsEnabled, true, value));
+    }
     return items;
 }

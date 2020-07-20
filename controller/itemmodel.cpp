@@ -25,7 +25,13 @@ void ItemModel::fetchMore(const QModelIndex &parent)
     if (!parent.isValid()) {
         return;
     }
-    static_cast<Item *>(parent.internalPointer())->fetchMore(m_controller);
+    auto items = static_cast<Item *>(parent.internalPointer())->fetchMore(m_controller);
+    auto parentItem = static_cast<Item *>(parent.internalPointer());
+    beginInsertRows(parent, 0, items.count() - 1);
+    for (auto item : items) {
+        parentItem->append(item);
+    }
+    endInsertRows();
 }
 
 bool ItemModel::hasChildren(const QModelIndex &parent) const
