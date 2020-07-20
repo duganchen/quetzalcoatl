@@ -1,22 +1,15 @@
 #include "itemmodel.h"
 #include <QDebug>
 
-ItemModel::ItemModel(Items *items, QObject *parent)
+ItemModel::ItemModel(Controller *myController, QObject *parent)
     : QAbstractItemModel(parent)
-    , m_items(items)
-{
-    m_items->setParent(this);
+    , m_rootItem(nullptr)
+    , m_controller(myController)
+{}
 
-    // Just reset the model each time the data changes...
-    // This is absolutely fine and fast enough for my purposes. It's possible to make it more
-    // granular by, for example, responding to individual plchangesposid calls, and my
-    // position on that is that if you feel it's important, you can send a pull request.
-    connect(m_items, &Items::modelAboutToBeReset, this, &ItemModel::beginResetModel);
-    connect(m_items, &Items::modelReset, this, [=]() {
-        endResetModel();
-        emit columnResized(0);
-        emit columnResized(1);
-    });
+ItemModel::~ItemModel()
+{
+    delete m_rootItem;
 }
 
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
@@ -82,8 +75,7 @@ QModelIndex ItemModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
-                                       : m_items->rootItem();
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_rootItem;
     if (!parentItem) {
         return QModelIndex();
     }
@@ -104,7 +96,7 @@ QModelIndex ItemModel::parent(const QModelIndex &index) const
     auto childItem = static_cast<Item *>(index.internalPointer());
     auto parentItem = childItem->parent();
 
-    if (m_items->rootItem() == parentItem)
+    if (m_rootItem == parentItem)
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -116,10 +108,24 @@ int ItemModel::rowCount(const QModelIndex &parent) const
         return 0;
     }
 
-    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer())
-                                       : m_items->rootItem();
+    auto parentItem = parent.isValid() ? static_cast<Item *>(parent.internalPointer()) : m_rootItem;
     if (!parentItem) {
         return 0;
     }
     return parentItem->count();
+}
+
+void ItemModel::setRootItem(Item *rootItem)
+{
+    m_rootItem = rootItem;
+}
+
+Item *ItemModel::rootItem() const
+{
+    return m_rootItem;
+}
+
+Controller *ItemModel::controller() const
+{
+    return m_controller;
 }

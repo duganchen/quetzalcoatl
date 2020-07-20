@@ -15,25 +15,6 @@ Controller::Controller(QObject *parent)
     , m_notifier(nullptr)
     , m_queueVersion(0)
 {
-    auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags, true);
-    dbRootItem->append(
-        new DBItem(QIcon(":/icons/folder-favorites.svg"), Qt::ItemIsEnabled, true, "Playlists"));
-    dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Albums"));
-    dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Compilations"));
-    dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Songs"));
-    dbRootItem->append(
-        new GenresItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Genres"));
-    dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Composers"));
-    dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"), Qt::ItemIsEnabled, true, "/"));
-    m_databaseItems = new Items(dbRootItem);
-
-    auto playlistRootItem = new Item(QIcon(), Qt::NoItemFlags, true);
-    m_playlistItems = new Items(playlistRootItem);
-
     qRegisterMetaType<Controller::ConnectionState>();
 
     auto settings = mpd_settings_new(nullptr, 0, 0, nullptr, nullptr);
@@ -125,6 +106,7 @@ void Controller::pollForStatus()
     emit statusMessage(QStringLiteral("%1/%2").arg(timeStr(elapsed), timeStr(total)), 0);
 
     unsigned queueVersion = mpd_status_get_queue_version(status);
+
     if (m_queueVersion != queueVersion) {
         m_queueVersion = queueVersion;
 
@@ -133,27 +115,32 @@ void Controller::pollForStatus()
             return;
         }
 
+#if 0
         emit m_playlistItems->modelAboutToBeReset();
-
         clearQueue();
+#endif
+        QVector<SongItem *> queue;
 
         mpd_entity *entity = nullptr;
         while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
             if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
-                m_playlistItems->rootItem()->append(
+                queue.append(
                     new SongItem(QIcon(":/icons/audio-x-generic.svg"),
                                  Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                                  false,
                                  entity));
             }
         }
-
+#if 0
         emit m_playlistItems->modelReset();
+#endif
 
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
+
+        emit queueChanged(queue);
     }
 
     emit shuffled(mpd_status_get_random(status));
@@ -164,12 +151,16 @@ void Controller::pollForStatus()
     mpd_status_free(status);
 }
 
+#if 0
 void Controller::clearQueue()
 {
+
     emit m_playlistItems->modelAboutToBeReset();
     m_playlistItems->rootItem()->clear();
     emit m_playlistItems->modelReset();
+
 }
+#endif
 
 void Controller::handleListAlbumsClick()
 {
@@ -242,7 +233,8 @@ void Controller::handleIdle(mpd_idle idle)
         emit sliderMax(0);
         emit sliderValue(0);
 
-        clearQueue();
+        QVector<SongItem *> emptyQueue;
+        emit queueChanged(emptyQueue);
 
     } else {
         if (idle & MPD_IDLE_DATABASE) {
@@ -319,21 +311,10 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 
 void Controller::handleActivation()
 {
-    qDebug() << "Handling activation";
     handleIdle(mpd_recv_idle(m_connection, false));
     if (m_connection) {
         mpd_send_idle(m_connection);
     }
-}
-
-Items *Controller::databaseItems() const
-{
-    return m_databaseItems;
-}
-
-Items *Controller::playlistItems() const
-{
-    return m_playlistItems;
 }
 
 // Call these two before and after most synchronous MPD commands.

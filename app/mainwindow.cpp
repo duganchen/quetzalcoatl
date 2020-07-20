@@ -116,7 +116,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto splitter = new QSplitter();
 
-    auto databaseModel = new DatabaseModel(controller->databaseItems());
+    auto databaseModel = new DatabaseModel(controller);
     auto databaseView = new QTreeView();
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
@@ -126,7 +126,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
-    auto playlistModel = new PlaylistModel(controller->playlistItems());
+    auto playlistModel = new PlaylistModel(controller);
 
     connect(playlistModel, &PlaylistModel::songsToMove, controller, &Controller::moveSongs);
 

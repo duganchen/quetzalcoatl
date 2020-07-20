@@ -2,7 +2,7 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
-#include "items.h"
+#include "songitem.h"
 #include <mpd/client.h>
 #include <QObject>
 #include <QSocketNotifier>
@@ -22,9 +22,6 @@ public:
 
     QString defaultHost();
     unsigned defaultPort();
-
-    Items *databaseItems() const;
-    Items *playlistItems() const;
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
@@ -53,6 +50,8 @@ signals:
     void crossfade(int);
     void volume(int);
 
+    void queueChanged(const QVector<SongItem *> &);
+
 private:
     void handleIdle(mpd_idle);
     void createMPD(QString, int, int);
@@ -61,8 +60,6 @@ private:
     void disableIdle();
 
     void pollForStatus();
-
-    void clearQueue();
 
     QString m_defaultHost;
     unsigned m_defaultPort;
@@ -74,9 +71,6 @@ private:
     unsigned m_queueVersion;
 
     ConnectionState m_connectionState;
-
-    Items *m_databaseItems;
-    Items *m_playlistItems;
 
 private slots:
     void handleActivation();

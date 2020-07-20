@@ -3,9 +3,13 @@
 #include <QByteArray>
 #include <QDebug>
 
-PlaylistModel::PlaylistModel(Items *items, QObject *parent)
-    : ItemModel(items, parent)
-{}
+PlaylistModel::PlaylistModel(Controller *controller, QObject *parent)
+    : ItemModel(controller, parent)
+{
+    setRootItem(new Item(QIcon(), Qt::NoItemFlags, true));
+
+    connect(controller, &Controller::queueChanged, this, &PlaylistModel::setQueue);
+}
 
 QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
@@ -116,4 +120,16 @@ bool PlaylistModel::dropMimeData(
     }
 
     return true;
+}
+
+void PlaylistModel::setQueue(const QVector<SongItem *> &queue)
+{
+    beginResetModel();
+    rootItem()->clear();
+    for (auto songItem : queue) {
+        rootItem()->append(songItem);
+    }
+    endResetModel();
+    emit columnResized(0);
+    emit columnResized(1);
 }

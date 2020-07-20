@@ -9,7 +9,7 @@ class PlaylistModel : public ItemModel
     Q_OBJECT
 
 public:
-    explicit PlaylistModel(Items *, QObject *parent = nullptr);
+    explicit PlaylistModel(Controller *, QObject *parent = nullptr);
 
     QVariant headerData(int section,
                         Qt::Orientation orientation,
@@ -27,6 +27,9 @@ public:
         const QMimeData *, Qt::DropAction, int, int, const QModelIndex &) const override;
 
     bool dropMimeData(const QMimeData *, Qt::DropAction, int, int, const QModelIndex &) override;
+
+public slots:
+    void setQueue(const QVector<SongItem *> &);
 
 signals:
     void songsToMove(QVector<unsigned>, unsigned);

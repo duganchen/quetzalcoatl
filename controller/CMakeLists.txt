@@ -6,7 +6,6 @@ add_library(controller SHARED
   icons.qrc
   item.cpp
   itemmodel.cpp
-  items.cpp
   playlistmodel.cpp
   songitem.cpp
   timeformat.cpp

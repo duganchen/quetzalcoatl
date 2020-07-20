@@ -7,7 +7,7 @@
 // The nodes are in items.h.
 
 #include "controller.h"
-#include "items.h"
+#include "item.h"
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
@@ -17,7 +17,8 @@ class ItemModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit ItemModel(Items *, QObject *parent = nullptr);
+    explicit ItemModel(Controller *, QObject *parent = nullptr);
+    ~ItemModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
@@ -30,8 +31,14 @@ public:
 signals:
     void columnResized(int);
 
+protected:
+    void setRootItem(Item *);
+    Item *rootItem() const;
+    Controller *controller() const;
+
 private:
-    Items *m_items;
+    Item *m_rootItem;
+    Controller *m_controller;
 };
 
 #endif // ITEMMODEL_H
