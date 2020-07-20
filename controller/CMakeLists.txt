@@ -1,12 +1,15 @@
 add_library(controller SHARED
-  item.cpp
+  controller.cpp
+  databasemodel.cpp
+  dbitem.cpp
   genresitem.cpp
   icons.qrc
-  dbitem.cpp
+  item.cpp
+  itemmodel.cpp
   items.cpp
-  controller.cpp
-  timeformat.cpp
+  playlistmodel.cpp
   songitem.cpp
+  timeformat.cpp
 )
 
 target_include_directories(controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})
