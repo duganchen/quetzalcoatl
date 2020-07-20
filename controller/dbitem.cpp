@@ -17,5 +17,3 @@ bool DBItem::canFetchMore()
 {
     return m_canFetchMore;
 }
-
-void DBItem::fetchMore() {}

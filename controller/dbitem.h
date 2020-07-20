@@ -10,7 +10,6 @@ public:
     QString text(int) const override;
 
     virtual bool canFetchMore() override;
-    virtual void fetchMore() override;
 
 private:
     QString m_label;

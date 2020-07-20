@@ -1,6 +1,8 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include <mpd/client.h>
+#include <QSocketNotifier>
 #include <QVariant>
 #include <QVector>
 #include <QtGui/QIcon>
@@ -28,7 +30,7 @@ public:
     Qt::ItemFlags flags() const;
 
     virtual bool canFetchMore();
-    virtual void fetchMore();
+    virtual void fetchMore(QSocketNotifier *, mpd_connection *);
     virtual bool hasChildren();
 
 private:

@@ -22,6 +22,9 @@ public:
 
     QString defaultHost();
     unsigned defaultPort();
+
+    QSocketNotifier *notifier() const;
+    mpd_connection *mpd() const;
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);

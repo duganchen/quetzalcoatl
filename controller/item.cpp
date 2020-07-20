@@ -83,9 +83,10 @@ bool Item::canFetchMore()
     return false;
 }
 
-void Item::fetchMore()
+void Item::fetchMore(QSocketNotifier *notifier, mpd_connection *mpd)
 {
-    qDebug() << "Fetching";
+    Q_UNUSED(notifier)
+    Q_UNUSED(mpd)
 }
 
 bool Item::hasChildren()

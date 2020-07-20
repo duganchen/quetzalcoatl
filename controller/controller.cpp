@@ -196,6 +196,16 @@ unsigned Controller::defaultPort()
     return m_defaultPort;
 }
 
+QSocketNotifier *Controller::notifier() const
+{
+    return m_notifier;
+}
+
+mpd_connection *Controller::mpd() const
+{
+    return m_connection;
+}
+
 void Controller::handleIdle(mpd_idle idle)
 {
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
