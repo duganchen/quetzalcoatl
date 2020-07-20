@@ -356,7 +356,7 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType)
     while ((pair = mpd_recv_pair_tag(m_connection, tagType)) != nullptr) {
         QString tag{pair->value};
         mpd_return_pair(m_connection, pair);
-        if (!tag.isEmpty()) {
+        if (!tag.trimmed().isEmpty()) {
             tags.push_back(tag);
         }
     }
