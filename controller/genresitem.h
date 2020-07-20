@@ -6,7 +6,7 @@
 class GenresItem : public DBItem
 {
 public:
-    explicit GenresItem(QIcon, Qt::ItemFlags, bool, QString, Item *parent = nullptr);
+    explicit GenresItem(QIcon, Qt::ItemFlags, bool, bool, QString, Item *parent = nullptr);
 
     QVector<Item *> fetchMore(Controller *) override;
 };

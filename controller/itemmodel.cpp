@@ -32,6 +32,7 @@ void ItemModel::fetchMore(const QModelIndex &parent)
         parentItem->append(item);
     }
     endInsertRows();
+    parentItem->setCanFetchMore(false);
 }
 
 bool ItemModel::hasChildren(const QModelIndex &parent) const

@@ -12,7 +12,7 @@ class Controller;
 class Item
 {
 public:
-    explicit Item(QIcon, Qt::ItemFlags, bool, Item *parent = nullptr);
+    explicit Item(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
     virtual ~Item();
 
     void append(Item *at);
@@ -31,7 +31,9 @@ public:
 
     Qt::ItemFlags flags() const;
 
-    virtual bool canFetchMore();
+    bool canFetchMore();
+    void setCanFetchMore(bool);
+
     virtual QVector<Item *> fetchMore(Controller *);
     virtual bool hasChildren();
 
@@ -41,6 +43,7 @@ private:
     Item *m_parent;
     Qt::ItemFlags m_flags;
     bool m_hasChildren;
+    bool m_canFetchMore;
 };
 
 #endif // ITEM_H

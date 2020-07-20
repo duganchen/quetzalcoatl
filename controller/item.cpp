@@ -1,11 +1,12 @@
 #include "item.h"
 #include <QDebug>
 
-Item::Item(QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, Item *parent)
+Item::Item(QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, bool couldFetchMore, Item *parent)
     : m_icon(icon)
     , m_parent(parent)
     , m_flags(myFlags)
     , m_hasChildren(hazChildren)
+    , m_canFetchMore(couldFetchMore)
 {}
 
 Item::~Item()
@@ -80,11 +81,17 @@ Qt::ItemFlags Item::flags() const
 
 bool Item::canFetchMore()
 {
-    return false;
+    return m_canFetchMore;
+}
+
+void Item::setCanFetchMore(bool value)
+{
+    m_canFetchMore = value;
 }
 
 QVector<Item *> Item::fetchMore(Controller *controller)
 {
+    // This is a stub. It doesn't get called.
     Q_UNUSED(controller)
     QVector<Item *> items;
     return items;

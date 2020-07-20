@@ -6,7 +6,7 @@
 PlaylistModel::PlaylistModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
 {
-    setRootItem(new Item(QIcon(), Qt::NoItemFlags, true));
+    setRootItem(new Item(QIcon(), Qt::NoItemFlags, true, false));
 
     connect(controller, &Controller::queueChanged, this, &PlaylistModel::setQueue);
 }

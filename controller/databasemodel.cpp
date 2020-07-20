@@ -4,31 +4,39 @@
 DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
 {
-    auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags, true);
+    auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags, true, false);
     dbRootItem->append(new DBItem(QIcon(":/icons/folder-favorites.svg"),
                                   Qt::ItemIsEnabled,
+                                  true,
                                   true,
                                   QStringLiteral("Playlists")));
     dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"),
                                   Qt::ItemIsEnabled,
                                   true,
+                                  true,
                                   QStringLiteral("Albums")));
     dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"),
                                   Qt::ItemIsEnabled,
+                                  true,
                                   true,
                                   QStringLiteral("Compilations")));
     dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"),
                                   Qt::ItemIsEnabled,
                                   true,
+                                  true,
                                   QStringLiteral("Songs")));
     dbRootItem->append(new GenresItem(QIcon(":/icons/server-database.svg"),
                                       Qt::ItemIsEnabled,
                                       true,
+                                      true,
                                       QStringLiteral("Genres")));
     dbRootItem->append(
-        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, "Composers"));
-    dbRootItem->append(
-        new DBItem(QIcon(":/icons/drive-harddisk"), Qt::ItemIsEnabled, true, QStringLiteral("/")));
+        new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, "Composers"));
+    dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"),
+                                  Qt::ItemIsEnabled,
+                                  true,
+                                  true,
+                                  QStringLiteral("/")));
 
     setRootItem(dbRootItem);
 }
