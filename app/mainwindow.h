@@ -12,8 +12,6 @@
 #include <QVector>
 #include <QWidget>
 
-#include "connectionstate.h"
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
