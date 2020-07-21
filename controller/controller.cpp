@@ -367,3 +367,42 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType)
     std::sort(tags.begin(), tags.end(), collator);
     return tags;
 }
+
+QVector<mpd_song *> Controller::searchSongs(const QVector<QPair<mpd_tag_type, QString>> &tags)
+{
+    QVector<mpd_song *> songs;
+
+    if (!m_connection) {
+        return songs;
+    }
+
+    disableIdle();
+
+    if (!mpd_search_db_songs(m_connection, true)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return songs;
+    }
+    for (auto tag : tags) {
+        if (!mpd_search_add_tag_constraint(m_connection,
+                                           MPD_OPERATOR_DEFAULT,
+                                           tag.first,
+                                           tag.second.toUtf8().constData())) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return songs;
+        }
+    }
+
+    if (!mpd_search_commit(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+
+    mpd_song *song = nullptr;
+
+    while ((song = mpd_recv_song(m_connection))) {
+        songs.append(song);
+    }
+
+    enableIdle();
+
+    return songs;
+}

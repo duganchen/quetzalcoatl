@@ -28,6 +28,9 @@ public:
 
     QVector<QString> searchTags(mpd_tag_type);
 
+    // The parameter is a sequence of tag_type, tag_value pairs.
+    QVector<mpd_song *> searchSongs(const QVector<QPair<mpd_tag_type, QString>> &);
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);

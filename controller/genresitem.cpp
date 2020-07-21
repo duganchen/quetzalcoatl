@@ -1,5 +1,6 @@
 #include "genresitem.h"
 #include "controller.h"
+#include "genreitem.h"
 
 #include <QDebug>
 
@@ -16,7 +17,11 @@ QVector<Item *> GenresItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto value : controller->searchTags(MPD_TAG_GENRE)) {
-        items.append(new DBItem(QIcon(), Qt::ItemIsEnabled, true, true, value));
+        items.append(new GenreItem(QIcon(":/icons/server-database.svg"),
+                                   Qt::ItemIsEnabled,
+                                   true,
+                                   true,
+                                   value));
     }
     return items;
 }
