@@ -1,16 +1,16 @@
-#include "songitem.h"
+#include "queueditem.h"
 #include "timeformat.h"
 #include <QDebug>
 #include <QStringBuilder>
 #include <QStringLiteral>
 
-SongItem::SongItem(
+QueuedItem::QueuedItem(
     QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, mpd_entity *entity, Item *parent)
     : Item(icon, myFlags, hazChildren, parent)
     , m_entity(entity)
 {}
 
-SongItem::~SongItem()
+QueuedItem::~QueuedItem()
 {
     if (m_entity) {
         mpd_entity_free(m_entity);
@@ -18,7 +18,7 @@ SongItem::~SongItem()
     }
 }
 
-QString SongItem::text(int column) const
+QString QueuedItem::text(int column) const
 {
     if (!m_entity || column > 1) {
         return QString();
@@ -49,7 +49,7 @@ QString SongItem::text(int column) const
     return timeStr(duration);
 }
 
-QVariant SongItem::tooltip()
+QVariant QueuedItem::tooltip()
 {
     if (!m_entity) {
         return QVariant();
@@ -84,7 +84,7 @@ QVariant SongItem::tooltip()
     return metadata.join("\n");
 }
 
-unsigned SongItem::id()
+unsigned QueuedItem::id()
 {
     if (!m_entity) {
         return -1;

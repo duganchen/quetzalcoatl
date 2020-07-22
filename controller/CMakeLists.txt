@@ -9,7 +9,7 @@ add_library(controller SHARED
   item.cpp
   itemmodel.cpp
   playlistmodel.cpp
-  songitem.cpp
+  queueditem.cpp
   timeformat.cpp
 )
 

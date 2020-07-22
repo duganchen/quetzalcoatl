@@ -1,7 +1,7 @@
 #include "controller.h"
 #include "genresitem.h"
 #include "item.h"
-#include "songitem.h"
+#include "queueditem.h"
 #include "timeformat.h"
 #include <mpd/client.h>
 #include <QCollator>
@@ -136,7 +136,7 @@ void Controller::pollForStatus()
         while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
             if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
                 queue.append(
-                    new SongItem(QIcon(":/icons/audio-x-generic.svg"),
+                    new QueuedItem(QIcon(":/icons/audio-x-generic.svg"),
                                  Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                                  false,
                                  entity));

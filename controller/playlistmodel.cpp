@@ -1,5 +1,5 @@
 #include "playlistmodel.h"
-#include "songitem.h"
+#include "queueditem.h"
 #include <QByteArray>
 #include <QDebug>
 
@@ -41,7 +41,7 @@ Qt::ItemFlags PlaylistModel::flags(const QModelIndex &index) const
 {
     if (index.isValid()) {
         if (index.column() == 0) {
-            return static_cast<SongItem *>(index.internalPointer())->flags();
+            return static_cast<QueuedItem *>(index.internalPointer())->flags();
         }
 
         return Qt::ItemIsEnabled;
@@ -63,7 +63,7 @@ QMimeData *PlaylistModel::mimeData(const QModelIndexList &indexes) const
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     for (auto &index : indexes) {
         stream << static_cast<unsigned>(index.row());
-        auto songItem = static_cast<SongItem *>(index.internalPointer());
+        auto songItem = static_cast<QueuedItem *>(index.internalPointer());
         stream << songItem->id();
     }
     mimeData->setData("x-application/vnd.mpd.songids", encodedData);
