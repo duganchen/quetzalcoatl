@@ -128,8 +128,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto playlistModel = new PlaylistModel(controller);
 
-    connect(playlistModel, &PlaylistModel::songsToMove, controller, &Controller::moveSongs);
-
     auto playlistView = new QTreeView();
     playlistView->setAcceptDrops(true);
     playlistView->setDropIndicatorShown(true);

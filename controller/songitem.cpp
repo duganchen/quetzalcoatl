@@ -79,6 +79,8 @@ QVariant SongItem::tooltip()
         metadata.append(tagName % ": " % tagValue);
     }
 
+    metadata.append(QString("id: %1").arg(mpd_song_get_id(song)));
+
     return metadata.join("\n");
 }
 

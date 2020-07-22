@@ -65,19 +65,42 @@ void Controller::updateStatus()
     enableIdle();
 }
 
-void Controller::moveSongs(QVector<unsigned> songids, unsigned to)
+void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, unsigned to)
 {
+    /*
+
+  Moving a and b down to row 2: a to 2, b to 2
+
+  a b c
+  b c a
+  c a b
+  d d d
+
+  Moving c and d up to row 1: d to 1, c to 1
+
+  a a a
+  b d c
+  c b d
+  d c b
+
+*/
+
     if (!m_connection) {
         return;
     }
 
     disableIdle();
 
-    qDebug() << songids;
+    for (auto it = sources.cbegin(); it != sources.cend() && it->first < to; it++) {
+        qDebug() << "Moving row " << it->first << " to " << to - 1;
+        if (!mpd_run_move_id(m_connection, it->second, to - 1)) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+    }
 
-    for (unsigned songid : songids) {
-        qDebug() << "Moving " << songid << " to " << to;
-        if (!mpd_run_move_id(m_connection, songid, to - 1)) {
+    for (auto it = sources.crbegin(); it != sources.crend() && it->first > to; it++) {
+        if (!mpd_run_move_id(m_connection, it->second, to)) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }

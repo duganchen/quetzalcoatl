@@ -62,11 +62,9 @@ QMimeData *PlaylistModel::mimeData(const QModelIndexList &indexes) const
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     for (auto &index : indexes) {
-        if (!index.isValid()) {
-            continue;
-        }
-
-        stream << static_cast<SongItem *>(index.internalPointer())->id();
+        stream << static_cast<unsigned>(index.row());
+        auto songItem = static_cast<SongItem *>(index.internalPointer());
+        stream << songItem->id();
     }
     mimeData->setData("x-application/vnd.mpd.songids", encodedData);
     return mimeData;
@@ -104,19 +102,26 @@ bool PlaylistModel::dropMimeData(
     Q_UNUSED(column)
     Q_UNUSED(parent)
 
+    if (!controller()) {
+        return false;
+    }
+
+    // source row, song id
+    QVector<QPair<unsigned, unsigned>> sources;
+
     if (data->hasFormat("x-application/vnd.mpd.songids")) {
         QByteArray encodedData = data->data("x-application/vnd.mpd.songids");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
         QVector<unsigned> songs;
-        unsigned song;
+
         while (!stream.atEnd()) {
-            stream >> song;
-            songs.append(song);
+            QPair<int, unsigned> source;
+            stream >> source.first;
+            stream >> source.second;
+            sources.append(source);
         }
 
-        qDebug() << "songs is " << songs;
-
-        emit songsToMove(songs, row);
+        controller()->moveSongs(sources, row);
     }
 
     return true;

@@ -31,13 +31,14 @@ public:
     // The parameter is a sequence of tag_type, tag_value pairs.
     QVector<mpd_song *> searchSongs(const QVector<QPair<mpd_tag_type, QString>> &);
 
+    void moveSongs(const QVector<QPair<unsigned, unsigned>> &, unsigned);
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
 
     void updateStatus();
 
-    void moveSongs(QVector<unsigned>, unsigned);
 signals:
     void errorMessage(QString);
     void connectionState(Controller::ConnectionState connectionState);

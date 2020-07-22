@@ -31,9 +31,6 @@ public:
 public slots:
     void setQueue(const QVector<Item *> &);
 
-signals:
-    void songsToMove(QVector<unsigned>, unsigned);
-
 private:
 };
 
