@@ -62,6 +62,8 @@ signals:
 
     void queueChanged(const QVector<Item *> &);
 
+    void songId(int);
+
 private:
     void handleIdle(mpd_idle);
     void createMPD(QString, int, int);

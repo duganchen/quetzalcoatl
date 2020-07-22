@@ -67,23 +67,7 @@ void Controller::updateStatus()
 
 void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, unsigned to)
 {
-    /*
-
-  Moving a and b down to row 2: a to 2, b to 2
-
-  a b c
-  b c a
-  c a b
-  d d d
-
-  Moving c and d up to row 1: d to 1, c to 1
-
-  a a a
-  b d c
-  c b d
-  d c b
-
-*/
+    // The pairs are (source row, song id). They are expected to be sorted by row.
 
     if (!m_connection) {
         return;
@@ -91,15 +75,22 @@ void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, un
 
     disableIdle();
 
+    // As far as I know, Quetzalcoatl was the first Qt program to have a drag-and-drop-
+    // rearrangeable playlist. This has always been one of the trickier parts of the
+    // program to get right.
+
+    // Keep in mind that it supports dragging multiple, non-continguous blocks of items.
+
+    // I haven't found a problem with the code below yet...
+
     for (auto it = sources.cbegin(); it != sources.cend() && it->first < to; it++) {
-        qDebug() << "Moving row " << it->first << " to " << to - 1;
         if (!mpd_run_move_id(m_connection, it->second, to - 1)) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
     }
 
-    for (auto it = sources.crbegin(); it != sources.crend() && it->first > to; it++) {
+    for (auto it = sources.crbegin(); it != sources.crend() && it->first >= to; it++) {
         if (!mpd_run_move_id(m_connection, it->second, to)) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
