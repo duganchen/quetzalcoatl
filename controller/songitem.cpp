@@ -1,16 +1,16 @@
-#include "dbsongitem.h"
+#include "songitem.h"
 #include "timeformat.h"
 #include <QDebug>
 #include <QStringBuilder>
 #include <QStringLiteral>
 
-DBSongItem::DBSongItem(
+SongItem::SongItem(
     QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, mpd_song *song, Item *parent)
     : Item(icon, myFlags, hazChildren, parent)
     , m_song(song)
 {}
 
-DBSongItem::~DBSongItem()
+SongItem::~SongItem()
 {
     if (m_song) {
         mpd_song_free(m_song);
@@ -18,7 +18,7 @@ DBSongItem::~DBSongItem()
     }
 }
 
-QString DBSongItem::text(int column) const
+QString SongItem::text(int column) const
 {
     if (!m_song || column > 1) {
         return QString();
@@ -42,7 +42,7 @@ QString DBSongItem::text(int column) const
     return timeStr(duration);
 }
 
-QVariant DBSongItem::tooltip()
+QVariant SongItem::tooltip()
 {
     if (!m_song) {
         return QVariant();
