@@ -2,7 +2,10 @@ add_library(controller SHARED
   controller.cpp
   databasemodel.cpp
   dbitem.cpp
+  genreartistitem.cpp
   genreitem.cpp
+  genreartistalbumitem.cpp
+  genreartistsongsitem.cpp
   genresitem.cpp
   genresongsitem.cpp
   item.cpp

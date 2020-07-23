@@ -26,12 +26,14 @@ public:
     QSocketNotifier *notifier() const;
     mpd_connection *mpd() const;
 
-    QVector<QString> searchTags(mpd_tag_type);
+    QVector<QString> listTags(mpd_tag_type);
 
     // The parameter is a sequence of tag_type, tag_value pairs.
     QVector<mpd_song *> searchSongs(const QVector<QPair<mpd_tag_type, QString>> &);
 
     void moveSongs(const QVector<QPair<unsigned, unsigned>> &, unsigned);
+
+    QVector<QString> searchTags(mpd_tag_type, const QVector<QPair<mpd_tag_type, QString>>);
 
 public slots:
     void handleListAlbumsClick();

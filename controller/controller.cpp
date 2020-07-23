@@ -100,6 +100,107 @@ void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, un
     enableIdle();
 }
 
+// TODO: Obviously, searchTags and searchSongs should be combined.
+
+QVector<mpd_song *> Controller::searchSongs(const QVector<QPair<mpd_tag_type, QString>> &tags)
+{
+    QVector<mpd_song *> songs;
+
+    if (!m_connection) {
+        return songs;
+    }
+
+    disableIdle();
+
+    if (!mpd_search_db_songs(m_connection, true)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return songs;
+    }
+    for (auto tag : tags) {
+        if (!mpd_search_add_tag_constraint(m_connection,
+                                           MPD_OPERATOR_DEFAULT,
+                                           tag.first,
+                                           tag.second.toUtf8().constData())) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return songs;
+        }
+    }
+
+    if (!mpd_search_commit(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+
+    mpd_song *song = nullptr;
+
+    while ((song = mpd_recv_song(m_connection))) {
+        songs.append(song);
+    }
+
+    enableIdle();
+
+    return songs;
+}
+
+QVector<QString> Controller::searchTags(mpd_tag_type tagType,
+                                        const QVector<QPair<mpd_tag_type, QString>> criteria)
+{
+    // TODO: The node queries that list tags should use this.
+
+    // For, Genre->Artist->[Album 1, Album 2]:
+    // tagType is album, the criteria are the genre and artist
+
+    qDebug() << criteria;
+
+    QVector<QString> tags;
+
+    if (!m_connection) {
+        return tags;
+    }
+
+    disableIdle();
+
+    if (!mpd_search_db_songs(m_connection, true)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return tags;
+    }
+
+    for (auto &tag : criteria) {
+        if (!mpd_search_add_tag_constraint(m_connection,
+                                           MPD_OPERATOR_DEFAULT,
+                                           tag.first,
+                                           tag.second.toUtf8().constData())) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return tags;
+        }
+    }
+
+    if (!mpd_search_commit(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+
+    QSet<QString> tagSet;
+
+    mpd_song *song;
+    QString tag;
+    while ((song = mpd_recv_song(m_connection))) {
+        tag = mpd_song_get_tag(song, tagType, 0);
+        mpd_song_free(song);
+        if (!tag.trimmed().isEmpty()) {
+            tagSet.insert(tag);
+        };
+    }
+
+    enableIdle();
+
+    for (auto tag : tagSet) {
+        tags.append(tag);
+    }
+
+    std::sort(tags.begin(), tags.end(), QCollator());
+
+    return tags;
+}
+
 void Controller::pollForStatus()
 {
     if (!m_connection) {
@@ -347,7 +448,7 @@ void Controller::enableIdle()
     mpd_send_idle(m_connection);
 }
 
-QVector<QString> Controller::searchTags(mpd_tag_type tagType)
+QVector<QString> Controller::listTags(mpd_tag_type tagType)
 {
     QVector<QString> tags;
 
@@ -381,43 +482,4 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType)
     QCollator collator;
     std::sort(tags.begin(), tags.end(), collator);
     return tags;
-}
-
-QVector<mpd_song *> Controller::searchSongs(const QVector<QPair<mpd_tag_type, QString>> &tags)
-{
-    QVector<mpd_song *> songs;
-
-    if (!m_connection) {
-        return songs;
-    }
-
-    disableIdle();
-
-    if (!mpd_search_db_songs(m_connection, true)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return songs;
-    }
-    for (auto tag : tags) {
-        if (!mpd_search_add_tag_constraint(m_connection,
-                                           MPD_OPERATOR_DEFAULT,
-                                           tag.first,
-                                           tag.second.toUtf8().constData())) {
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return songs;
-        }
-    }
-
-    if (!mpd_search_commit(m_connection)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-    }
-
-    mpd_song *song = nullptr;
-
-    while ((song = mpd_recv_song(m_connection))) {
-        songs.append(song);
-    }
-
-    enableIdle();
-
-    return songs;
 }
