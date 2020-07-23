@@ -1,4 +1,6 @@
 #include "genreartistsongsitem.h"
+#include "controller.h"
+#include "songitem.h"
 
 GenreArtistSongsItem::GenreArtistSongsItem(QIcon icon,
                                            Qt::ItemFlags myFlags,
@@ -16,6 +18,12 @@ GenreArtistSongsItem::GenreArtistSongsItem(QIcon icon,
 QVector<Item *> GenreArtistSongsItem::fetchMore(Controller *controller)
 {
     Q_UNUSED(controller);
+    QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_GENRE, m_genre},
+                                                 {MPD_TAG_ARTIST, m_artist}};
     QVector<Item *> items;
+    for (auto song : controller->searchSongs(filter)) {
+        items.append(
+            new SongItem(QIcon(":/icons/audio-x-generic.svg"), Qt::ItemIsEnabled, false, song));
+    }
     return items;
 }
