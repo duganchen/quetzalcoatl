@@ -28,10 +28,14 @@ public:
 
     bool dropMimeData(const QMimeData *, Qt::DropAction, int, int, const QModelIndex &) override;
 
+    QVariant data(const QModelIndex &index, int role) const override;
+
 public slots:
     void setQueue(const QVector<Item *> &);
+    void setSongId(int);
 
 private:
+    int m_songId;
 };
 
 #endif // PLAYLISTMODEL_H

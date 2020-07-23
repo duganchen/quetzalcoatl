@@ -137,9 +137,9 @@ void Controller::pollForStatus()
             if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
                 queue.append(
                     new QueuedItem(QIcon(":/icons/audio-x-generic.svg"),
-                                 Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
-                                 false,
-                                 entity));
+                                   Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
+                                   false,
+                                   entity));
             }
         }
 
@@ -155,6 +155,7 @@ void Controller::pollForStatus()
     emit repeating(mpd_status_get_repeat(status));
     emit volume(mpd_status_get_volume(status));
     emit crossfade(mpd_status_get_crossfade(status));
+    emit songId(mpd_status_get_song_id(status));
 
     mpd_status_free(status);
 }

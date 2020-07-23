@@ -2,13 +2,16 @@
 #include "queueditem.h"
 #include <QByteArray>
 #include <QDebug>
+#include <QFont>
 
 PlaylistModel::PlaylistModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
+    , m_songId(-1)
 {
     setRootItem(new Item(QIcon(), Qt::NoItemFlags, true, false));
 
     connect(controller, &Controller::queueChanged, this, &PlaylistModel::setQueue);
+    connect(controller, &Controller::songId, this, &PlaylistModel::setSongId);
 }
 
 QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -127,6 +130,24 @@ bool PlaylistModel::dropMimeData(
     return true;
 }
 
+QVariant PlaylistModel::data(const QModelIndex &index, int role) const
+{
+    // qDebug() << "m_songId is " << m_songId;
+    if (Qt::FontRole == role) {
+        if (m_songId != -1) {
+            unsigned playingId = static_cast<unsigned>(m_songId);
+            auto rowId = static_cast<QueuedItem *>(index.internalPointer())->id();
+            if (rowId == playingId) {
+                QFont font;
+                font.setBold(true);
+                return font;
+            }
+        }
+    }
+
+    return ItemModel::data(index, role);
+}
+
 void PlaylistModel::setQueue(const QVector<Item *> &queue)
 {
     beginResetModel();
@@ -137,4 +158,13 @@ void PlaylistModel::setQueue(const QVector<Item *> &queue)
     endResetModel();
     emit columnResized(0);
     emit columnResized(1);
+}
+
+void PlaylistModel::setSongId(int songId)
+{
+    // Can this be optimized by being changed to a dataChanged() signal? Yes.
+    // This is an optimization worth pursuing later.
+    beginResetModel();
+    m_songId = songId;
+    endResetModel();
 }
