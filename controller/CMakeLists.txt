@@ -5,7 +5,14 @@ add_library(controller SHARED
   artistalbumitem.cpp
   artistitem.cpp
   artistsongsitem.cpp
+  compilationsitem.cpp
+  compilationartistitem.cpp
+  compilationartistalbumitem.cpp
   controller.cpp
+  composersitem.cpp
+  composeritem.cpp
+  composeralbumitem.cpp
+  composersongsitem.cpp
   databasemodel.cpp
   dbitem.cpp
   genreartistitem.cpp

@@ -144,12 +144,9 @@ QVector<mpd_song *> Controller::searchSongs(const QVector<QPair<mpd_tag_type, QS
 QVector<QString> Controller::searchTags(mpd_tag_type tagType,
                                         const QVector<QPair<mpd_tag_type, QString>> criteria)
 {
-    // TODO: The node queries that list tags should use this.
-
-    // For, Genre->Artist->[Album 1, Album 2]:
-    // tagType is album, the criteria are the genre and artist
-
-    qDebug() << criteria;
+    // The "criteria" is the search filter. To list all songs on Ice T's
+    // Power album, the tagType would be MPD_TAG_ALBUM, and the criteria would be
+    // QVector(QPair(MPD_TAG_ARTIST, "Ice T")).
 
     QVector<QString> tags;
 
