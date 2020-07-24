@@ -1,4 +1,6 @@
 add_library(controller SHARED
+  albumsitem.cpp
+  albumitem.cpp
   controller.cpp
   databasemodel.cpp
   dbitem.cpp

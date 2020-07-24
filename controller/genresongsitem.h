@@ -1,7 +1,7 @@
 #ifndef GENRESONGSITEM_H
 #define GENRESONGSITEM_H
 
-#include "dbitem.h"
+#include "item.h"
 
 class GenreSongsItem : public Item
 {
