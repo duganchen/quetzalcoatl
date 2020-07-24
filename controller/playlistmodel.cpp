@@ -162,9 +162,24 @@ void PlaylistModel::setQueue(const QVector<Item *> &queue)
 
 void PlaylistModel::setSongId(int songId)
 {
-    // Can this be optimized by being changed to a dataChanged() signal? Yes.
-    // This is an optimization worth pursuing later.
-    beginResetModel();
+    if (m_songId == songId) {
+        return;
+    }
+
+    int oldSongId = m_songId;
     m_songId = songId;
-    endResetModel();
+
+    for (int i = 0; i < rootItem()->children().count(); i++) {
+        unsigned id = static_cast<QueuedItem *>(rootItem()->children().at(i))->id();
+
+        // The previously playing song is no longer bolded.
+        if (oldSongId > 0 && id == static_cast<unsigned>(oldSongId)) {
+            emit dataChanged(index(i, 0, QModelIndex()), index(i, 0, QModelIndex()), {Qt::FontRole});
+        }
+
+        // The currently playing song is now bolded.
+        if (m_songId > 0 && id == static_cast<unsigned>(m_songId)) {
+            emit dataChanged(index(i, 0, QModelIndex()), index(i, 0, QModelIndex()), {Qt::FontRole});
+        }
+    }
 }

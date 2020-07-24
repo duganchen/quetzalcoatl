@@ -101,3 +101,8 @@ bool Item::hasChildren()
 {
     return m_hasChildren;
 }
+
+QVector<Item *> &Item::children()
+{
+    return m_children;
+}

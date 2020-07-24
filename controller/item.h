@@ -36,6 +36,7 @@ public:
 
     virtual QVector<Item *> fetchMore(Controller *);
     virtual bool hasChildren();
+    QVector<Item *> &children();
 
 private:
     QVector<Item *> m_children;
