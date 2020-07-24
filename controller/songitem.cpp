@@ -4,9 +4,8 @@
 #include <QStringBuilder>
 #include <QStringLiteral>
 
-SongItem::SongItem(
-    QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, mpd_song *song, Item *parent)
-    : Item(icon, myFlags, hazChildren, parent)
+SongItem::SongItem(mpd_song *song, Item *parent)
+    : Item(QIcon(":/icons/audio-x-generic.svg"), Qt::ItemIsEnabled, false, false, parent)
     , m_song(song)
 {}
 

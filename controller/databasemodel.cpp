@@ -25,11 +25,7 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
                                   true,
                                   true,
                                   QStringLiteral("Songs")));
-    dbRootItem->append(new GenresItem(QIcon(":/icons/server-database.svg"),
-                                      Qt::ItemIsEnabled,
-                                      true,
-                                      true,
-                                      QStringLiteral("Genres")));
+    dbRootItem->append(new GenresItem());
     dbRootItem->append(
         new DBItem(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, "Composers"));
     dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"),

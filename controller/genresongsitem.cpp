@@ -4,13 +4,8 @@
 
 #include <QDebug>
 
-GenreSongsItem::GenreSongsItem(QIcon icon,
-                               Qt::ItemFlags myFlags,
-                               bool hazChildren,
-                               bool couldFetchMore,
-                               QString text,
-                               Item *parent)
-    : DBItem(icon, myFlags, hazChildren, couldFetchMore, text, parent)
+GenreSongsItem::GenreSongsItem(Item *parent)
+    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QVector<Item *> GenreSongsItem::fetchMore(Controller *controller)
@@ -18,8 +13,16 @@ QVector<Item *> GenreSongsItem::fetchMore(Controller *controller)
     QVector<Item *> items;
     QVector<QPair<mpd_tag_type, QString>> tags{{MPD_TAG_GENRE, parent()->text(0)}};
     for (auto song : controller->searchSongs(tags)) {
-        items.append(
-            new SongItem(QIcon(":/icons/audio-x-generic.svg"), Qt::ItemIsEnabled, false, song));
+        items.append(new SongItem(song));
     }
     return items;
+}
+
+QString GenreSongsItem::text(int column) const
+{
+    if (0 == column) {
+        return "All Songs";
+    }
+
+    return QString();
 }

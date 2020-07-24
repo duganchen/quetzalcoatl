@@ -3,11 +3,12 @@
 
 #include "dbitem.h"
 
-class GenresItem : public DBItem
+class GenresItem : public Item
 {
 public:
-    explicit GenresItem(QIcon, Qt::ItemFlags, bool, bool, QString, Item *parent = nullptr);
+    explicit GenresItem(Item *parent = nullptr);
 
+    QString text(int) const override;
     QVector<Item *> fetchMore(Controller *) override;
 };
 

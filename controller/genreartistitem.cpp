@@ -6,40 +6,32 @@
 
 #include <QDebug>
 
-GenreArtistItem::GenreArtistItem(QIcon icon,
-                                 Qt::ItemFlags myFlags,
-                                 bool hazChildren,
-                                 bool couldFetchMore,
-                                 QString genre,
-                                 QString text,
-                                 Item *parent)
-    : DBItem(icon, myFlags, hazChildren, couldFetchMore, text, parent)
+GenreArtistItem::GenreArtistItem(QString genre, QString artist, Item *parent)
+    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+
     , m_genre(genre)
+    , m_artist(artist)
 {}
 
 QVector<Item *> GenreArtistItem::fetchMore(Controller *controller)
 {
     Q_UNUSED(controller);
     QVector<Item *> items;
-    items.append(new GenreArtistSongsItem(QIcon(":/icons/server-database.svg"),
-                                          Qt::ItemIsEnabled,
-                                          true,
-                                          true,
-                                          m_genre,
-                                          text(0),
-                                          "All Songs",
-                                          this));
+    items.append(new GenreArtistSongsItem(m_genre, m_artist));
 
     QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_GENRE, m_genre},
                                                  {MPD_TAG_ARTIST, text(0)}};
     for (auto album : controller->searchTags(MPD_TAG_ALBUM, filter)) {
-        items.append(new GenreArtistAlbumItem(QIcon(":/icons/media-optical-audio.svg"),
-                                              Qt::ItemIsEnabled,
-                                              true,
-                                              true,
-                                              m_genre,
-                                              text(0),
-                                              album));
+        items.append(new GenreArtistAlbumItem(m_genre, m_artist, album));
     }
     return items;
+}
+
+QString GenreArtistItem::text(int column) const
+{
+    if (0 == column) {
+        return m_artist;
+    }
+
+    return QString();
 }

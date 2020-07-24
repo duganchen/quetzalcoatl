@@ -2,15 +2,8 @@
 #include "controller.h"
 #include "songitem.h"
 
-GenreArtistSongsItem::GenreArtistSongsItem(QIcon icon,
-                                           Qt::ItemFlags myFlags,
-                                           bool hazChildren,
-                                           bool couldFetchMore,
-                                           QString genre,
-                                           QString artist,
-                                           QString text,
-                                           Item *parent)
-    : DBItem(icon, myFlags, hazChildren, couldFetchMore, text, parent)
+GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist, Item *parent)
+    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
     , m_genre(genre)
     , m_artist(artist)
 {}
@@ -22,8 +15,16 @@ QVector<Item *> GenreArtistSongsItem::fetchMore(Controller *controller)
                                                  {MPD_TAG_ARTIST, m_artist}};
     QVector<Item *> items;
     for (auto song : controller->searchSongs(filter)) {
-        items.append(
-            new SongItem(QIcon(":/icons/audio-x-generic.svg"), Qt::ItemIsEnabled, false, song));
+        items.append(new SongItem(song));
     }
     return items;
+}
+
+QString GenreArtistSongsItem::text(int column) const
+{
+    if (0 == column) {
+        return "All Songs";
+    }
+
+    return QString();
 }

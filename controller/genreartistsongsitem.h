@@ -1,15 +1,16 @@
 #ifndef GENREARTISTSONGSITEM_H
 #define GENREARTISTSONGSITEM_H
 
-#include "dbitem.h"
+#include "item.h"
 
-class GenreArtistSongsItem : public DBItem
+class GenreArtistSongsItem : public Item
 {
 public:
-    explicit GenreArtistSongsItem(
-        QIcon, Qt::ItemFlags, bool, bool, QString, QString, QString, Item *parent = nullptr);
+    explicit GenreArtistSongsItem(QString, QString, Item *parent = nullptr);
 
     QVector<Item *> fetchMore(Controller *) override;
+
+    QString text(int) const override;
 
 private:
     QString m_genre;
