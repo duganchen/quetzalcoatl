@@ -1,5 +1,6 @@
 #include "databasemodel.h"
 #include "albumsitem.h"
+#include "artistsitem.h"
 #include "dbitem.h"
 #include "genresitem.h"
 
@@ -12,6 +13,7 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
                                   true,
                                   true,
                                   QStringLiteral("Playlists")));
+    dbRootItem->append(new ArtistsItem());
     dbRootItem->append(new AlbumsItem());
     dbRootItem->append(new DBItem(QIcon(":/icons/server-database.svg"),
                                   Qt::ItemIsEnabled,
