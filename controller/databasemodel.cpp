@@ -5,16 +5,13 @@
 #include "composersitem.h"
 #include "dbitem.h"
 #include "genresitem.h"
+#include "playlistsitem.h"
 
 DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
 {
     auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags, true, false);
-    dbRootItem->append(new DBItem(QIcon(":/icons/folder-favorites.svg"),
-                                  Qt::ItemIsEnabled,
-                                  true,
-                                  true,
-                                  QStringLiteral("Playlists")));
+    dbRootItem->append(new PlaylistsItem());
     dbRootItem->append(new ArtistsItem());
     dbRootItem->append(new AlbumsItem());
     dbRootItem->append(new CompilationsItem());

@@ -24,6 +24,10 @@ add_library(controller SHARED
   item.cpp
   itemmodel.cpp
   playlistmodel.cpp
+  playlistsitem.cpp
+  playlistitem.cpp
+  playlistitem.cpp
+  playlistsongitem.cpp
   queueditem.cpp
   songitem.cpp
   timeformat.cpp

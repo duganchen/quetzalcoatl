@@ -198,6 +198,60 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType,
     return tags;
 }
 
+QVector<mpd_playlist *> Controller::listPlaylists()
+{
+    QVector<mpd_playlist *> playlists;
+
+    if (!m_connection) {
+        return playlists;
+    }
+    disableIdle();
+
+    if (!mpd_send_list_playlists(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return playlists;
+    }
+
+    mpd_playlist *playlist = nullptr;
+
+    while ((playlist = mpd_recv_playlist(m_connection))) {
+        playlists.append(playlist);
+    }
+
+    enableIdle();
+    return playlists;
+}
+
+QVector<mpd_entity *> Controller::listPlaylist(mpd_playlist *playlist)
+{
+    QVector<mpd_entity *> songs;
+    if (!m_connection) {
+        return songs;
+    }
+
+    if (!playlist) {
+        return songs;
+    }
+
+    disableIdle();
+
+    if (!mpd_send_list_playlist_meta(m_connection, mpd_playlist_get_path(playlist))) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return songs;
+    }
+
+    mpd_entity *entity = nullptr;
+    while ((entity = mpd_recv_entity(m_connection))) {
+        if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
+            songs.append(entity);
+        }
+    }
+
+    enableIdle();
+
+    return songs;
+}
+
 void Controller::pollForStatus()
 {
     if (!m_connection) {

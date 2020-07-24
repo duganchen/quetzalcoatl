@@ -35,6 +35,10 @@ public:
 
     QVector<QString> searchTags(mpd_tag_type, const QVector<QPair<mpd_tag_type, QString>>);
 
+    QVector<mpd_playlist *> listPlaylists();
+
+    QVector<mpd_entity *> listPlaylist(mpd_playlist *);
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
