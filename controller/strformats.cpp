@@ -1,4 +1,6 @@
 #include "strformats.h"
+#include <QStringBuilder>
+#include <QStringList>
 
 QString timeStr(unsigned duration)
 {
@@ -68,4 +70,47 @@ QString dirEntryLabel(mpd_entity *entity)
     }
 
     return songEntityLabel(entity);
+}
+
+QString songToolTip(mpd_song *song)
+{
+    if (!song) {
+        return QString();
+    }
+
+    QStringList metadata;
+
+    QVector<mpd_tag_type> tagTypes{MPD_TAG_TITLE,
+                                   MPD_TAG_TRACK,
+                                   MPD_TAG_ALBUM,
+                                   MPD_TAG_DISC,
+                                   MPD_TAG_ARTIST,
+                                   MPD_TAG_ALBUM_ARTIST,
+                                   MPD_TAG_COMPOSER,
+                                   MPD_TAG_GENRE};
+
+    QString tagValue;
+    QString tagName;
+    for (auto tagType : tagTypes) {
+        tagValue = mpd_song_get_tag(song, tagType, 0);
+        if (tagValue.isEmpty()) {
+            continue;
+        }
+
+        QString tagName = mpd_tag_name(tagType);
+        metadata.append(tagName % ": " % tagValue);
+    }
+
+    return metadata.join("\n");
+}
+
+QString songDuration(mpd_song *song)
+{
+    unsigned duration = mpd_song_get_duration(song);
+    if (!duration) {
+        // I have not personally encountered this.
+        return "0:00";
+    }
+
+    return timeStr(duration);
 }
