@@ -3,7 +3,6 @@
 #include "artistsitem.h"
 #include "compilationsitem.h"
 #include "composersitem.h"
-#include "dbitem.h"
 #include "directoryitem.h"
 #include "genresitem.h"
 #include "playlistsitem.h"
