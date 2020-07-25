@@ -2,7 +2,7 @@
 #include "genresitem.h"
 #include "item.h"
 #include "queueditem.h"
-#include "timeformat.h"
+#include "strformats.h"
 #include <mpd/client.h>
 #include <QCollator>
 #include <QDebug>
@@ -276,6 +276,11 @@ QVector<mpd_entity *> Controller::listSongs()
     }
 
     enableIdle();
+    QCollator collator;
+
+    std::sort(entities.begin(), entities.end(), [&collator](mpd_entity *a, mpd_entity *b) {
+        return collator.compare(songEntityLabel(a), songEntityLabel(b)) < 0;
+    });
 
     return entities;
 }
@@ -311,6 +316,15 @@ QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
     }
 
     enableIdle();
+
+    QCollator collator;
+    std::stable_sort(listing.begin(), listing.end(), [&collator](mpd_entity *a, mpd_entity *b) {
+        return collator.compare(dirEntryLabel(a), dirEntryLabel(b)) < 0;
+    });
+
+    std::stable_sort(listing.begin(), listing.end(), [=](mpd_entity *a, mpd_entity *b) {
+        return mpd_entity_get_type(a) < mpd_entity_get_type(b);
+    });
 
     return listing;
 }

@@ -31,7 +31,7 @@ add_library(controller SHARED
   queueditem.cpp
   songitem.cpp
   songsitem.cpp
-  timeformat.cpp
+  strformats.cpp
 )
 
 target_include_directories(controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})

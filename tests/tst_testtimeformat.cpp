@@ -1,4 +1,4 @@
-#include "timeformat.h"
+#include "strformats.h"
 #include <QObject>
 #include <QTest>
 

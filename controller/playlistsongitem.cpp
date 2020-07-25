@@ -1,5 +1,5 @@
 #include "playlistsongitem.h"
-#include "timeformat.h"
+#include "strformats.h"
 #include <QStringBuilder>
 
 PlaylistSongItem::PlaylistSongItem(mpd_entity *entity, Item *parent)
@@ -75,8 +75,5 @@ QVariant PlaylistSongItem::tooltip()
         QString tagName = mpd_tag_name(tagType);
         metadata.append(tagName % ": " % tagValue);
     }
-
-    metadata.append(QString("id: %1").arg(mpd_song_get_id(song)));
-
     return metadata.join("\n");
 }

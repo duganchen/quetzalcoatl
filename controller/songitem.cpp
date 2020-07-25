@@ -1,5 +1,5 @@
 #include "songitem.h"
-#include "timeformat.h"
+#include "strformats.h"
 #include <QDebug>
 #include <QStringBuilder>
 #include <QStringLiteral>
