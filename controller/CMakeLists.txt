@@ -30,6 +30,7 @@ add_library(controller SHARED
   playlistsongitem.cpp
   queueditem.cpp
   songitem.cpp
+  songsitem.cpp
   timeformat.cpp
 )
 

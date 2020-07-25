@@ -252,6 +252,34 @@ QVector<mpd_entity *> Controller::listPlaylist(mpd_playlist *playlist)
     return songs;
 }
 
+QVector<mpd_entity *> Controller::listAll(mpd_entity_type entityType)
+{
+    QVector<mpd_entity *> entities;
+    if (!m_connection) {
+        return entities;
+    }
+
+    disableIdle();
+
+    if (!mpd_send_list_all_meta(m_connection, nullptr)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return entities;
+    }
+
+    mpd_entity *entity = nullptr;
+    while ((entity = mpd_recv_entity(m_connection))) {
+        if (mpd_entity_get_type(entity) == entityType) {
+            entities.append(entity);
+        } else {
+            mpd_entity_free(entity);
+        }
+    }
+
+    enableIdle();
+
+    return entities;
+}
+
 void Controller::pollForStatus()
 {
     if (!m_connection) {

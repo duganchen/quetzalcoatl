@@ -39,6 +39,8 @@ public:
 
     QVector<mpd_entity *> listPlaylist(mpd_playlist *);
 
+    QVector<mpd_entity *> listAll(mpd_entity_type);
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
