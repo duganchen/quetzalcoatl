@@ -27,8 +27,8 @@ add_library(controller SHARED
   playlistsitem.cpp
   playlistitem.cpp
   playlistitem.cpp
-  playlistsongitem.cpp
   queueditem.cpp
+  songentityitem.cpp
   songitem.cpp
   songsitem.cpp
   strformats.cpp

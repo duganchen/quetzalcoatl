@@ -1,5 +1,5 @@
 #include "directoryitem.h"
-#include "playlistsongitem.h"
+#include "songentityitem.h"
 #include <QDebug>
 
 DirectoryItem::DirectoryItem(mpd_entity *entity, Item *parent)
@@ -32,7 +32,7 @@ QVector<Item *> DirectoryItem::fetchMore(Controller *controller)
         if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_DIRECTORY) {
             items.append(new DirectoryItem(entity));
         } else {
-            items.append(new PlaylistSongItem(entity));
+            items.append(new SongEntityItem(entity));
         }
     }
     return items;

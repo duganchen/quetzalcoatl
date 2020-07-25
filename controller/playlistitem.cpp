@@ -1,6 +1,5 @@
 #include "playlistitem.h"
-#include "playlistsongitem.h"
-#include "songitem.h"
+#include "songentityitem.h"
 #include <QDebug>
 
 PlaylistItem::PlaylistItem(mpd_playlist *playlist, Item *parent)
@@ -20,7 +19,7 @@ QVector<Item *> PlaylistItem::fetchMore(Controller *controller)
     QVector<Item *> items;
 
     for (auto entity : controller->listPlaylist(m_playlist)) {
-        items.append(new PlaylistSongItem(entity));
+        items.append(new SongEntityItem(entity));
     }
     return items;
 }

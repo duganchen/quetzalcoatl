@@ -72,7 +72,7 @@ QString dirEntryLabel(mpd_entity *entity)
     return songEntityLabel(entity);
 }
 
-QString songToolTip(mpd_song *song)
+QString songToolTip(const mpd_song *song)
 {
     if (!song) {
         return QString();
@@ -104,7 +104,7 @@ QString songToolTip(mpd_song *song)
     return metadata.join("\n");
 }
 
-QString songDuration(mpd_song *song)
+QString songDuration(const mpd_song *song)
 {
     unsigned duration = mpd_song_get_duration(song);
     if (!duration) {
