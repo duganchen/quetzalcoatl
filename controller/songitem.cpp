@@ -24,12 +24,7 @@ QString SongItem::text(int column) const
     }
 
     if (column == 0) {
-        const char *title = mpd_song_get_tag(m_song, MPD_TAG_TITLE, 0);
-        if (!title) {
-            // You're supposed to have a title. This is just a fallback to let you know to fix the tags.
-            title = mpd_song_get_uri(m_song);
-        }
-        return title;
+        return songLabel(m_song);
     }
 
     unsigned duration = mpd_song_get_duration(m_song);
