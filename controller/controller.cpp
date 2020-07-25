@@ -252,7 +252,7 @@ QVector<mpd_entity *> Controller::listPlaylist(mpd_playlist *playlist)
     return songs;
 }
 
-QVector<mpd_entity *> Controller::listAll(mpd_entity_type entityType)
+QVector<mpd_entity *> Controller::listSongs()
 {
     QVector<mpd_entity *> entities;
     if (!m_connection) {
@@ -268,7 +268,7 @@ QVector<mpd_entity *> Controller::listAll(mpd_entity_type entityType)
 
     mpd_entity *entity = nullptr;
     while ((entity = mpd_recv_entity(m_connection))) {
-        if (mpd_entity_get_type(entity) == entityType) {
+        if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
             entities.append(entity);
         } else {
             mpd_entity_free(entity);
@@ -278,6 +278,41 @@ QVector<mpd_entity *> Controller::listAll(mpd_entity_type entityType)
     enableIdle();
 
     return entities;
+}
+
+QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
+{
+    QVector<mpd_entity *> listing;
+
+    if (!m_connection) {
+        return listing;
+    }
+
+    auto directory = entity && mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_DIRECTORY
+                         ? mpd_entity_get_directory(entity)
+                         : nullptr;
+    auto path = directory ? mpd_directory_get_path(directory) : nullptr;
+
+    disableIdle();
+
+    mpd_entity *newEntity = nullptr;
+
+    if (!mpd_send_list_all_meta(m_connection, path)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return listing;
+    }
+    while ((newEntity = mpd_recv_entity(m_connection))) {
+        auto entityType = mpd_entity_get_type(newEntity);
+        if (entityType == MPD_ENTITY_TYPE_SONG || entityType == MPD_ENTITY_TYPE_DIRECTORY) {
+            listing.append(newEntity);
+        } else {
+            mpd_entity_free(entity);
+        }
+    }
+
+    enableIdle();
+
+    return listing;
 }
 
 void Controller::pollForStatus()

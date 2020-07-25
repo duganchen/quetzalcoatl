@@ -4,6 +4,7 @@
 #include "compilationsitem.h"
 #include "composersitem.h"
 #include "dbitem.h"
+#include "directoryitem.h"
 #include "genresitem.h"
 #include "playlistsitem.h"
 #include "songsitem.h"
@@ -19,11 +20,7 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     dbRootItem->append(new SongsItem());
     dbRootItem->append(new GenresItem());
     dbRootItem->append(new ComposersItem);
-    dbRootItem->append(new DBItem(QIcon(":/icons/drive-harddisk"),
-                                  Qt::ItemIsEnabled,
-                                  true,
-                                  true,
-                                  QStringLiteral("/")));
+    dbRootItem->append(new DirectoryItem(nullptr));
 
     setRootItem(dbRootItem);
 }

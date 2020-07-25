@@ -39,7 +39,9 @@ public:
 
     QVector<mpd_entity *> listPlaylist(mpd_playlist *);
 
-    QVector<mpd_entity *> listAll(mpd_entity_type);
+    QVector<mpd_entity *> listSongs();
+
+    QVector<mpd_entity *> listDir(mpd_entity *);
 
 public slots:
     void handleListAlbumsClick();

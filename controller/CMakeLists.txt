@@ -14,6 +14,7 @@ add_library(controller SHARED
   composeralbumitem.cpp
   composersongsitem.cpp
   databasemodel.cpp
+  directoryitem.cpp
   dbitem.cpp
   genreartistitem.cpp
   genreitem.cpp

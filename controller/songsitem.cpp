@@ -16,7 +16,7 @@ QString SongsItem::text(int column) const
 QVector<Item *> SongsItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
-    for (auto entity : controller->listAll(MPD_ENTITY_TYPE_SONG)) {
+    for (auto entity : controller->listSongs()) {
         items.append(new PlaylistSongItem(entity));
     }
     return items;
