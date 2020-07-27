@@ -118,3 +118,8 @@ unsigned Item::id()
     // Overridden in nodes that actually have an id.
     return UINT_MAX;
 }
+
+void Item::onDoubleClicked()
+{
+    // The default is a no-op.
+}

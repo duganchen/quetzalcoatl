@@ -127,3 +127,8 @@ Controller *ItemModel::controller() const
 {
     return m_controller;
 }
+
+void ItemModel::onDoubleClicked(const QModelIndex &index)
+{
+    static_cast<Item *>(index.internalPointer())->onDoubleClicked();
+}

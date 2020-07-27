@@ -12,7 +12,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QStringList mimeTypes() const override;
-    QMimeData *mimeData(const QModelIndexList &) const;
+    QMimeData *mimeData(const QModelIndexList &) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
 private:

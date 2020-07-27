@@ -27,6 +27,9 @@ public:
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex &parent) override;
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
+
+public slots:
+    void onDoubleClicked(const QModelIndex &);
 signals:
     void columnResized(int);
 

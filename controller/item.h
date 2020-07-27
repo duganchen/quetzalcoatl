@@ -44,6 +44,8 @@ public:
     // The song id, for songs in the queue.
     virtual unsigned id();
 
+    virtual void onDoubleClicked();
+
 private:
     QVector<Item *> m_children;
     QIcon m_icon;
