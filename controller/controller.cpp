@@ -311,7 +311,7 @@ QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
         if (entityType == MPD_ENTITY_TYPE_SONG || entityType == MPD_ENTITY_TYPE_DIRECTORY) {
             listing.append(newEntity);
         } else {
-            mpd_entity_free(entity);
+            mpd_entity_free(newEntity);
         }
     }
 

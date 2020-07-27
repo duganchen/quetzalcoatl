@@ -118,6 +118,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto databaseModel = new DatabaseModel(controller);
     auto databaseView = new QTreeView();
+    connect(databaseView, &QTreeView::doubleClicked, databaseModel, &ItemModel::onDoubleClicked);
     databaseView->setHeaderHidden(true);
     databaseView->setModel(databaseModel);
     databaseView->setEnabled(false);
@@ -134,6 +135,7 @@ MainWindow::MainWindow(QWidget *parent)
     playlistView->setDragEnabled(true);
     playlistView->setModel(playlistModel);
     playlistView->setSelectionMode(QTreeView::ExtendedSelection);
+    connect(playlistView, &QTreeView::doubleClicked, playlistModel, &ItemModel::onDoubleClicked);
     connect(playlistModel,
             &ItemModel::columnResized,
             playlistView,
