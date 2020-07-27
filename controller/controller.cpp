@@ -648,7 +648,7 @@ void Controller::playSongEntity(mpd_entity *entity)
     enableIdle();
 }
 
-void Controller::playAlbum(const QVector<QString> &uris)
+void Controller::playAlbum(const QVector<QString> &uris, QString uri)
 {
     if (!m_connection) {
         return;
@@ -660,10 +660,21 @@ void Controller::playAlbum(const QVector<QString> &uris)
         return;
     }
 
-    for (auto uri : uris) {
-        if (!mpd_run_add(m_connection, uri.toUtf8().constData())) {
+    int returnedId = -1;
+    unsigned id = UINT_MAX;
+    for (auto songUri : uris) {
+        if ((returnedId = mpd_run_add_id(m_connection, songUri.toUtf8().constData())) == -1) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
+        }
+
+        id = static_cast<unsigned>(returnedId);
+
+        if (songUri == uri) {
+            if (!mpd_run_play_id(m_connection, id)) {
+                emit errorMessage(mpd_connection_get_error_message(m_connection));
+                return;
+            }
         }
     }
 

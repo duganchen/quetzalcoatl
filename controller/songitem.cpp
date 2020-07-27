@@ -60,5 +60,5 @@ void SongItem::onDoubleClicked(Controller *controller)
         uris.append(item->uri());
     }
 
-    controller->playAlbum(uris);
+    controller->playAlbum(uris, uri());
 }
