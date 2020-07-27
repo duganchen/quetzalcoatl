@@ -1,4 +1,5 @@
 #include "queueditem.h"
+#include "controller.h"
 #include "strformats.h"
 #include <QDebug>
 #include <QStringBuilder>
@@ -50,4 +51,9 @@ unsigned QueuedItem::id()
     }
 
     return mpd_song_get_id(mpd_entity_get_song(m_entity));
+}
+
+void QueuedItem::onDoubleClicked(Controller *controller)
+{
+    controller->playSongEntity(m_entity);
 }

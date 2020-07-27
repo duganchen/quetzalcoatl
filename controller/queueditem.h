@@ -16,6 +16,8 @@ public:
 
     unsigned id() override;
 
+    void onDoubleClicked(Controller *) override;
+
 private:
     mpd_entity *m_entity;
 };

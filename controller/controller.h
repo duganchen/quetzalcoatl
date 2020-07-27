@@ -44,6 +44,7 @@ public:
     QVector<mpd_entity *> listDir(mpd_entity *);
 
     void queueUris(const QVector<QString> &, int);
+    void playSongEntity(mpd_entity *);
 
 public slots:
     void handleListAlbumsClick();

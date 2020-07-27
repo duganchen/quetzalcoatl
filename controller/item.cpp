@@ -119,7 +119,7 @@ unsigned Item::id()
     return UINT_MAX;
 }
 
-void Item::onDoubleClicked()
+void Item::onDoubleClicked(Controller *controller)
 {
     // The default is a no-op.
 }

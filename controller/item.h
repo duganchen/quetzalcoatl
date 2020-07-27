@@ -44,7 +44,7 @@ public:
     // The song id, for songs in the queue.
     virtual unsigned id();
 
-    virtual void onDoubleClicked();
+    virtual void onDoubleClicked(Controller *);
 
 private:
     QVector<Item *> m_children;

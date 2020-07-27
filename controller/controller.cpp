@@ -624,3 +624,26 @@ QVector<QString> Controller::listTags(mpd_tag_type tagType)
     std::sort(tags.begin(), tags.end(), collator);
     return tags;
 }
+
+void Controller::playSongEntity(mpd_entity *entity)
+{
+    if (!m_connection) {
+        return;
+    }
+    if (!entity) {
+        return;
+    }
+
+    if (mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG) {
+        return;
+    }
+    disableIdle();
+
+    auto song = mpd_entity_get_song(entity);
+    auto songid = mpd_song_get_id(song);
+
+    if (!mpd_run_play_id(m_connection, songid)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+    enableIdle();
+}
