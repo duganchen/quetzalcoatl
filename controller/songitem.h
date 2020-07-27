@@ -16,6 +16,8 @@ public:
 
     QString uri() override;
 
+    void onDoubleClicked(Controller *) override;
+
 private:
     mpd_song *m_song;
 };

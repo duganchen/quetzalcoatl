@@ -647,3 +647,25 @@ void Controller::playSongEntity(mpd_entity *entity)
     }
     enableIdle();
 }
+
+void Controller::playAlbum(const QVector<QString> &uris)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_clear(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
+    for (auto uri : uris) {
+        if (!mpd_run_add(m_connection, uri.toUtf8().constData())) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+    }
+
+    enableIdle();
+}
