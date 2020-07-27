@@ -5,7 +5,11 @@
 #include <QStringLiteral>
 
 SongItem::SongItem(mpd_song *song, Item *parent)
-    : Item(QIcon(":/icons/audio-x-generic.svg"), Qt::ItemIsEnabled, false, false, parent)
+    : Item(QIcon(":/icons/audio-x-generic.svg"),
+           Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
+           false,
+           false,
+           parent)
     , m_song(song)
 {}
 
@@ -28,4 +32,9 @@ QString SongItem::text(int column) const
 QVariant SongItem::tooltip()
 {
     return songToolTip(m_song);
+}
+
+QString SongItem::uri()
+{
+    return mpd_song_get_uri(m_song);
 }

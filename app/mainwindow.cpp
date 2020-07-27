@@ -2,7 +2,7 @@
 #include "controller.h"
 #include "databasemodel.h"
 #include "playbacksettingsdialog.h"
-#include "playlistmodel.h"
+#include "queuemodel.h"
 #include "saveplaylistdialog.h"
 #include <QKeySequence>
 #include <QMessageBox>
@@ -126,7 +126,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
-    auto playlistModel = new PlaylistModel(controller);
+    auto playlistModel = new QueueModel(controller);
 
     auto playlistView = new QTreeView();
     playlistView->setAcceptDrops(true);

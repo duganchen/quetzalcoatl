@@ -45,7 +45,8 @@ QVariant QueuedItem::tooltip()
 unsigned QueuedItem::id()
 {
     if (!m_entity) {
-        return -1;
+        // This should obviously never happen.
+        return UINT_MAX;
     }
 
     return mpd_song_get_id(mpd_entity_get_song(m_entity));

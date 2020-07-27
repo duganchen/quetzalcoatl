@@ -106,3 +106,15 @@ QVector<Item *> &Item::children()
 {
     return m_children;
 }
+
+QString Item::uri()
+{
+    // Overridden in nodes that actually have a URI.
+    return QString();
+}
+
+unsigned Item::id()
+{
+    // Overridden in nodes that actually have an id.
+    return UINT_MAX;
+}

@@ -3,7 +3,11 @@
 #include <QStringBuilder>
 
 SongEntityItem::SongEntityItem(mpd_entity *entity, Item *parent)
-    : Item(QIcon(":/icons/audio-x-generic.svg"), Qt::ItemIsEnabled, false, false, parent)
+    : Item(QIcon(":/icons/audio-x-generic.svg"),
+           Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
+           false,
+           false,
+           parent)
     , m_entity(entity)
 {}
 
@@ -27,6 +31,11 @@ QString SongEntityItem::text(int column) const
 QVariant SongEntityItem::tooltip()
 {
     return songToolTip(song());
+}
+
+QString SongEntityItem::uri()
+{
+    return mpd_song_get_uri(mpd_entity_get_song(m_entity));
 }
 
 const mpd_song *SongEntityItem::song()

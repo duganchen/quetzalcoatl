@@ -1,15 +1,15 @@
-#ifndef PLAYLISTMODEL_H
-#define PLAYLISTMODEL_H
+#ifndef QUEUEMODEL_H
+#define QUEUEMODEL_H
 
 #include "itemmodel.h"
 #include <QMimeData>
 
-class PlaylistModel : public ItemModel
+class QueueModel : public ItemModel
 {
     Q_OBJECT
 
 public:
-    explicit PlaylistModel(Controller *, QObject *parent = nullptr);
+    explicit QueueModel(Controller *, QObject *parent = nullptr);
 
     QVariant headerData(int section,
                         Qt::Orientation orientation,
@@ -38,4 +38,4 @@ private:
     int m_songId;
 };
 
-#endif // PLAYLISTMODEL_H
+#endif // QUEUEMODEL_H

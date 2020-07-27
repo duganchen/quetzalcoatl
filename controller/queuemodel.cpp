@@ -1,20 +1,20 @@
-#include "playlistmodel.h"
-#include "queueditem.h"
+#include "queuemodel.h"
+#include "item.h"
 #include <QByteArray>
 #include <QDebug>
 #include <QFont>
 
-PlaylistModel::PlaylistModel(Controller *controller, QObject *parent)
+QueueModel::QueueModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
     , m_songId(-1)
 {
     setRootItem(new Item(QIcon(), Qt::NoItemFlags, true, false));
 
-    connect(controller, &Controller::queueChanged, this, &PlaylistModel::setQueue);
-    connect(controller, &Controller::songId, this, &PlaylistModel::setSongId);
+    connect(controller, &Controller::queueChanged, this, &QueueModel::setQueue);
+    connect(controller, &Controller::songId, this, &QueueModel::setSongId);
 }
 
-QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant QueueModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -34,50 +34,50 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
     return QVariant();
 }
 
-int PlaylistModel::columnCount(const QModelIndex &parent) const
+int QueueModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return 2;
 }
 
-Qt::ItemFlags PlaylistModel::flags(const QModelIndex &index) const
+Qt::ItemFlags QueueModel::flags(const QModelIndex &index) const
 {
     if (index.isValid()) {
         if (index.column() == 0) {
-            return static_cast<QueuedItem *>(index.internalPointer())->flags();
+            return static_cast<Item *>(index.internalPointer())->flags();
         }
 
-        return Qt::ItemIsEnabled;
+        return Qt::NoItemFlags;
     }
 
     // The drop target is between rows.
     return Qt::ItemIsDropEnabled;
 }
 
-QStringList PlaylistModel::mimeTypes() const
+QStringList QueueModel::mimeTypes() const
 {
     return QStringList{"x-application/vnd.mpd.songids", "x-application/vnd.mpd.uris"};
 }
 
-QMimeData *PlaylistModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *QueueModel::mimeData(const QModelIndexList &indexes) const
 {
     QMimeData *mimeData = new QMimeData();
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     for (auto &index : indexes) {
         stream << static_cast<unsigned>(index.row());
-        auto songItem = static_cast<QueuedItem *>(index.internalPointer());
+        auto songItem = static_cast<Item *>(index.internalPointer());
         stream << songItem->id();
     }
     mimeData->setData("x-application/vnd.mpd.songids", encodedData);
     return mimeData;
 }
 
-bool PlaylistModel::canDropMimeData(const QMimeData *data,
-                                    Qt::DropAction action,
-                                    int row,
-                                    int column,
-                                    const QModelIndex &parent) const
+bool QueueModel::canDropMimeData(const QMimeData *data,
+                                 Qt::DropAction action,
+                                 int row,
+                                 int column,
+                                 const QModelIndex &parent) const
 {
     Q_UNUSED(action)
     Q_UNUSED(parent)
@@ -98,7 +98,7 @@ bool PlaylistModel::canDropMimeData(const QMimeData *data,
     return true;
 }
 
-bool PlaylistModel::dropMimeData(
+bool QueueModel::dropMimeData(
     const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(action)
@@ -125,18 +125,29 @@ bool PlaylistModel::dropMimeData(
         }
 
         controller()->moveSongs(sources, row);
+    } else if (data->hasFormat("x-application/vnd.mpd.uris")) {
+        qDebug() << "Handling the dropping of URIs at " << row;
+        QByteArray encodedData = data->data("x-application/vnd.mpd.uris");
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        QVector<QString> uris;
+        QString uri;
+        while (!stream.atEnd()) {
+            stream >> uri;
+            uris.append(uri);
+        }
+
+        controller()->queueUris(uris, row);
     }
 
     return true;
 }
 
-QVariant PlaylistModel::data(const QModelIndex &index, int role) const
+QVariant QueueModel::data(const QModelIndex &index, int role) const
 {
-    // qDebug() << "m_songId is " << m_songId;
     if (Qt::FontRole == role) {
         if (m_songId != -1) {
             unsigned playingId = static_cast<unsigned>(m_songId);
-            auto rowId = static_cast<QueuedItem *>(index.internalPointer())->id();
+            auto rowId = static_cast<Item *>(index.internalPointer())->id();
             if (rowId == playingId) {
                 QFont font;
                 font.setBold(true);
@@ -148,7 +159,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
     return ItemModel::data(index, role);
 }
 
-void PlaylistModel::setQueue(const QVector<Item *> &queue)
+void QueueModel::setQueue(const QVector<Item *> &queue)
 {
     beginResetModel();
     rootItem()->clear();
@@ -160,7 +171,7 @@ void PlaylistModel::setQueue(const QVector<Item *> &queue)
     emit columnResized(1);
 }
 
-void PlaylistModel::setSongId(int songId)
+void QueueModel::setSongId(int songId)
 {
     if (m_songId == songId) {
         return;
@@ -170,7 +181,7 @@ void PlaylistModel::setSongId(int songId)
     m_songId = songId;
 
     for (int i = 0; i < rootItem()->children().count(); i++) {
-        unsigned id = static_cast<QueuedItem *>(rootItem()->children().at(i))->id();
+        unsigned id = static_cast<Item *>(rootItem()->children().at(i))->id();
 
         // The previously playing song is no longer bolded.
         if (oldSongId > 0 && id == static_cast<unsigned>(oldSongId)) {

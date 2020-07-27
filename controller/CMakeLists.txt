@@ -23,11 +23,11 @@ add_library(controller SHARED
   genresongsitem.cpp
   item.cpp
   itemmodel.cpp
-  playlistmodel.cpp
   playlistsitem.cpp
   playlistitem.cpp
   playlistitem.cpp
   queueditem.cpp
+  queuemodel.cpp
   songentityitem.cpp
   songitem.cpp
   songsitem.cpp

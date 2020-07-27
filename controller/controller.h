@@ -43,6 +43,8 @@ public:
 
     QVector<mpd_entity *> listDir(mpd_entity *);
 
+    void queueUris(const QVector<QString> &, int);
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);

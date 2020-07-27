@@ -38,6 +38,12 @@ public:
     virtual bool hasChildren();
     QVector<Item *> &children();
 
+    // The song URI, for songs in the database.
+    virtual QString uri();
+
+    // The song id, for songs in the queue.
+    virtual unsigned id();
+
 private:
     QVector<Item *> m_children;
     QIcon m_icon;

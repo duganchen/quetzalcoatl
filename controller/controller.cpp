@@ -329,6 +329,23 @@ QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
     return listing;
 }
 
+void Controller::queueUris(const QVector<QString> &uris, int row)
+{
+    if (!m_connection) {
+        return;
+    }
+    auto to = static_cast<unsigned>(row);
+
+    disableIdle();
+    for (auto it = uris.crbegin(); it != uris.crend(); it++) {
+        if ((mpd_run_add_id_to(m_connection, it->toUtf8().constData(), to)) == -1) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+    }
+    enableIdle();
+}
+
 void Controller::pollForStatus()
 {
     if (!m_connection) {

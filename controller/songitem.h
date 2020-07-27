@@ -14,6 +14,8 @@ public:
 
     QVariant tooltip() override;
 
+    QString uri() override;
+
 private:
     mpd_song *m_song;
 };

@@ -14,6 +14,8 @@ public:
 
     QVariant tooltip() override;
 
+    QString uri() override;
+
 protected:
     const mpd_song *song();
 

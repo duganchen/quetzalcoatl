@@ -14,7 +14,7 @@ public:
 
     QVariant tooltip() override;
 
-    unsigned id();
+    unsigned id() override;
 
 private:
     mpd_entity *m_entity;
