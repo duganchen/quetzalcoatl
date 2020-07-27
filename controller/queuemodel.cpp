@@ -126,7 +126,6 @@ bool QueueModel::dropMimeData(
 
         controller()->moveSongs(sources, row);
     } else if (data->hasFormat("x-application/vnd.mpd.uris")) {
-        qDebug() << "Handling the dropping of URIs at " << row;
         QByteArray encodedData = data->data("x-application/vnd.mpd.uris");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
         QVector<QString> uris;
