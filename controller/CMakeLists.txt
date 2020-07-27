@@ -1,6 +1,7 @@
 add_library(controller SHARED
   albumsitem.cpp
   albumitem.cpp
+  albumsongitem.cpp
   artistsitem.cpp
   artistalbumitem.cpp
   artistitem.cpp

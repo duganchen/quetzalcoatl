@@ -39,26 +39,3 @@ QString SongItem::uri()
 {
     return mpd_song_get_uri(m_song);
 }
-
-void SongItem::onDoubleClicked(Controller *controller)
-{
-    if (!controller) {
-        return;
-    }
-
-    if (!parent()) {
-        return;
-    }
-
-    QVector<QString> uris;
-
-    for (Item *item : parent()->children()) {
-        if (!item) {
-            continue;
-        }
-
-        uris.append(item->uri());
-    }
-
-    controller->playAlbum(uris, uri());
-}

@@ -1,5 +1,5 @@
 #include "composeralbumitem.h"
-#include "songitem.h"
+#include "albumsongitem.h"
 
 ComposerAlbumItem::ComposerAlbumItem(QString composer, QString album, Item *parent)
     : Item(QIcon(":/icons/media-optical-audio.svg"), Qt::ItemIsEnabled, true, true, parent)
@@ -14,7 +14,7 @@ QVector<Item *> ComposerAlbumItem::fetchMore(Controller *controller)
     auto songs = controller->searchSongs(filter);
     QVector<Item *> items;
     for (auto song : songs) {
-        items.append(new SongItem(song));
+        items.append(new AlbumSongItem(song));
     }
 
     return items;
