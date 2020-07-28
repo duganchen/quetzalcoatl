@@ -1,5 +1,5 @@
 #include "songsitem.h"
-#include "songentityitem.h"
+#include "randomsongentityitem.h"
 
 SongsItem::SongsItem(Item *parent)
     : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
@@ -17,7 +17,7 @@ QVector<Item *> SongsItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto entity : controller->listSongs()) {
-        items.append(new SongEntityItem(entity));
+        items.append(new RandomSongEntityItem(entity));
     }
     return items;
 }

@@ -39,11 +39,6 @@ QString SongEntityItem::uri()
     return mpd_song_get_uri(mpd_entity_get_song(m_entity));
 }
 
-void SongEntityItem::onDoubleClicked(Controller *controller)
-{
-    controller->addAndPlaySong(uri());
-}
-
 const mpd_song *SongEntityItem::song()
 {
     return mpd_entity_get_song(m_entity);

@@ -28,8 +28,10 @@ add_library(controller SHARED
   playlistsitem.cpp
   playlistitem.cpp
   playlistitem.cpp
+  playlistsongentityitem.cpp
   queueditem.cpp
   queuemodel.cpp
+  randomsongentityitem.cpp
   songentityitem.cpp
   songitem.cpp
   songsitem.cpp
