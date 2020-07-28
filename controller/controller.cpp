@@ -85,6 +85,7 @@ void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, un
 
     for (auto it = sources.cbegin(); it != sources.cend() && it->first < to; it++) {
         if (!mpd_run_move_id(m_connection, it->second, to - 1)) {
+            qDebug() << "Error running moveId";
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
@@ -92,6 +93,7 @@ void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, un
 
     for (auto it = sources.crbegin(); it != sources.crend() && it->first >= to; it++) {
         if (!mpd_run_move_id(m_connection, it->second, to)) {
+            qDebug() << "Error running moveId";
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
@@ -113,6 +115,7 @@ QVector<mpd_song *> Controller::searchSongs(const QVector<QPair<mpd_tag_type, QS
     disableIdle();
 
     if (!mpd_search_db_songs(m_connection, true)) {
+        qDebug() << "Error running mpd_search_db_songs";
         emit errorMessage(mpd_connection_get_error_message(m_connection));
         return songs;
     }
@@ -561,7 +564,10 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 
 void Controller::handleActivation()
 {
-    handleIdle(mpd_recv_idle(m_connection, false));
+    qDebug() << "We are in handleActivation, about to recv idle";
+    auto idle = mpd_recv_idle(m_connection, false);
+    qDebug() << "Idle received";
+    handleIdle(idle);
     if (m_connection) {
         mpd_send_idle(m_connection);
     }
@@ -643,6 +649,7 @@ void Controller::playSongEntity(mpd_entity *entity)
     auto songid = mpd_song_get_id(song);
 
     if (!mpd_run_play_id(m_connection, songid)) {
+        qDebug() << "Error running mpd_run_play_id";
         emit errorMessage(mpd_connection_get_error_message(m_connection));
     }
     enableIdle();
@@ -663,11 +670,13 @@ void Controller::addAndPlaySong(QString uri)
     int id = mpd_run_add_id(m_connection, uri.toUtf8().constData());
 
     if (id == -1) {
+        qDebug() << "Error running mpd_run_add_id";
         emit errorMessage(mpd_connection_get_error_message(m_connection));
         return;
     }
 
     if (!mpd_run_play_id(m_connection, static_cast<unsigned>(id))) {
+        qDebug() << "Error running mpd_run_play_id";
         emit errorMessage(mpd_connection_get_error_message(m_connection));
     }
 
@@ -682,6 +691,7 @@ void Controller::playAlbum(const QVector<QString> &uris, QString uri)
 
     disableIdle();
     if (!mpd_run_clear(m_connection)) {
+        qDebug() << "Error running mpd_run_clear";
         emit errorMessage(mpd_connection_get_error_message(m_connection));
         return;
     }
@@ -690,6 +700,7 @@ void Controller::playAlbum(const QVector<QString> &uris, QString uri)
     unsigned id = UINT_MAX;
     for (auto songUri : uris) {
         if ((returnedId = mpd_run_add_id(m_connection, songUri.toUtf8().constData())) == -1) {
+            qDebug() << "Error running mpd_run_add_id";
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
@@ -698,6 +709,7 @@ void Controller::playAlbum(const QVector<QString> &uris, QString uri)
 
         if (songUri == uri) {
             if (!mpd_run_play_id(m_connection, id)) {
+                qDebug() << "Error running mpd_run_play_id";
                 emit errorMessage(mpd_connection_get_error_message(m_connection));
                 return;
             }
