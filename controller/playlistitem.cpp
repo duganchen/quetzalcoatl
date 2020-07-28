@@ -3,7 +3,11 @@
 #include <QDebug>
 
 PlaylistItem::PlaylistItem(mpd_playlist *playlist, Item *parent)
-    : Item(QIcon(":/icons/view-media-playlist.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon(":/icons/view-media-playlist.svg"),
+           Qt::ItemIsEnabled | Qt::ItemIsEditable,
+           true,
+           true,
+           parent)
     , m_playlist(playlist)
 {}
 

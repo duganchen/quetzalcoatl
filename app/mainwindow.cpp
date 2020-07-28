@@ -2,6 +2,7 @@
 #include "controller.h"
 #include "databasemodel.h"
 #include "playbacksettingsdialog.h"
+#include "playlistdelegate.h"
 #include "queuemodel.h"
 #include "saveplaylistdialog.h"
 #include <QDebug>
@@ -126,6 +127,7 @@ MainWindow::MainWindow(QWidget *parent)
     databaseView->setEnabled(false);
     databaseView->setSelectionMode(QTreeView::ExtendedSelection);
     databaseView->setDragEnabled(true);
+    databaseView->setItemDelegate(new PlaylistDelegate());
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
@@ -142,10 +144,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     auto renamePlaylistAction = new QAction("Rename", this);
-
     connect(renamePlaylistAction, &QAction::triggered, [=]() {
-        auto item = static_cast<Item *>(databaseView->currentIndex().internalPointer());
-        qDebug() << item->text(0);
+        databaseView->edit(databaseView->currentIndex());
     });
 
     connect(databaseView, &QTreeView::customContextMenuRequested, [=](const QPoint &point) {
