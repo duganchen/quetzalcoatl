@@ -648,6 +648,32 @@ void Controller::playSongEntity(mpd_entity *entity)
     enableIdle();
 }
 
+void Controller::addAndPlaySong(QString uri)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    if (uri.isEmpty()) {
+        return;
+    }
+
+    disableIdle();
+
+    int id = mpd_run_add_id(m_connection, uri.toUtf8().constData());
+
+    if (id == -1) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
+    if (!mpd_run_play_id(m_connection, static_cast<unsigned>(id))) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+
+    enableIdle();
+}
+
 void Controller::playAlbum(const QVector<QString> &uris, QString uri)
 {
     if (!m_connection) {

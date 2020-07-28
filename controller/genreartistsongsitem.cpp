@@ -1,6 +1,6 @@
 #include "genreartistsongsitem.h"
+#include "allsongitem.h"
 #include "controller.h"
-#include "songitem.h"
 
 GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist, Item *parent)
     : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
@@ -15,7 +15,7 @@ QVector<Item *> GenreArtistSongsItem::fetchMore(Controller *controller)
                                                  {MPD_TAG_ARTIST, m_artist}};
     QVector<Item *> items;
     for (auto song : controller->searchSongs(filter)) {
-        items.append(new SongItem(song));
+        items.append(new AllSongItem(song));
     }
     return items;
 }

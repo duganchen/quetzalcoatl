@@ -45,6 +45,7 @@ public:
 
     void queueUris(const QVector<QString> &, int);
     void playSongEntity(mpd_entity *);
+    void addAndPlaySong(QString);
     void playAlbum(const QVector<QString> &, QString uri);
 
 public slots:
