@@ -247,6 +247,8 @@ QVector<mpd_entity *> Controller::listPlaylist(mpd_playlist *playlist)
     while ((entity = mpd_recv_entity(m_connection))) {
         if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
             songs.append(entity);
+        } else {
+            mpd_entity_free(entity);
         }
     }
 
@@ -358,6 +360,7 @@ void Controller::pollForStatus()
     auto status = mpd_run_status(m_connection);
     if (nullptr == status) {
         auto msg = mpd_connection_get_error_message(m_connection);
+        qDebug() << "Error running mpd_run_get_status";
         emit errorMessage(msg);
         return;
     }
@@ -375,6 +378,7 @@ void Controller::pollForStatus()
         m_queueVersion = queueVersion;
 
         if (!mpd_send_list_queue_meta(m_connection)) {
+            qDebug() << "Error running mpd_send_list_queue_meta";
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
@@ -385,12 +389,9 @@ void Controller::pollForStatus()
         while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
             if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
                 queue.append(new QueuedItem(entity));
+            } else {
+                mpd_entity_free(entity);
             }
-        }
-
-        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return;
         }
 
         emit queueChanged(queue);
@@ -469,7 +470,7 @@ mpd_connection *Controller::mpd() const
 
 void Controller::handleIdle(mpd_idle idle)
 {
-    if (mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
+    if (!idle && mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
         m_notifier = nullptr;
@@ -497,6 +498,7 @@ void Controller::handleIdle(mpd_idle idle)
             qDebug() << "a stored playlist has been modified, created, deleted or renamed";
         }
         if (idle & MPD_IDLE_QUEUE) {
+            qDebug() << "The queue has changed";
             pollForStatus();
         }
         if (idle & MPD_IDLE_PLAYER) {
