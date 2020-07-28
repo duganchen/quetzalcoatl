@@ -6,6 +6,7 @@
 #include "saveplaylistdialog.h"
 #include <QDebug>
 #include <QKeySequence>
+#include <QMenu>
 #include <QMessageBox>
 #include <QProgressBar>
 #include <QPushButton>
@@ -127,6 +128,38 @@ MainWindow::MainWindow(QWidget *parent)
     databaseView->setDragEnabled(true);
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
+
+    // https://stackoverflow.com/a/22198672/240515
+    databaseView->setContextMenuPolicy(Qt::CustomContextMenu);
+    auto deletePlaylistAction = new QAction("Delete", this);
+
+    // currentIndex does appear to be the right way to do it...
+    // https://www.qtcentre.org/threads/19919-Custom-context-menu-in-QTreeView?p=97803#post97803
+
+    connect(deletePlaylistAction, &QAction::triggered, [=]() {
+        auto item = static_cast<Item *>(databaseView->currentIndex().internalPointer());
+        qDebug() << item->text(0);
+    });
+
+    auto renamePlaylistAction = new QAction("Rename", this);
+
+    connect(renamePlaylistAction, &QAction::triggered, [=]() {
+        auto item = static_cast<Item *>(databaseView->currentIndex().internalPointer());
+        qDebug() << item->text(0);
+    });
+
+    connect(databaseView, &QTreeView::customContextMenuRequested, [=](const QPoint &point) {
+        auto index = databaseView->indexAt(point);
+        if (!index.isValid()) {
+            return;
+        }
+
+        auto item = static_cast<Item *>(index.internalPointer());
+        if (item->parent()->text(0) == "Playlists") {
+            QMenu::exec({deletePlaylistAction, renamePlaylistAction},
+                        databaseView->viewport()->mapToGlobal(point));
+        }
+    });
 
     auto queueModel = new QueueModel(controller);
 
