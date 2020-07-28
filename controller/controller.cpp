@@ -575,7 +575,7 @@ void Controller::handleActivation()
         qDebug() << "error code is " << error;
         auto message = mpd_connection_get_error_message(m_connection);
         qDebug() << "Message is " << message;
-        emit errorMessage();
+        emit errorMessage(message);
         return;
     }
     handleIdle(idle);
