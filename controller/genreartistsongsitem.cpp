@@ -1,5 +1,5 @@
 #include "genreartistsongsitem.h"
-#include "allsongitem.h"
+#include "unorderedmpdsongitem.h"
 #include "controller.h"
 
 GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist, Item *parent)
@@ -15,7 +15,7 @@ QVector<Item *> GenreArtistSongsItem::fetchMore(Controller *controller)
                                                  {MPD_TAG_ARTIST, m_artist}};
     QVector<Item *> items;
     for (auto song : controller->searchSongs(filter)) {
-        items.append(new AllSongItem(song));
+        items.append(new UnorderedMPDSongItem(song));
     }
     return items;
 }

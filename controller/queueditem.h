@@ -1,22 +1,20 @@
 #ifndef QUEUEDITEM_H
 #define QUEUEDITEM_H
 
-#include "songentityitem.h"
+#include "abstractsongitem.h"
 #include <mpd/client.h>
 
-class QueuedItem : public Item
+class QueuedItem : public AbstractSongItem
 {
 public:
     QueuedItem(mpd_entity *, Item *parent = nullptr);
     ~QueuedItem();
 
-    QString text(int column) const override;
-
-    QVariant tooltip() override;
-
+    void onDoubleClicked(Controller *) override;
     unsigned id() override;
 
-    void onDoubleClicked(Controller *) override;
+protected:
+    const mpd_song *song() const override;
 
 private:
     mpd_entity *m_entity;

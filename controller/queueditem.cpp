@@ -6,11 +6,11 @@
 #include <QStringLiteral>
 
 QueuedItem::QueuedItem(mpd_entity *entity, Item *parent)
-    : Item(QIcon(":/icons/audio-x-generic.svg"),
-           Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
-           false,
-           false,
-           parent)
+    : AbstractSongItem(QIcon(":/icons/audio-x-generic.svg"),
+                       Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
+                       false,
+                       false,
+                       parent)
     , m_entity(entity)
 {}
 
@@ -20,27 +20,6 @@ QueuedItem::~QueuedItem()
         mpd_entity_free(m_entity);
         m_entity = nullptr;
     }
-}
-
-QString QueuedItem::text(int column) const
-{
-    if (!m_entity) {
-        return QString();
-    }
-
-    switch (column) {
-    case 0:
-        return songEntityLabel(m_entity);
-    case 1:
-        return songDuration(mpd_entity_get_song(m_entity));
-    default:
-        return QString();
-    }
-}
-
-QVariant QueuedItem::tooltip()
-{
-    return songToolTip(mpd_entity_get_song(m_entity));
 }
 
 unsigned QueuedItem::id()
@@ -56,4 +35,9 @@ unsigned QueuedItem::id()
 void QueuedItem::onDoubleClicked(Controller *controller)
 {
     controller->playSongEntity(m_entity);
+}
+
+const mpd_song *QueuedItem::song() const
+{
+    return mpd_entity_get_song(m_entity);
 }

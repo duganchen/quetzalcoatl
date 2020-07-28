@@ -1,5 +1,5 @@
 #include "genreartistalbumitem.h"
-#include "albumsongitem.h"
+#include "orderedmpdsongitem.h"
 #include "controller.h"
 
 GenreArtistAlbumItem::GenreArtistAlbumItem(QString genre,
@@ -20,7 +20,7 @@ QVector<Item *> GenreArtistAlbumItem::fetchMore(Controller *controller)
     auto songs = controller->searchSongs(filter);
     QVector<Item *> items;
     for (auto song : songs) {
-        items.append(new AlbumSongItem(song));
+        items.append(new OrderedMPDSongItem(song));
     }
 
     return items;

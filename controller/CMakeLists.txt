@@ -1,41 +1,41 @@
 add_library(controller SHARED
-  albumsitem.cpp
+  abstractsongitem.cpp
   albumitem.cpp
-  albumsongitem.cpp
-  allsongitem.cpp
-  artistsitem.cpp
+  albumsitem.cpp
   artistalbumitem.cpp
   artistitem.cpp
+  artistsitem.cpp
   artistsongsitem.cpp
-  compilationsitem.cpp
-  compilationartistitem.cpp
   compilationartistalbumitem.cpp
-  controller.cpp
-  composersitem.cpp
-  composeritem.cpp
+  compilationartistitem.cpp
+  compilationsitem.cpp
   composeralbumitem.cpp
+  composeritem.cpp
+  composersitem.cpp
   composersongsitem.cpp
+  controller.cpp
   databasemodel.cpp
   directoryitem.cpp
-  genreartistitem.cpp
-  genreitem.cpp
   genreartistalbumitem.cpp
+  genreartistitem.cpp
   genreartistsongsitem.cpp
+  genreitem.cpp
   genresitem.cpp
   genresongsitem.cpp
   item.cpp
   itemmodel.cpp
+  orderedentitysongitem.cpp
+  orderedmpdsongitem.cpp
+  orderedsongitem.cpp
+  playlistitem.cpp
   playlistsitem.cpp
-  playlistitem.cpp
-  playlistitem.cpp
-  playlistsongentityitem.cpp
   queueditem.cpp
   queuemodel.cpp
-  randomsongentityitem.cpp
-  songentityitem.cpp
-  songitem.cpp
   songsitem.cpp
   strformats.cpp
+  unorderedentitysongitem.cpp
+  unorderedmpdsongitem.cpp
+  unorderedsongitem.cpp
 )
 
 target_include_directories(controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})

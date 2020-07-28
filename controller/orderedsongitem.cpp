@@ -1,11 +1,12 @@
-#include "albumsongitem.h"
+#include "orderedsongitem.h"
 #include "controller.h"
 
-AlbumSongItem::AlbumSongItem(mpd_song *song, Item *parent)
-    : SongItem(song, parent)
+OrderedSongItem::OrderedSongItem(
+    QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, bool couldFetchMore, Item *parent)
+    : AbstractSongItem(icon, myFlags, hazChildren, couldFetchMore, parent)
 {}
 
-void AlbumSongItem::onDoubleClicked(Controller *controller)
+void OrderedSongItem::onDoubleClicked(Controller *controller)
 {
     if (!controller) {
         return;

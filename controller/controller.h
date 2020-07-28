@@ -48,6 +48,8 @@ public:
     void addAndPlaySong(QString);
     void playAlbum(const QVector<QString> &, QString uri);
 
+    void fetchMore();
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);

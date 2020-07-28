@@ -1,5 +1,5 @@
 #include "compilationartistalbumitem.h"
-#include "albumsongitem.h"
+#include "orderedmpdsongitem.h"
 
 CompilationArtistAlbumItem::CompilationArtistAlbumItem(QString albumArtist,
                                                        QString album,
@@ -16,7 +16,7 @@ QVector<Item *> CompilationArtistAlbumItem::fetchMore(Controller *controller)
     auto songs = controller->searchSongs(filter);
     QVector<Item *> items;
     for (auto song : songs) {
-        items.append(new AlbumSongItem(song));
+        items.append(new OrderedMPDSongItem(song));
     }
 
     return items;

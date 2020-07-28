@@ -1,5 +1,5 @@
 #include "composersongsitem.h"
-#include "allsongitem.h"
+#include "unorderedmpdsongitem.h"
 
 ComposerSongsItem::ComposerSongsItem(QString composer, Item *parent)
     : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
@@ -11,7 +11,7 @@ QVector<Item *> ComposerSongsItem::fetchMore(Controller *controller)
     QVector<Item *> items;
     QVector<QPair<mpd_tag_type, QString>> tags{{MPD_TAG_COMPOSER, m_composer}};
     for (auto song : controller->searchSongs(tags)) {
-        items.append(new AllSongItem(song));
+        items.append(new UnorderedMPDSongItem(song));
     }
     return items;
 }
