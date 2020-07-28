@@ -569,6 +569,15 @@ void Controller::handleActivation()
     qDebug() << "We are in handleActivation, about to recv idle";
     auto idle = mpd_recv_idle(m_connection, false);
     qDebug() << "Idle received";
+    if (!idle) {
+        qDebug() << "idle is " << idle;
+        auto error = mpd_connection_get_error(m_connection);
+        qDebug() << "error code is " << error;
+        auto message = mpd_connection_get_error_message(m_connection);
+        qDebug() << "Message is " << message;
+        emit errorMessage();
+        return;
+    }
     handleIdle(idle);
     if (m_connection) {
         mpd_send_idle(m_connection);
