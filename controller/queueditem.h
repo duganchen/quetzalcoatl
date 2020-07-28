@@ -12,6 +12,7 @@ public:
 
     void onDoubleClicked(Controller *) override;
     unsigned id() override;
+    unsigned duration() override;
 
 protected:
     const mpd_song *song() const override;

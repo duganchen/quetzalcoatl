@@ -50,6 +50,8 @@ public:
 
     void fetchMore();
 
+    void setCombinedTime(unsigned);
+
 public slots:
     void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
@@ -80,6 +82,8 @@ signals:
     void queueChanged(const QVector<Item *> &);
 
     void songId(int);
+
+    void combinedTime(QString);
 
 private:
     void handleIdle(mpd_idle);

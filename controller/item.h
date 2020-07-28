@@ -44,6 +44,8 @@ public:
     // The song id, for songs in the queue.
     virtual unsigned id();
 
+    virtual unsigned duration();
+
     virtual void onDoubleClicked(Controller *);
 
 private:

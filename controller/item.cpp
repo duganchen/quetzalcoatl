@@ -119,6 +119,11 @@ unsigned Item::id()
     return UINT_MAX;
 }
 
+unsigned Item::duration()
+{
+    return UINT_MAX;
+}
+
 void Item::onDoubleClicked(Controller *controller)
 {
     // The default is a no-op.

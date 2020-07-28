@@ -4,6 +4,7 @@
 #include "playbacksettingsdialog.h"
 #include "queuemodel.h"
 #include "saveplaylistdialog.h"
+#include <QDebug>
 #include <QKeySequence>
 #include <QMessageBox>
 #include <QProgressBar>
@@ -127,23 +128,28 @@ MainWindow::MainWindow(QWidget *parent)
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
-    auto playlistModel = new QueueModel(controller);
+    auto queueModel = new QueueModel(controller);
 
-    auto playlistView = new QTreeView();
-    playlistView->setAcceptDrops(true);
-    playlistView->setDropIndicatorShown(true);
-    playlistView->setDragEnabled(true);
-    playlistView->setModel(playlistModel);
-    playlistView->setSelectionMode(QTreeView::ExtendedSelection);
-    connect(playlistView, &QTreeView::doubleClicked, playlistModel, &ItemModel::onDoubleClicked);
-    connect(playlistModel,
-            &ItemModel::columnResized,
-            playlistView,
-            &QTreeView::resizeColumnToContents);
-    splitter->addWidget(playlistView);
-    playlistView->setEnabled(false);
+    auto queueView = new QTreeView();
 
-    m_connectedWidgets.append(playlistView);
+    queueView->setAcceptDrops(true);
+    queueView->setDropIndicatorShown(true);
+    queueView->setDragEnabled(true);
+    queueView->setModel(queueModel);
+    queueView->setSelectionMode(QTreeView::ExtendedSelection);
+    connect(queueView, &QTreeView::doubleClicked, queueModel, &ItemModel::onDoubleClicked);
+    connect(queueModel, &ItemModel::columnResized, queueView, &QTreeView::resizeColumnToContents);
+    splitter->addWidget(queueView);
+    queueView->setEnabled(false);
+
+    // This needs to be done after setting the model.
+    // https://stackoverflow.com/a/30793898/240515
+    connect(queueView->selectionModel(),
+            &QItemSelectionModel::selectionChanged,
+            queueModel,
+            &QueueModel::onSelectionChanged);
+
+    m_connectedWidgets.append(queueView);
     layout->addWidget(splitter);
     auto widget = new QWidget();
     widget->setLayout(layout);
@@ -151,7 +157,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto status = statusBar();
     auto combinedTimeLabel = new QLabel();
-    status->addWidget(combinedTimeLabel);
+    status->addPermanentWidget(combinedTimeLabel);
+    connect(controller, &Controller::combinedTime, combinedTimeLabel, &QLabel::setText);
 
     auto timer = new QTimer(this);
     connect(timer, &QTimer::timeout, controller, &Controller::updateStatus);

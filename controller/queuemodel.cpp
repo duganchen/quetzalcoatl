@@ -193,3 +193,14 @@ void QueueModel::setSongId(int songId)
         }
     }
 }
+
+void QueueModel::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    Q_UNUSED(deselected)
+    unsigned combined = 0;
+    for (auto index : selected.indexes()) {
+        combined += static_cast<Item *>(index.internalPointer())->duration();
+    }
+
+    controller()->setCombinedTime(combined);
+}

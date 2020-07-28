@@ -2,6 +2,7 @@
 #define QUEUEMODEL_H
 
 #include "itemmodel.h"
+#include <QItemSelection>
 #include <QMimeData>
 
 class QueueModel : public ItemModel
@@ -33,6 +34,7 @@ public:
 public slots:
     void setQueue(const QVector<Item *> &);
     void setSongId(int);
+    void onSelectionChanged(const QItemSelection &, const QItemSelection &);
 
 private:
     int m_songId;

@@ -7,10 +7,10 @@
 
 QueuedItem::QueuedItem(mpd_entity *entity, Item *parent)
     : SongItem(QIcon(":/icons/audio-x-generic.svg"),
-                       Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
-                       false,
-                       false,
-                       parent)
+               Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
+               false,
+               false,
+               parent)
     , m_entity(entity)
 {}
 
@@ -40,4 +40,9 @@ void QueuedItem::onDoubleClicked(Controller *controller)
 const mpd_song *QueuedItem::song() const
 {
     return mpd_entity_get_song(m_entity);
+}
+
+unsigned QueuedItem::duration()
+{
+    return mpd_song_get_duration(mpd_entity_get_song(m_entity));
 }

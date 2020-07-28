@@ -706,3 +706,12 @@ void Controller::playAlbum(const QVector<QString> &uris, QString uri)
 
     enableIdle();
 }
+
+void Controller::setCombinedTime(unsigned duration)
+{
+    if (duration) {
+        emit combinedTime(timeStr(duration));
+    } else {
+        emit combinedTime("");
+    }
+}
