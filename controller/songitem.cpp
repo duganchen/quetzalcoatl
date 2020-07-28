@@ -1,13 +1,13 @@
-#include "abstractsongitem.h"
+#include "songitem.h"
 #include "strformats.h"
 #include <QIcon>
 
-AbstractSongItem::AbstractSongItem(
+SongItem::SongItem(
     QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, bool couldFetchMore, Item *parent)
     : Item(icon, myFlags, hazChildren, couldFetchMore, parent)
 {}
 
-QString AbstractSongItem::text(int column) const
+QString SongItem::text(int column) const
 {
     if (!song()) {
         return QString();
@@ -24,12 +24,12 @@ QString AbstractSongItem::text(int column) const
     }
 }
 
-QVariant AbstractSongItem::tooltip()
+QVariant SongItem::tooltip()
 {
     return songToolTip(song());
 }
 
-QString AbstractSongItem::uri()
+QString SongItem::uri()
 {
     return mpd_song_get_uri(song());
 }

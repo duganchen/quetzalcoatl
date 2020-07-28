@@ -1,5 +1,4 @@
 add_library(controller SHARED
-  abstractsongitem.cpp
   albumitem.cpp
   albumsitem.cpp
   artistalbumitem.cpp
@@ -31,6 +30,7 @@ add_library(controller SHARED
   playlistsitem.cpp
   queueditem.cpp
   queuemodel.cpp
+  songitem.cpp
   songsitem.cpp
   strformats.cpp
   unorderedentitysongitem.cpp

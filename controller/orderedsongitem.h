@@ -1,9 +1,9 @@
 #ifndef ORDEREDSONGITEM_H
 #define ORDEREDSONGITEM_H
 
-#include "abstractsongitem.h"
+#include "songitem.h"
 
-class OrderedSongItem : public AbstractSongItem
+class OrderedSongItem : public SongItem
 {
 public:
     explicit OrderedSongItem(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);

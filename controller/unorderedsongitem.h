@@ -1,9 +1,9 @@
 #ifndef UNORDEREDSONGITEM_H
 #define UNORDEREDSONGITEM_H
 
-#include "abstractsongitem.h"
+#include "songitem.h"
 
-class UnorderedSongItem : public AbstractSongItem
+class UnorderedSongItem : public SongItem
 {
 public:
     explicit UnorderedSongItem(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);

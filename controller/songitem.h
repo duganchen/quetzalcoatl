@@ -1,13 +1,13 @@
-#ifndef ABSTRACTSONGITEM_H
-#define ABSTRACTSONGITEM_H
+#ifndef SONGITEM_H
+#define SONGITEM_H
 
 #include "item.h"
 #include <mpd/client.h>
 
-class AbstractSongItem : public Item
+class SongItem : public Item
 {
 public:
-    explicit AbstractSongItem(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
+    explicit SongItem(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
     QString text(int column) const override;
 
     QVariant tooltip() override;
@@ -18,4 +18,4 @@ protected:
     virtual const mpd_song *song() const = 0;
 };
 
-#endif // ABSTRACTSONGITEM_H
+#endif // SONGITEM_H

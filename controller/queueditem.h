@@ -1,10 +1,10 @@
 #ifndef QUEUEDITEM_H
 #define QUEUEDITEM_H
 
-#include "abstractsongitem.h"
+#include "songitem.h"
 #include <mpd/client.h>
 
-class QueuedItem : public AbstractSongItem
+class QueuedItem : public SongItem
 {
 public:
     QueuedItem(mpd_entity *, Item *parent = nullptr);

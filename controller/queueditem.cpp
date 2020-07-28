@@ -6,7 +6,7 @@
 #include <QStringLiteral>
 
 QueuedItem::QueuedItem(mpd_entity *entity, Item *parent)
-    : AbstractSongItem(QIcon(":/icons/audio-x-generic.svg"),
+    : SongItem(QIcon(":/icons/audio-x-generic.svg"),
                        Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                        false,
                        false,
