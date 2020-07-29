@@ -15,6 +15,7 @@ Controller::Controller(QObject *parent)
     , m_connection(nullptr)
     , m_notifier(nullptr)
     , m_queueVersion(0)
+    , m_mpdPlayerState(MPD_STATE_UNKNOWN)
 {
     qRegisterMetaType<Controller::ConnectionState>();
 
@@ -59,10 +60,11 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
 
 void Controller::updateStatus()
 {
-    disableIdle();
-
-    pollForStatus();
-    enableIdle();
+    if (MPD_STATE_PLAY == m_mpdPlayerState) {
+        disableIdle();
+        pollForStatus();
+        enableIdle();
+    }
 }
 
 void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, unsigned to)
@@ -418,6 +420,8 @@ void Controller::pollForStatus()
     emit crossfade(mpd_status_get_crossfade(status));
     emit songId(mpd_status_get_song_id(status));
 
+    m_mpdPlayerState = mpd_status_get_state(status);
+
     unsigned queueVersion = mpd_status_get_queue_version(status);
     mpd_status_free(status);
 
@@ -491,6 +495,7 @@ void Controller::handleIdle(mpd_idle idle)
         emit connectionState(ConnectionState::Disconnected);
         emit sliderMax(0);
         emit sliderValue(0);
+        m_mpdPlayerState = MPD_STATE_UNKNOWN;
 
         QVector<Item *> emptyQueue;
         emit queueChanged(emptyQueue);

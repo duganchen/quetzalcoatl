@@ -102,6 +102,8 @@ private:
 
     ConnectionState m_connectionState;
 
+    mpd_state m_mpdPlayerState;
+
 private slots:
     void handleActivation();
 };
