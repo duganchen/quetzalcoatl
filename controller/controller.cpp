@@ -85,7 +85,6 @@ void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, un
 
     for (auto it = sources.cbegin(); it != sources.cend() && it->first < to; it++) {
         if (!mpd_run_move_id(m_connection, it->second, to - 1)) {
-            qDebug() << "Error running moveId";
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
@@ -93,7 +92,6 @@ void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, un
 
     for (auto it = sources.crbegin(); it != sources.crend() && it->first >= to; it++) {
         if (!mpd_run_move_id(m_connection, it->second, to)) {
-            qDebug() << "Error running moveId";
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
@@ -115,22 +113,28 @@ QVector<mpd_song *> Controller::searchSongs(const QVector<QPair<mpd_tag_type, QS
     disableIdle();
 
     if (!mpd_search_db_songs(m_connection, true)) {
-        qDebug() << "Error running mpd_search_db_songs";
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return songs;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return songs;
+        }
     }
     for (auto tag : tags) {
         if (!mpd_search_add_tag_constraint(m_connection,
                                            MPD_OPERATOR_DEFAULT,
                                            tag.first,
                                            tag.second.toUtf8().constData())) {
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return songs;
+            if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+                emit errorMessage(mpd_connection_get_error_message(m_connection));
+                return songs;
+            }
         }
     }
 
     if (!mpd_search_commit(m_connection)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return songs;
+        }
     }
 
     mpd_song *song = nullptr;
@@ -160,8 +164,10 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType,
     disableIdle();
 
     if (!mpd_search_db_songs(m_connection, true)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return tags;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return tags;
+        }
     }
 
     for (auto &tag : criteria) {
@@ -169,13 +175,17 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType,
                                            MPD_OPERATOR_DEFAULT,
                                            tag.first,
                                            tag.second.toUtf8().constData())) {
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return tags;
+            if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+                emit errorMessage(mpd_connection_get_error_message(m_connection));
+                return tags;
+            }
         }
     }
 
     if (!mpd_search_commit(m_connection)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+        }
     }
 
     QSet<QString> tagSet;
@@ -211,14 +221,20 @@ QVector<mpd_playlist *> Controller::listPlaylists()
     disableIdle();
 
     if (!mpd_send_list_playlists(m_connection)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return playlists;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return playlists;
+        }
     }
 
     mpd_playlist *playlist = nullptr;
 
     while ((playlist = mpd_recv_playlist(m_connection))) {
         playlists.append(playlist);
+    }
+
+    if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
     }
 
     enableIdle();
@@ -239,8 +255,10 @@ QVector<mpd_entity *> Controller::listPlaylist(mpd_playlist *playlist)
     disableIdle();
 
     if (!mpd_send_list_playlist_meta(m_connection, mpd_playlist_get_path(playlist))) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return songs;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return songs;
+        }
     }
 
     mpd_entity *entity = nullptr;
@@ -250,6 +268,11 @@ QVector<mpd_entity *> Controller::listPlaylist(mpd_playlist *playlist)
         } else {
             mpd_entity_free(entity);
         }
+    }
+
+    if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return songs;
     }
 
     enableIdle();
@@ -267,8 +290,10 @@ QVector<mpd_entity *> Controller::listSongs()
     disableIdle();
 
     if (!mpd_send_list_all_meta(m_connection, nullptr)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return entities;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return entities;
+        }
     }
 
     mpd_entity *entity = nullptr;
@@ -278,6 +303,11 @@ QVector<mpd_entity *> Controller::listSongs()
         } else {
             mpd_entity_free(entity);
         }
+    }
+
+    if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return entities;
     }
 
     enableIdle();
@@ -308,8 +338,10 @@ QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
     mpd_entity *newEntity = nullptr;
 
     if (!mpd_send_list_all_meta(m_connection, path)) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return listing;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return listing;
+        }
     }
     while ((newEntity = mpd_recv_entity(m_connection))) {
         auto entityType = mpd_entity_get_type(newEntity);
@@ -318,6 +350,11 @@ QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
         } else {
             mpd_entity_free(newEntity);
         }
+    }
+
+    if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return listing;
     }
 
     enableIdle();
@@ -344,8 +381,10 @@ void Controller::queueUris(const QVector<QString> &uris, int row)
     disableIdle();
     for (auto it = uris.crbegin(); it != uris.crend(); it++) {
         if ((mpd_run_add_id_to(m_connection, it->toUtf8().constData(), to)) == -1) {
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return;
+            if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+                emit errorMessage(mpd_connection_get_error_message(m_connection));
+                return;
+            }
         }
     }
     enableIdle();
@@ -359,28 +398,37 @@ void Controller::pollForStatus()
 
     auto status = mpd_run_status(m_connection);
     if (nullptr == status) {
-        auto msg = mpd_connection_get_error_message(m_connection);
-        qDebug() << "Error running mpd_run_get_status";
-        emit errorMessage(msg);
-        return;
+        auto error = mpd_connection_get_error(m_connection);
+        if (MPD_ERROR_SUCCESS != error) {
+            auto msg = mpd_connection_get_error_message(m_connection);
+            emit errorMessage(msg);
+            return;
+        }
     }
 
     auto total = mpd_status_get_total_time(status);
     emit sliderMax(total);
     auto elapsed = mpd_status_get_elapsed_ms(status) / 1000;
     emit sliderValue(elapsed);
-
     emit statusMessage(QStringLiteral("%1/%2").arg(timeStr(elapsed), timeStr(total)), 0);
 
+    emit shuffled(mpd_status_get_random(status));
+    emit repeating(mpd_status_get_repeat(status));
+    emit volume(mpd_status_get_volume(status));
+    emit crossfade(mpd_status_get_crossfade(status));
+    emit songId(mpd_status_get_song_id(status));
+
     unsigned queueVersion = mpd_status_get_queue_version(status);
+    mpd_status_free(status);
 
     if (m_queueVersion != queueVersion) {
         m_queueVersion = queueVersion;
 
         if (!mpd_send_list_queue_meta(m_connection)) {
-            qDebug() << "Error running mpd_send_list_queue_meta";
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return;
+            if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+                emit errorMessage(mpd_connection_get_error_message(m_connection));
+                return;
+            }
         }
 
         QVector<Item *> queue;
@@ -394,58 +442,15 @@ void Controller::pollForStatus()
             }
         }
 
+        auto error = mpd_connection_get_error(m_connection);
+        if (MPD_ERROR_SUCCESS != error) {
+            auto message = mpd_connection_get_error_message(m_connection);
+            emit errorMessage(message);
+            return;
+        }
+
         emit queueChanged(queue);
     }
-
-    emit shuffled(mpd_status_get_random(status));
-    emit repeating(mpd_status_get_repeat(status));
-    emit volume(mpd_status_get_volume(status));
-    emit crossfade(mpd_status_get_crossfade(status));
-    emit songId(mpd_status_get_song_id(status));
-
-    mpd_status_free(status);
-}
-
-void Controller::handleListAlbumsClick()
-{
-    if (!m_connection) {
-        return;
-    }
-
-    for (auto album : getAlbumList()) {
-        qDebug() << album;
-    }
-}
-
-QVector<QString> Controller::getAlbumList()
-{
-    QVector<QString> albums;
-
-    if (!m_connection) {
-        return albums;
-    }
-
-    disableIdle();
-
-    if (!mpd_search_db_tags(m_connection, MPD_TAG_ALBUM)) {
-        qDebug() << mpd_connection_get_error_message(m_connection);
-        return albums;
-    }
-
-    if (!mpd_search_commit(m_connection)) {
-        qDebug() << mpd_connection_get_error_message(m_connection);
-        return albums;
-    }
-
-    struct mpd_pair *pair = nullptr;
-    while ((pair = mpd_recv_pair_tag(m_connection, MPD_TAG_ALBUM)) != nullptr) {
-        albums.push_back(pair->value);
-        mpd_return_pair(m_connection, pair);
-    }
-
-    enableIdle();
-
-    return albums;
 }
 
 QString Controller::defaultHost()
@@ -491,19 +496,20 @@ void Controller::handleIdle(mpd_idle idle)
         emit queueChanged(emptyQueue);
 
     } else {
+        bool statusUpdate = false;
         if (idle & MPD_IDLE_DATABASE) {
             qDebug() << "song database has been updated";
         }
         if (idle & MPD_IDLE_STORED_PLAYLIST) {
             qDebug() << "a stored playlist has been modified, created, deleted or renamed";
         }
-        if (idle & MPD_IDLE_QUEUE) {
+        if (idle & MPD_IDLE_QUEUE || idle & MPD_IDLE_PLAYER) {
             qDebug() << "The queue has changed";
-            pollForStatus();
+            statusUpdate = true;
         }
         if (idle & MPD_IDLE_PLAYER) {
             qDebug() << "the player state has changed: play, stop, pause, seek, ...";
-            pollForStatus();
+            statusUpdate = true;
         }
         if (idle & MPD_IDLE_MIXER) {
             qDebug() << "the volume has been modified";
@@ -525,6 +531,10 @@ void Controller::handleIdle(mpd_idle idle)
         }
         if (idle & MPD_IDLE_MESSAGE) {
             qDebug() << "a message on a subscribed channel was received";
+        }
+
+        if (statusUpdate) {
+            pollForStatus();
         }
     }
 }
@@ -566,17 +576,14 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 
 void Controller::handleActivation()
 {
-    qDebug() << "We are in handleActivation, about to recv idle";
     auto idle = mpd_recv_idle(m_connection, false);
-    qDebug() << "Idle received";
     if (!idle) {
-        qDebug() << "idle is " << idle;
         auto error = mpd_connection_get_error(m_connection);
-        qDebug() << "error code is " << error;
-        auto message = mpd_connection_get_error_message(m_connection);
-        qDebug() << "Message is " << message;
-        emit errorMessage(message);
-        return;
+        if (MPD_ERROR_SUCCESS != error) {
+            auto message = mpd_connection_get_error_message(m_connection);
+            emit errorMessage(message);
+            return;
+        }
     }
     handleIdle(idle);
     if (m_connection) {
@@ -585,7 +592,6 @@ void Controller::handleActivation()
 }
 
 // Call these two before and after most synchronous MPD commands.
-// Make sure they're called OUTside the idle handler!
 
 void Controller::disableIdle()
 {
@@ -594,7 +600,14 @@ void Controller::disableIdle()
     }
     m_notifier->setEnabled(false);
     auto idle = mpd_run_noidle(m_connection);
-    handleIdle(idle);
+    if (idle) {
+        handleIdle(idle);
+    } else {
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            auto message = mpd_connection_get_error_message(m_connection);
+            emit errorMessage(message);
+        }
+    }
 }
 
 void Controller::enableIdle()
@@ -617,13 +630,17 @@ QVector<QString> Controller::listTags(mpd_tag_type tagType)
     disableIdle();
 
     if (!mpd_search_db_tags(m_connection, tagType)) {
-        qDebug() << mpd_connection_get_error_message(m_connection);
-        return tags;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            qDebug() << mpd_connection_get_error_message(m_connection);
+            return tags;
+        }
     }
 
     if (!mpd_search_commit(m_connection)) {
-        qDebug() << mpd_connection_get_error_message(m_connection);
-        return tags;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            qDebug() << mpd_connection_get_error_message(m_connection);
+            return tags;
+        }
     }
 
     struct mpd_pair *pair = nullptr;
@@ -660,8 +677,9 @@ void Controller::playSongEntity(mpd_entity *entity)
     auto songid = mpd_song_get_id(song);
 
     if (!mpd_run_play_id(m_connection, songid)) {
-        qDebug() << "Error running mpd_run_play_id";
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+        }
     }
     enableIdle();
 }
@@ -681,14 +699,17 @@ void Controller::addAndPlaySong(QString uri)
     int id = mpd_run_add_id(m_connection, uri.toUtf8().constData());
 
     if (id == -1) {
-        qDebug() << "Error running mpd_run_add_id";
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
     }
 
     if (!mpd_run_play_id(m_connection, static_cast<unsigned>(id))) {
-        qDebug() << "Error running mpd_run_play_id";
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
     }
 
     enableIdle();
@@ -702,27 +723,31 @@ void Controller::playAlbum(const QVector<QString> &uris, QString uri)
 
     disableIdle();
     if (!mpd_run_clear(m_connection)) {
-        qDebug() << "Error running mpd_run_clear";
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return;
+        if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
     }
 
     int returnedId = -1;
     unsigned id = UINT_MAX;
     for (auto songUri : uris) {
         if ((returnedId = mpd_run_add_id(m_connection, songUri.toUtf8().constData())) == -1) {
-            qDebug() << "Error running mpd_run_add_id";
-            emit errorMessage(mpd_connection_get_error_message(m_connection));
-            return;
+            if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+                emit errorMessage(mpd_connection_get_error_message(m_connection));
+                return;
+            }
         }
 
         id = static_cast<unsigned>(returnedId);
 
         if (songUri == uri) {
             if (!mpd_run_play_id(m_connection, id)) {
-                qDebug() << "Error running mpd_run_play_id";
-                emit errorMessage(mpd_connection_get_error_message(m_connection));
-                return;
+                if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+                    emit errorMessage(mpd_connection_get_error_message(m_connection));
+
+                    return;
+                }
             }
         }
     }

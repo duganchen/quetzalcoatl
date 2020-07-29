@@ -18,8 +18,6 @@ public:
     enum class ConnectionState { Disconnected, Connecting, Connected };
     Q_ENUM(ConnectionState)
 
-    QVector<QString> getAlbumList();
-
     QString defaultHost();
     unsigned defaultPort();
 
@@ -53,7 +51,6 @@ public:
     void setCombinedTime(unsigned);
 
 public slots:
-    void handleListAlbumsClick();
     void connectToMPD(QString, int, int);
 
     void updateStatus();
