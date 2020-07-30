@@ -493,7 +493,9 @@ mpd_connection *Controller::mpd() const
 
 void Controller::handleIdle(mpd_idle idle)
 {
+    qDebug() << "When handling idle, it is " << idle;
     if (!idle && mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
+        qDebug() << "CLOSED";
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
         m_notifier = nullptr;
@@ -600,16 +602,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
 
 void Controller::handleActivation()
 {
-    auto idle = mpd_recv_idle(m_connection, false);
-    if (!idle) {
-        auto error = mpd_connection_get_error(m_connection);
-        if (MPD_ERROR_SUCCESS != error) {
-            auto message = mpd_connection_get_error_message(m_connection);
-            emit errorMessage(message);
-            return;
-        }
-    }
-    handleIdle(idle);
+    handleIdle(mpd_recv_idle(m_connection, false));
     if (m_connection) {
         mpd_send_idle(m_connection);
     }

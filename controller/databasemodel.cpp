@@ -26,6 +26,7 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     setRootItem(dbRootItem);
 
     connect(controller, &Controller::playlists, this, &DatabaseModel::setPlaylists);
+    connect(controller, &Controller::connectionState, this, &DatabaseModel::onConnectionChanged);
 }
 
 int DatabaseModel::columnCount(const QModelIndex &parent) const
@@ -79,4 +80,23 @@ void DatabaseModel::setPlaylists(const QVector<Item *> &playlists)
     } else {
         qDeleteAll(playlists);
     }
+}
+
+void DatabaseModel::onConnectionChanged(Controller::ConnectionState connectionState)
+{
+    if (connectionState == Controller::ConnectionState::Disconnected) {
+        for (int row = 0; row < rootItem()->count(); row++) {
+            auto itemIndex = index(row, 0, QModelIndex());
+            auto item = rootItem()->children().at(row);
+            beginRemoveRows(itemIndex, 0, item->count() - 1);
+            item->clear();
+            endRemoveRows();
+        }
+    }
+
+    beginResetModel();
+    for (auto item : rootItem()->children()) {
+        item->setCanFetchMore(true);
+    }
+    endResetModel();
 }
