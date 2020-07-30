@@ -809,7 +809,7 @@ void Controller::renamePlaylist(QString from, QString to)
         emit playlists(listPlaylistsImpl());
     } else {
         // This is robust enough, but I'm going to say that I've seen it lock up completely if the
-        // playlist renam
+        // playlist renaming fails.
         auto error = mpd_connection_get_error(m_connection);
         if (error == MPD_ERROR_SERVER) {
             auto serverError = mpd_connection_get_server_error(m_connection);
