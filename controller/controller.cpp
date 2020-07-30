@@ -1,6 +1,7 @@
 #include "controller.h"
 #include "genresitem.h"
 #include "item.h"
+#include "playlistitem.h"
 #include "queueditem.h"
 #include "strformats.h"
 #include <mpd/client.h>
@@ -117,6 +118,7 @@ QVector<mpd_song *> Controller::searchSongs(const QVector<QPair<mpd_tag_type, QS
     if (!mpd_search_db_songs(m_connection, true)) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
+
             return songs;
         }
     }
@@ -222,6 +224,15 @@ QVector<mpd_playlist *> Controller::listPlaylists()
     }
     disableIdle();
 
+    auto thesePlaylists = listPlaylistsImpl();
+
+    enableIdle();
+    return thesePlaylists;
+}
+
+QVector<mpd_playlist *> Controller::listPlaylistsImpl()
+{
+    QVector<mpd_playlist *> playlists;
     if (!mpd_send_list_playlists(m_connection)) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
@@ -239,7 +250,10 @@ QVector<mpd_playlist *> Controller::listPlaylists()
         emit errorMessage(mpd_connection_get_error_message(m_connection));
     }
 
-    enableIdle();
+    QCollator collator;
+    std::sort(playlists.begin(), playlists.end(), [&collator](mpd_playlist *a, mpd_playlist *b) {
+        return collator.compare(mpd_playlist_get_path(a), mpd_playlist_get_path(b)) < 0;
+    });
     return playlists;
 }
 
@@ -507,6 +521,11 @@ void Controller::handleIdle(mpd_idle idle)
         }
         if (idle & MPD_IDLE_STORED_PLAYLIST) {
             qDebug() << "a stored playlist has been modified, created, deleted or renamed";
+            QVector<Item *> thesePlaylists;
+            for (auto storedPlaylist : listPlaylistsImpl()) {
+                thesePlaylists.append(new PlaylistItem(storedPlaylist));
+            }
+            emit playlists(thesePlaylists);
         }
         if (idle & MPD_IDLE_QUEUE || idle & MPD_IDLE_PLAYER) {
             qDebug() << "The queue has changed";

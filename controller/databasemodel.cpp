@@ -7,6 +7,7 @@
 #include "genresitem.h"
 #include "playlistsitem.h"
 #include "songsitem.h"
+#include <QDebug>
 #include <QMimeData>
 
 DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
@@ -23,6 +24,8 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     dbRootItem->append(new DirectoryItem(nullptr));
 
     setRootItem(dbRootItem);
+
+    connect(controller, &Controller::playlists, this, &DatabaseModel::setPlaylists);
 }
 
 int DatabaseModel::columnCount(const QModelIndex &parent) const
@@ -55,4 +58,25 @@ Qt::ItemFlags DatabaseModel::flags(const QModelIndex &index) const
         return static_cast<Item *>(index.internalPointer())->flags();
     }
     return Qt::NoItemFlags;
+}
+
+void DatabaseModel::setPlaylists(const QVector<Item *> &playlists)
+{
+    int playlistsRow = 0;
+
+    auto playlistsIndex = index(playlistsRow, 0, QModelIndex());
+    auto playlistsItem = rootItem()->children().at(playlistsRow);
+    if (!playlistsItem->canFetchMore()) {
+        beginRemoveRows(playlistsIndex, 0, playlistsItem->count() - 1);
+        playlistsItem->clear();
+        endRemoveRows();
+
+        beginInsertRows(playlistsIndex, 0, playlists.count() - 1);
+        for (auto item : playlists) {
+            playlistsItem->append(item);
+        }
+        endInsertRows();
+    } else {
+        qDeleteAll(playlists);
+    }
 }

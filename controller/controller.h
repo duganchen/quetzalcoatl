@@ -82,6 +82,8 @@ signals:
 
     void combinedTime(QString);
 
+    void playlists(const QVector<Item *> &);
+
 private:
     void handleIdle(mpd_idle);
     void createMPD(QString, int, int);
@@ -103,6 +105,8 @@ private:
     ConnectionState m_connectionState;
 
     mpd_state m_mpdPlayerState;
+
+    QVector<mpd_playlist *> listPlaylistsImpl();
 
 private slots:
     void handleActivation();
