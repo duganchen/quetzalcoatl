@@ -1,4 +1,5 @@
 #include "playlistdelegate.h"
+#include "databasemodel.h"
 #include "item.h"
 #include <QDebug>
 #include <QLineEdit>
@@ -11,6 +12,7 @@ QWidget *PlaylistDelegate::createEditor(QWidget *parent,
                                         const QStyleOptionViewItem &option,
                                         const QModelIndex &index) const
 {
+    auto lineEdit = new QLineEdit(parent);
     return new QLineEdit(parent);
 }
 
@@ -25,5 +27,7 @@ void PlaylistDelegate::setModelData(QWidget *editor,
                                     QAbstractItemModel *model,
                                     const QModelIndex &index) const
 {
-    qDebug() << "Calling setModelData";
+    auto lineEdit = static_cast<QLineEdit *>(editor);
+    auto dbModel = static_cast<DatabaseModel *>(model);
+    dbModel->renamePlaylist(index, lineEdit->text());
 }

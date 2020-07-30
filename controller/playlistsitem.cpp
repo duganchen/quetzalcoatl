@@ -16,9 +16,5 @@ QString PlaylistsItem::text(int column) const
 
 QVector<Item *> PlaylistsItem::fetchMore(Controller *controller)
 {
-    QVector<Item *> items;
-    for (auto playlist : controller->listPlaylists()) {
-        items.append(new PlaylistItem(playlist));
-    }
-    return items;
+    return controller->listPlaylists();
 }

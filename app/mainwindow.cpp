@@ -140,7 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(deletePlaylistAction, &QAction::triggered, [=]() {
         auto item = static_cast<Item *>(databaseView->currentIndex().internalPointer());
-        qDebug() << item->text(0);
+        controller->deletePlaylist(item->text(0));
     });
 
     auto renamePlaylistAction = new QAction("Rename", this);

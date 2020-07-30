@@ -100,3 +100,9 @@ void DatabaseModel::onConnectionChanged(Controller::ConnectionState connectionSt
     }
     endResetModel();
 }
+
+void DatabaseModel::renamePlaylist(const QModelIndex &index, QString text)
+{
+    auto item = static_cast<Item *>(index.internalPointer());
+    controller()->renamePlaylist(item->text(0), text);
+}

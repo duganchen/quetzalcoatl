@@ -15,6 +15,7 @@ public:
     QMimeData *mimeData(const QModelIndexList &) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+    void renamePlaylist(const QModelIndex &, QString);
 public slots:
     void setPlaylists(const QVector<Item *> &);
     void onConnectionChanged(Controller::ConnectionState);

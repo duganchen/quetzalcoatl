@@ -33,7 +33,7 @@ public:
 
     QVector<QString> searchTags(mpd_tag_type, const QVector<QPair<mpd_tag_type, QString>>);
 
-    QVector<mpd_playlist *> listPlaylists();
+    QVector<Item *> listPlaylists();
 
     QVector<mpd_entity *> listPlaylist(mpd_playlist *);
 
@@ -49,6 +49,10 @@ public:
     void fetchMore();
 
     void setCombinedTime(unsigned);
+
+    void renamePlaylist(QString, QString);
+
+    void deletePlaylist(QString);
 
 public slots:
     void connectToMPD(QString, int, int);
@@ -106,7 +110,7 @@ private:
 
     mpd_state m_mpdPlayerState;
 
-    QVector<mpd_playlist *> listPlaylistsImpl();
+    QVector<Item *> listPlaylistsImpl();
 
 private slots:
     void handleActivation();
