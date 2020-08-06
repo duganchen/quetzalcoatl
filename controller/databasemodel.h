@@ -20,6 +20,8 @@ public slots:
     void setPlaylists(const QVector<Item *> &);
     void onConnectionChanged(Controller::ConnectionState);
 
+    void reset();
+
 private:
 };
 

@@ -104,9 +104,11 @@ signals:
     void combinedTime(QString);
 
     // There's a technical reason for this: you can't have a signal that
-    // carries a pointer to a libmpdclient pointer (like mpd_playlist *).
+    // carries a pointer to a libmpdclient structure (like mpd_playlist *).
     void playlistItems(const QVector<Item *> &);
     void playlistNames(const QVector<QString> &);
+
+    void updated();
 
 private:
     void handleIdle(mpd_idle);

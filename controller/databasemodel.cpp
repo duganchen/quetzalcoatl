@@ -27,6 +27,7 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
 
     connect(controller, &Controller::playlistItems, this, &DatabaseModel::setPlaylists);
     connect(controller, &Controller::connectionState, this, &DatabaseModel::onConnectionChanged);
+    connect(controller, &Controller::updated, this, &DatabaseModel::reset);
 }
 
 int DatabaseModel::columnCount(const QModelIndex &parent) const
@@ -85,13 +86,24 @@ void DatabaseModel::setPlaylists(const QVector<Item *> &playlists)
 void DatabaseModel::onConnectionChanged(Controller::ConnectionState connectionState)
 {
     if (connectionState == Controller::ConnectionState::Disconnected) {
-        for (int row = 0; row < rootItem()->count(); row++) {
-            auto itemIndex = index(row, 0, QModelIndex());
-            auto item = rootItem()->children().at(row);
-            beginRemoveRows(itemIndex, 0, item->count() - 1);
-            item->clear();
-            endRemoveRows();
-        }
+        reset();
+    }
+}
+
+void DatabaseModel::renamePlaylist(const QModelIndex &index, QString text)
+{
+    auto item = static_cast<Item *>(index.internalPointer());
+    controller()->renamePlaylist(item->text(0), text);
+}
+
+void DatabaseModel::reset()
+{
+    for (int row = 0; row < rootItem()->count(); row++) {
+        auto itemIndex = index(row, 0, QModelIndex());
+        auto item = rootItem()->children().at(row);
+        beginRemoveRows(itemIndex, 0, item->count() - 1);
+        item->clear();
+        endRemoveRows();
     }
 
     beginResetModel();
@@ -99,10 +111,4 @@ void DatabaseModel::onConnectionChanged(Controller::ConnectionState connectionSt
         item->setCanFetchMore(true);
     }
     endResetModel();
-}
-
-void DatabaseModel::renamePlaylist(const QModelIndex &index, QString text)
-{
-    auto item = static_cast<Item *>(index.internalPointer());
-    controller()->renamePlaylist(item->text(0), text);
 }

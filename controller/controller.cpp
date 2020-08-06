@@ -526,11 +526,9 @@ void Controller::handleIdle(mpd_idle idle)
             checkStoredPlaylists();
         }
         if (idle & MPD_IDLE_QUEUE || idle & MPD_IDLE_PLAYER) {
-            qDebug() << "The queue has changed";
             statusUpdate = true;
         }
         if (idle & MPD_IDLE_PLAYER) {
-            qDebug() << "the player state has changed: play, stop, pause, seek, ...";
             statusUpdate = true;
         }
         if (idle & MPD_IDLE_MIXER) {
@@ -543,7 +541,7 @@ void Controller::handleIdle(mpd_idle idle)
             qDebug() << "options have changed: crossfade, random, repeat, ...";
         }
         if (idle & MPD_IDLE_UPDATE) {
-            qDebug() << "a database update has started or finished.";
+            emit updated();
         }
         if (idle & MPD_IDLE_STICKER) {
             qDebug() << "a sticker has been modified.";
