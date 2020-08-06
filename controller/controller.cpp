@@ -395,14 +395,29 @@ void Controller::queueUris(const QVector<QString> &uris, int row)
     auto to = static_cast<unsigned>(row);
 
     disableIdle();
+
+    if (!mpd_command_list_begin(m_connection, false)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
     for (auto it = uris.crbegin(); it != uris.crend(); it++) {
-        if ((mpd_run_add_id_to(m_connection, it->toUtf8().constData(), to)) == -1) {
-            if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
-                emit errorMessage(mpd_connection_get_error_message(m_connection));
-                return;
-            }
+        if (!mpd_send_add_id_to(m_connection, it->toUtf8().constData(), to)) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
         }
     }
+
+    if (!mpd_command_list_end(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
+    if (!mpd_response_finish(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
     enableIdle();
 }
 
@@ -959,6 +974,7 @@ void Controller::deleteSongIds(const QVector<unsigned> &songIds)
 
     if (!mpd_command_list_begin(m_connection, false)) {
         emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
     }
     for (auto id : songIds) {
         if (!mpd_send_delete_id(m_connection, id)) {
