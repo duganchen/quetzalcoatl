@@ -205,6 +205,8 @@ MainWindow::MainWindow(QWidget *parent)
                 deleteAction->setEnabled(selected.count());
             });
 
+    connect(queueModel, &QueueModel::hasSongs, savePlaylistAction, &QAction::setEnabled);
+
     m_connectedWidgets.append(queueView);
     layout->addWidget(splitter);
     auto widget = new QWidget();

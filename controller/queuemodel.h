@@ -37,6 +37,8 @@ public slots:
     void setQueue(const QVector<Item *> &);
     void setSongId(int);
     void onSelectionChanged(const QItemSelection &, const QItemSelection &);
+signals:
+    void hasSongs(bool);
 
 private:
     int m_songId;

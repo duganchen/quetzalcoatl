@@ -166,8 +166,10 @@ void QueueModel::setQueue(const QVector<Item *> &queue)
         rootItem()->append(songItem);
     }
     endResetModel();
-    emit columnResized(0);
     emit columnResized(1);
+    emit columnResized(0);
+
+    emit hasSongs(rootItem()->children().count());
 }
 
 void QueueModel::setSongId(int songId)
