@@ -1,11 +1,11 @@
 #include "genresongsitem.h"
-#include "unorderedmpdsongitem.h"
 #include "controller.h"
+#include "unorderedmpdsongitem.h"
 
 #include <QDebug>
 
 GenreSongsItem::GenreSongsItem(Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QVector<Item *> GenreSongsItem::fetchMore(Controller *controller)

@@ -1,7 +1,7 @@
 #include "orderedentitysongitem.h"
 
 OrderedEntitySongItem::OrderedEntitySongItem(mpd_entity *entity, Item *parent)
-    : OrderedSongItem(QIcon::fromTheme("audio-x-generic"),
+    : OrderedSongItem(QIcon::fromTheme(IconNames::Audio),
                       Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                       false,
                       false,

@@ -4,6 +4,7 @@
 #include "connectiondialog.h"
 #include "controller.h"
 #include <QAction>
+#include <QEvent>
 #include <QLabel>
 #include <QMainWindow>
 #include <QProgressBar>
@@ -20,6 +21,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void changeEvent(QEvent *);
+
 private:
     QVector<QWidget *> m_connectedWidgets;
     QVector<QAction *> m_connectedActions;
@@ -29,6 +32,7 @@ private:
     ConnectionDialog *m_connectionDialog;
 
 private:
+    void onPaletteChanged();
 private slots:
     void setConnectionState(Controller::ConnectionState);
 };

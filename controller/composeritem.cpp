@@ -3,7 +3,7 @@
 #include "composersongsitem.h"
 
 ComposerItem::ComposerItem(QString composer, Item *parent)
-    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
 
     , m_composer(composer)
 {}

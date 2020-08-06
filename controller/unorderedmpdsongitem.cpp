@@ -1,7 +1,7 @@
 #include "unorderedmpdsongitem.h"
 
 UnorderedMPDSongItem::UnorderedMPDSongItem(mpd_song *song, Item *parent)
-    : UnorderedSongItem(QIcon::fromTheme("audio-x-generic"),
+    : UnorderedSongItem(QIcon::fromTheme(IconNames::Audio),
                         Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                         false,
                         false,

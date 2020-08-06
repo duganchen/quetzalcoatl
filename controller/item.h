@@ -1,6 +1,7 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include "iconnames.h"
 #include <mpd/client.h>
 #include <QSocketNotifier>
 #include <QVariant>

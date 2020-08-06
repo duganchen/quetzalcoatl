@@ -4,7 +4,7 @@
 #include "controller.h"
 
 AlbumsItem::AlbumsItem(Item *parent)
-    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QString AlbumsItem::text(int column) const

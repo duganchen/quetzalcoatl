@@ -6,7 +6,7 @@ GenreArtistAlbumItem::GenreArtistAlbumItem(QString genre,
                                            QString artist,
                                            QString album,
                                            Item *parent)
-    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
     , m_genre(genre)
     , m_artist(artist)
     , m_album(album)

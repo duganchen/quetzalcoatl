@@ -2,7 +2,7 @@
 #include "orderedmpdsongitem.h"
 
 ComposerAlbumItem::ComposerAlbumItem(QString composer, QString album, Item *parent)
-    : Item(QIcon::fromTheme("media-optical-audio"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true, parent)
     , m_composer(composer)
     , m_album(album)
 {}

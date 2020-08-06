@@ -1,0 +1,46 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/breeze-dark/actions/24/list-remove.svg</file>
+        <file>icons/breeze-dark/actions/24/network-connect.svg</file>
+        <file>icons/breeze-dark/actions/24/view-media-playlist.svg</file>
+        <file>icons/breeze-dark/actions/32/configure.svg</file>
+        <file>icons/breeze-dark/actions/32/document-save-all.svg</file>
+        <file>icons/breeze-dark/actions/32/media-playback-pause.svg</file>
+        <file>icons/breeze-dark/actions/32/media-playback-start.svg</file>
+        <file>icons/breeze-dark/actions/32/media-playback-stop.svg</file>
+        <file>icons/breeze-dark/actions/32/media-playlist-repeat.svg</file>
+        <file>icons/breeze-dark/actions/32/media-playlist-shuffle.svg</file>
+        <file>icons/breeze-dark/actions/32/media-skip-backward.svg</file>
+        <file>icons/breeze-dark/actions/32/media-skip-forward.svg</file>
+        <file>icons/breeze-dark/devices/64/drive-harddisk.svg</file>
+        <file>icons/breeze-dark/devices/64/media-optical-audio.svg</file>
+        <file>icons/breeze-dark/devices/64/multimedia-player.svg</file>
+        <file>icons/breeze-dark/index.theme</file>
+        <file>icons/breeze-dark/mimetypes/64/audio-x-generic.svg</file>
+        <file>icons/breeze-dark/places/24/server-database.svg</file>
+        <file>icons/breeze-dark/places/64/folder-documents.svg</file>
+        <file>icons/breeze-dark/places/64/folder-favorites.svg</file>
+        <file>icons/breeze-dark/places/64/folder-sound.svg</file>
+        <file>icons/breeze/actions/24/list-remove.svg</file>
+        <file>icons/breeze/actions/24/network-connect.svg</file>
+        <file>icons/breeze/actions/24/view-media-playlist.svg</file>
+        <file>icons/breeze/actions/32/configure.svg</file>
+        <file>icons/breeze/actions/32/document-save-all.svg</file>
+        <file>icons/breeze/actions/32/media-playback-pause.svg</file>
+        <file>icons/breeze/actions/32/media-playback-start.svg</file>
+        <file>icons/breeze/actions/32/media-playback-stop.svg</file>
+        <file>icons/breeze/actions/32/media-playlist-repeat.svg</file>
+        <file>icons/breeze/actions/32/media-playlist-shuffle.svg</file>
+        <file>icons/breeze/actions/32/media-skip-backward.svg</file>
+        <file>icons/breeze/actions/32/media-skip-forward.svg</file>
+        <file>icons/breeze/devices/64/drive-harddisk.svg</file>
+        <file>icons/breeze/devices/64/media-optical-audio.svg</file>
+        <file>icons/breeze/devices/64/multimedia-player.svg</file>
+        <file>icons/breeze/index.theme</file>
+        <file>icons/breeze/mimetypes/64/audio-x-generic.svg</file>
+        <file>icons/breeze/places/24/server-database.svg</file>
+        <file>icons/breeze/places/64/folder-documents.svg</file>
+        <file>icons/breeze/places/64/folder-favorites.svg</file>
+        <file>icons/breeze/places/64/folder-sound.svg</file>
+    </qresource>
+</RCC>

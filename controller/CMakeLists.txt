@@ -21,6 +21,7 @@ add_library(controller SHARED
   genreitem.cpp
   genresitem.cpp
   genresongsitem.cpp
+  iconnames.cpp
   item.cpp
   itemmodel.cpp
   orderedentitysongitem.cpp

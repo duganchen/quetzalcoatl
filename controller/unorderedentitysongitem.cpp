@@ -1,7 +1,7 @@
 #include "unorderedentitysongitem.h"
 
 UnorderedEntitySongItem::UnorderedEntitySongItem(mpd_entity *entity, Item *parent)
-    : UnorderedSongItem(QIcon::fromTheme("audio-x-generic"),
+    : UnorderedSongItem(QIcon::fromTheme(IconNames::Audio),
                         Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                         false,
                         false,
