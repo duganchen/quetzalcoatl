@@ -22,6 +22,8 @@ Drag the slider to seek within the current song.
 
 Hover your mouse over any song or toolbar button to get a tooltip.
 
+Select songs in the queue to see their combined time. Very useful if you're picking songs for a mix CD.
+
 ## Credits
 
 It currently uses:
