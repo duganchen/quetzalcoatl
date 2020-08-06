@@ -227,7 +227,6 @@ MainWindow::MainWindow(QWidget *parent)
     queueView->setEnabled(false);
 
     connect(deleteAction, &QAction::triggered, [=]() {
-        qDebug() << "Deleting selected songs from the queue";
         queueModel->deleteIndexes(queueView->selectionModel()->selectedIndexes());
     });
 

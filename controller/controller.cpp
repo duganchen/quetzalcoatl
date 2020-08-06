@@ -659,7 +659,7 @@ QVector<QString> Controller::listTags(mpd_tag_type tagType)
 
     if (!mpd_search_db_tags(m_connection, tagType)) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
-            qDebug() << mpd_connection_get_error_message(m_connection);
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
             return tags;
         }
     }
@@ -803,6 +803,7 @@ void Controller::renamePlaylist(QString from, QString to)
     if (!mpd_run_rename(m_connection, from.toUtf8().constData(), to.toUtf8().constData())) {
         if (mpd_connection_get_error(m_connection) == MPD_ERROR_SERVER) {
             emit serverErrorMessage(mpd_connection_get_error_message(m_connection));
+            mpd_connection_clear_error(m_connection);
         } else {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
         }
@@ -822,6 +823,7 @@ void Controller::savePlaylist(QString name)
     if (!mpd_run_save(m_connection, name.toUtf8().constData())) {
         if (mpd_connection_get_error(m_connection) == MPD_ERROR_SERVER) {
             emit serverErrorMessage(mpd_connection_get_error_message(m_connection));
+            mpd_connection_clear_error(m_connection);
         } else {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
         }
@@ -841,6 +843,7 @@ void Controller::deletePlaylist(QString name)
     if (!mpd_run_rm(m_connection, name.toUtf8().constData())) {
         if (mpd_connection_get_error(m_connection) == MPD_ERROR_SERVER) {
             emit serverErrorMessage(mpd_connection_get_error_message(m_connection));
+            mpd_connection_clear_error(m_connection);
         } else {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
         }
@@ -954,12 +957,25 @@ void Controller::deleteSongIds(const QVector<unsigned> &songIds)
     }
 
     disableIdle();
+
+    if (!mpd_command_list_begin(m_connection, false)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
     for (auto id : songIds) {
-        if (!mpd_run_delete_id(m_connection, id)) {
+        if (!mpd_send_delete_id(m_connection, id)) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
     }
+
+    if (!mpd_command_list_end(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+
+    if (!mpd_response_finish(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+
     enableIdle();
 }
 
