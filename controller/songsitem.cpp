@@ -2,7 +2,7 @@
 #include "unorderedentitysongitem.h"
 
 SongsItem::SongsItem(Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QString SongsItem::text(int column) const

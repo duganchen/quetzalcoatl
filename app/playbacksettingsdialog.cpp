@@ -16,7 +16,7 @@ PlaybackSettingsDialog::PlaybackSettingsDialog(Controller *controller,
     : QDialog(parent, f)
     , m_controller(controller)
 {
-    setWindowIcon(QIcon(":/icons/configure.svg"));
+    setWindowIcon(QIcon::fromTheme("configure"));
     setWindowTitle("Playback Settings");
     auto layout = new QVBoxLayout();
     auto playbackLayout = new QFormLayout();

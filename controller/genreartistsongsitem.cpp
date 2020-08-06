@@ -1,9 +1,9 @@
 #include "genreartistsongsitem.h"
-#include "unorderedmpdsongitem.h"
 #include "controller.h"
+#include "unorderedmpdsongitem.h"
 
 GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist, Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
     , m_genre(genre)
     , m_artist(artist)
 {}

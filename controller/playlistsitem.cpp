@@ -3,7 +3,7 @@
 #include <QDebug>
 
 PlaylistsItem::PlaylistsItem(Item *parent)
-    : Item(QIcon(":/icons/folder-favorites.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("folder-favorites"), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QString PlaylistsItem::text(int column) const

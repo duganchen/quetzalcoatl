@@ -22,8 +22,30 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+#ifndef Q_OS_LINUX
+
+    /*
+     * Future versions should detect when the OS changes into dark mode.
+    void MainWindow::changeEvent(QEvent *event)
+    {
+        if (event->type() == QEvent::PaletteChange) {
+            qDebug() << palette().color(QPalette::Active, QPalette::Window);
+        }
+    }
+    */
+
+    constexpr OSX_LIGHT_MODE = 236;
+    constexpr OSX_DARK_MODE = 50;
+    constexpr THRESHOLD = OSX_LIGHT_MODE / 2 - OSX_DARK_MODE / 2;
+
+    if (palette().color(QPalette::Active, QPalette::Window).lightness() < THRESHOLD) {
+        QIcon::setThemeName("breeze-dark");
+    } else {
+        QIcon::setThemeName("breeze");
+    }
+#endif
     setWindowTitle(tr("Quetzalcoatl"));
-    setWindowIcon(QIcon(":/icons/multimedia-player.svg"));
+    setWindowIcon(QIcon::fromTheme("multimedia-player"));
 
     auto controller = new Controller(this);
     connect(controller, &Controller::connectionState, this, &MainWindow::setConnectionState);
@@ -34,51 +56,51 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_connectionDialog = new ConnectionDialog(controller, this);
 
-    auto connectAction = toolBar->addAction(QIcon(":/icons/network-connect.svg"),
+    auto connectAction = toolBar->addAction(QIcon::fromTheme("network-connect"),
                                             "Connect to MPD",
                                             [=]() { m_connectionDialog->exec(); });
     toolBar->addSeparator();
 
-    auto stopAction = toolBar->addAction(QIcon(":/icons/stop_circle-24px.svg"), "Stop");
+    auto stopAction = toolBar->addAction(QIcon::fromTheme("media-playback-stop"), "Stop");
     stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
     stopAction->setEnabled(false);
     m_connectedActions.append(stopAction);
 
-    auto playAction = toolBar->addAction(QIcon(":/icons/play_circle_outline-24px.svg"), "Play");
+    auto playAction = toolBar->addAction(QIcon::fromTheme("media-playback-start"), "Play");
     playAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPlay));
     playAction->setEnabled(false);
     m_connectedActions.append(playAction);
 
-    auto pauseAction = toolBar->addAction(QIcon(":/icons/pause_circle_outline-24px.svg"), "Pause");
+    auto pauseAction = toolBar->addAction(QIcon::fromTheme("media-playback-pause"), "Pause");
     pauseAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPause));
     pauseAction->setEnabled(false);
     m_connectedActions.append(pauseAction);
 
-    auto skipBackAction = toolBar->addAction(QIcon(":/icons/skip_previous-24px.svg"), "Previous");
+    auto skipBackAction = toolBar->addAction(QIcon::fromTheme("media-skip-backward"), "Previous");
     skipBackAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPrevious));
     skipBackAction->setEnabled(false);
     m_connectedActions.append(skipBackAction);
 
-    auto skipForthAction = toolBar->addAction(QIcon(":/icons/skip_next-24px.svg"), "Next");
+    auto skipForthAction = toolBar->addAction(QIcon::fromTheme("media-skip-forward"), "Next");
     skipForthAction->setShortcut(QKeySequence(Qt::Key::Key_MediaNext));
     skipForthAction->setEnabled(false);
     m_connectedActions.append(skipForthAction);
 
     toolBar->addSeparator();
 
-    auto shuffleAction = toolBar->addAction(QIcon(":icons/shuffle-24px.svg"), "Shuffle");
+    auto shuffleAction = toolBar->addAction(QIcon::fromTheme("media-playlist-shuffle"), "Shuffle");
     shuffleAction->setCheckable(true);
     shuffleAction->setEnabled(false);
     m_connectedActions.append(shuffleAction);
 
-    auto repeatAction = toolBar->addAction(QIcon(":/icons/repeat-24px.svg"), "Repeat");
+    auto repeatAction = toolBar->addAction(QIcon::fromTheme("media-playlist-repeat"), "Repeat");
     repeatAction->setCheckable(true);
     repeatAction->setEnabled(false);
     m_connectedActions.append(repeatAction);
 
     toolBar->addSeparator();
 
-    auto deleteAction = toolBar->addAction(QIcon(":/icons/remove_from_queue-24px.svg"),
+    auto deleteAction = toolBar->addAction(QIcon::fromTheme("list-remove"),
                                            "[DEL]ete selected playlist items");
     deleteAction->setEnabled(false);
 
@@ -86,7 +108,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto savePlaylistDialog = new SavePlaylistDialog(controller, this);
     savePlaylistDialog->setEnabled(false);
 
-    auto savePlaylistAction = toolBar->addAction(QIcon(":/icons/save-24px.svg"),
+    auto savePlaylistAction = toolBar->addAction(QIcon::fromTheme("document-save-all"),
                                                  "[CTRL-S]ave playlist",
                                                  [=]() { savePlaylistDialog->exec(); });
 
@@ -99,7 +121,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto playbackSettingsDialog = new PlaybackSettingsDialog(controller, this);
     m_connectedWidgets.append(playbackSettingsDialog);
     playbackSettingsDialog->setEnabled(false);
-    auto playbackSettingsAction = toolBar->addAction(QIcon(":/icons/configure.svg"),
+    auto playbackSettingsAction = toolBar->addAction(QIcon::fromTheme("configure"),
                                                      "Playback Settings",
                                                      [=]() { playbackSettingsDialog->exec(); });
     playbackSettingsAction->setEnabled(false);

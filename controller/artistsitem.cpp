@@ -2,7 +2,7 @@
 #include "artistitem.h"
 
 ArtistsItem::ArtistsItem(Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QString ArtistsItem::text(int column) const

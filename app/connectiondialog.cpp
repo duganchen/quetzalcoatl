@@ -16,7 +16,7 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
 {
     connect(m_controller, &Controller::connectionState, this, &ConnectionDialog::setConnectionState);
 
-    setWindowIcon(QIcon(":/icons/network-connect.svg"));
+    setWindowIcon(QIcon::fromTheme("network-connect"));
     setWindowTitle("Connect to MPD");
     auto layout = new QVBoxLayout();
     auto connectionLayout = new QFormLayout();

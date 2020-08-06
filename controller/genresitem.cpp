@@ -5,7 +5,7 @@
 #include <QDebug>
 
 GenresItem::GenresItem(Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QString GenresItem::text(int column) const

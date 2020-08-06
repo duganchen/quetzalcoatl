@@ -6,7 +6,7 @@
 #include <QDebug>
 
 GenreItem::GenreItem(QString genre, Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
     , m_genre(genre)
 {}
 

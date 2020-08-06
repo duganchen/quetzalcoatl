@@ -3,7 +3,7 @@
 #include "artistsongsitem.h"
 
 ArtistItem::ArtistItem(QString artist, Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
 
     , m_artist(artist)
 {}

@@ -2,7 +2,7 @@
 #include "composeritem.h"
 
 ComposersItem::ComposersItem(Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
 {}
 
 QString ComposersItem::text(int column) const

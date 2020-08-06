@@ -3,7 +3,7 @@
 #include <QDebug>
 
 DirectoryItem::DirectoryItem(mpd_entity *entity, Item *parent)
-    : Item(QIcon(":/icons/folder-favorites.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("folder-favorites"), Qt::ItemIsEnabled, true, true, parent)
     , m_entity(entity)
 {}
 

@@ -2,7 +2,7 @@
 #include "unorderedmpdsongitem.h"
 
 ComposerSongsItem::ComposerSongsItem(QString composer, Item *parent)
-    : Item(QIcon(":/icons/server-database.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("server-database"), Qt::ItemIsEnabled, true, true, parent)
     , m_composer(composer)
 {}
 

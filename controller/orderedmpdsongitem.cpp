@@ -1,7 +1,7 @@
 #include "orderedmpdsongitem.h"
 
 OrderedMPDSongItem ::OrderedMPDSongItem(mpd_song *song, Item *parent)
-    : OrderedSongItem(QIcon(":/icons/audio-x-generic.svg"),
+    : OrderedSongItem(QIcon::fromTheme("audio-x-generic"),
                       Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                       false,
                       false,

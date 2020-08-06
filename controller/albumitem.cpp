@@ -3,7 +3,7 @@
 #include "orderedmpdsongitem.h"
 
 AlbumItem::AlbumItem(QString album, Item *parent)
-    : Item(QIcon(":/icons/media-optical-audio.svg"), Qt::ItemIsEnabled, true, true, parent)
+    : Item(QIcon::fromTheme("media-optical-audio"), Qt::ItemIsEnabled, true, true, parent)
     , m_album(album)
 {}
 
