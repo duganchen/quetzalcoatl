@@ -47,7 +47,7 @@ Qt::ItemFlags QueueModel::flags(const QModelIndex &index) const
             return static_cast<Item *>(index.internalPointer())->flags();
         }
 
-        return Qt::NoItemFlags;
+        return Qt::ItemIsEnabled;
     }
 
     // The drop target is between rows.
