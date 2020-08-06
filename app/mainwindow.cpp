@@ -149,6 +149,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_controller, &Controller::sliderMax, [=](int value) {
         if (!m_slider->isSliderDown()) {
             m_slider->setMaximum(value);
+
+            // Skipping only works if you have a song playing.
+            skipForthAction->setEnabled(value);
+            skipBackAction->setEnabled(value);
         }
     });
     connect(m_controller, &Controller::sliderValue, [=](int value) {
