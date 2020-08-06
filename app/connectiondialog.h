@@ -17,6 +17,9 @@ public:
     explicit ConnectionDialog(Controller *,
                               QWidget *parent = nullptr,
                               Qt::WindowFlags f = Qt::WindowFlags());
+
+    bool isProtected() const;
+    QString password() const;
 public slots:
     void setConnectionState(Controller::ConnectionState);
     void connectToMPD();

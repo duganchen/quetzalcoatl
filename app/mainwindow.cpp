@@ -24,6 +24,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , m_seekPosition(0)
+    , m_controller(nullptr)
 {
     setWindowTitle(tr("Quetzalcoatl"));
 
@@ -31,14 +32,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowIcon(QIcon::fromTheme(IconNames::Player));
 
-    auto controller = new Controller(this);
-    connect(controller, &Controller::connectionState, this, &MainWindow::setConnectionState);
+    m_controller = new Controller(this);
+    connect(m_controller, &Controller::connectionState, this, &MainWindow::setConnectionState);
 
     auto toolBar = addToolBar("ToolBar");
     toolBar->setMovable(false);
     toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    m_connectionDialog = new ConnectionDialog(controller, this);
+    m_connectionDialog = new ConnectionDialog(m_controller, this);
 
     auto connectAction = toolBar->addAction(QIcon::fromTheme(IconNames::Connect),
                                             "Connect to MPD",
@@ -48,31 +49,31 @@ MainWindow::MainWindow(QWidget *parent)
     auto stopAction = toolBar->addAction(QIcon::fromTheme(IconNames::Stop), "Stop");
     stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
     stopAction->setEnabled(false);
-    connect(stopAction, &QAction::triggered, controller, &Controller::stop);
+    connect(stopAction, &QAction::triggered, m_controller, &Controller::stop);
     m_connectedActions.append(stopAction);
 
     auto playAction = toolBar->addAction(QIcon::fromTheme(IconNames::Start), "Play");
     playAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPlay));
     playAction->setEnabled(false);
-    connect(playAction, &QAction::triggered, controller, &Controller::play);
+    connect(playAction, &QAction::triggered, m_controller, &Controller::play);
     m_connectedActions.append(playAction);
 
     auto pauseAction = toolBar->addAction(QIcon::fromTheme(IconNames::Pause), "Pause");
     pauseAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPause));
     pauseAction->setEnabled(false);
-    connect(pauseAction, &QAction::triggered, controller, &Controller::pause);
+    connect(pauseAction, &QAction::triggered, m_controller, &Controller::pause);
     m_connectedActions.append(pauseAction);
 
     auto skipBackAction = toolBar->addAction(QIcon::fromTheme(IconNames::SkipBackward), "Previous");
     skipBackAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPrevious));
     skipBackAction->setEnabled(false);
-    connect(skipBackAction, &QAction::triggered, controller, &Controller::skipBack);
+    connect(skipBackAction, &QAction::triggered, m_controller, &Controller::skipBack);
     m_connectedActions.append(skipBackAction);
 
     auto skipForthAction = toolBar->addAction(QIcon::fromTheme(IconNames::SkipForward), "Next");
     skipForthAction->setShortcut(QKeySequence(Qt::Key::Key_MediaNext));
     skipForthAction->setEnabled(false);
-    connect(skipForthAction, &QAction::triggered, controller, &Controller::skipForth);
+    connect(skipForthAction, &QAction::triggered, m_controller, &Controller::skipForth);
     m_connectedActions.append(skipForthAction);
 
     toolBar->addSeparator();
@@ -80,13 +81,13 @@ MainWindow::MainWindow(QWidget *parent)
     auto randomAction = toolBar->addAction(QIcon::fromTheme(IconNames::Shuffle), "Random");
     randomAction->setCheckable(true);
     randomAction->setEnabled(false);
-    connect(randomAction, &QAction::toggled, controller, &Controller::random);
+    connect(randomAction, &QAction::toggled, m_controller, &Controller::random);
     m_connectedActions.append(randomAction);
 
     auto repeatAction = toolBar->addAction(QIcon::fromTheme(IconNames::Repeat), "Repeat");
     repeatAction->setCheckable(true);
     repeatAction->setEnabled(false);
-    connect(repeatAction, &QAction::toggled, controller, &Controller::repeat);
+    connect(repeatAction, &QAction::toggled, m_controller, &Controller::repeat);
 
     m_connectedActions.append(repeatAction);
 
@@ -97,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
     deleteAction->setEnabled(false);
 
     auto playlistValidator = new PlaylistValidator(this);
-    connect(controller,
+    connect(m_controller,
             &Controller::playlistNames,
             playlistValidator,
             &PlaylistValidator::setPlaylists);
@@ -121,14 +122,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(savePlaylistDialog, &SavePlaylistDialog::accepted, [=]() {
         auto name = savePlaylistDialog->name();
         if (!name.isEmpty()) {
-            controller->savePlaylist(name);
+            m_controller->savePlaylist(name);
         }
         savePlaylistDialog->clear();
     });
 
     toolBar->addSeparator();
 
-    auto playbackSettingsDialog = new PlaybackSettingsDialog(controller, this);
+    auto playbackSettingsDialog = new PlaybackSettingsDialog(m_controller, this);
     m_connectedWidgets.append(playbackSettingsDialog);
     playbackSettingsDialog->setEnabled(false);
     auto playbackSettingsAction = toolBar->addAction(QIcon::fromTheme(IconNames::Configure),
@@ -145,25 +146,25 @@ MainWindow::MainWindow(QWidget *parent)
     m_slider = new QSlider(Qt::Horizontal);
     m_slider->setTracking(false);
 
-    connect(controller, &Controller::sliderMax, [=](int value) {
+    connect(m_controller, &Controller::sliderMax, [=](int value) {
         if (!m_slider->isSliderDown()) {
             m_slider->setMaximum(value);
         }
     });
-    connect(controller, &Controller::sliderValue, [=](int value) {
+    connect(m_controller, &Controller::sliderValue, [=](int value) {
         if (!m_slider->isSliderDown()) {
             m_slider->setValue(value);
         }
     });
 
-    connect(controller, &Controller::statusMessage, statusBar(), &QStatusBar::showMessage);
+    connect(m_controller, &Controller::statusMessage, statusBar(), &QStatusBar::showMessage);
     layout->addWidget(m_slider);
     m_slider->setEnabled(false);
     m_connectedWidgets.append(m_slider);
 
     auto splitter = new QSplitter();
 
-    auto databaseModel = new DatabaseModel(controller);
+    auto databaseModel = new DatabaseModel(m_controller);
     auto databaseView = new QTreeView();
     connect(databaseView, &QTreeView::doubleClicked, databaseModel, &ItemModel::onDoubleClicked);
     databaseView->setHeaderHidden(true);
@@ -186,7 +187,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(deletePlaylistAction, &QAction::triggered, [=]() {
         auto item = static_cast<Item *>(databaseView->currentIndex().internalPointer());
-        controller->deletePlaylist(item->text(0));
+        m_controller->deletePlaylist(item->text(0));
     });
 
     auto renamePlaylistAction = new QAction("Rename", this);
@@ -207,11 +208,11 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
 
-    auto queueModel = new QueueModel(controller);
+    auto queueModel = new QueueModel(m_controller);
 
     connect(m_slider, &QSlider::sliderMoved, [=](int value) { m_seekPosition = value; });
     connect(m_slider, &QSlider::sliderReleased, [=]() {
-        controller->seek(queueModel->songId(), m_seekPosition);
+        m_controller->seek(queueModel->songId(), m_seekPosition);
     });
 
     auto queueView = new QTreeView();
@@ -255,15 +256,15 @@ MainWindow::MainWindow(QWidget *parent)
     auto status = statusBar();
     auto combinedTimeLabel = new QLabel();
     status->addPermanentWidget(combinedTimeLabel);
-    connect(controller, &Controller::combinedTime, combinedTimeLabel, &QLabel::setText);
+    connect(m_controller, &Controller::combinedTime, combinedTimeLabel, &QLabel::setText);
 
     auto timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, controller, &Controller::updateStatus);
+    connect(timer, &QTimer::timeout, m_controller, &Controller::updateStatus);
     timer->start(1000);
 
     // Error messages from the Controller are unforeseen and unrecoverable. If we get one, then we just
     // let the user shut the program down.
-    connect(controller, &Controller::errorMessage, [=](QString message) {
+    connect(m_controller, &Controller::errorMessage, [=](QString message) {
         QMessageBox::critical(this, "Critical error", message);
         setConnectionState(Controller::ConnectionState::Disconnected);
         connectAction->setEnabled(false);
@@ -271,17 +272,17 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     // These are, say, when you rename a playlist to a name that already exists.
-    connect(controller, &Controller::serverErrorMessage, [=](QString message) {
+    connect(m_controller, &Controller::serverErrorMessage, [=](QString message) {
         QMessageBox::critical(this, "Server error", message);
     });
 
-    connect(controller, &Controller::repeating, repeatAction, &QAction::setChecked);
-    connect(controller, &Controller::shuffled, randomAction, &QAction::setChecked);
-    connect(controller,
+    connect(m_controller, &Controller::repeating, repeatAction, &QAction::setChecked);
+    connect(m_controller, &Controller::shuffled, randomAction, &QAction::setChecked);
+    connect(m_controller,
             &Controller::volume,
             playbackSettingsDialog,
             &PlaybackSettingsDialog::setVolume);
-    connect(controller,
+    connect(m_controller,
             &Controller::crossfade,
             playbackSettingsDialog,
             &PlaybackSettingsDialog::setCrossfade);
@@ -316,6 +317,11 @@ void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
         }
 
         statusBar()->clearMessage();
+
+        // Just a heads up that I've never tested this.
+        if (m_connectionDialog->isProtected()) {
+            m_controller->password(m_connectionDialog->password());
+        }
     }
 }
 

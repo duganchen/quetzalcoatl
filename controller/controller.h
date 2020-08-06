@@ -73,6 +73,8 @@ public slots:
     void random(bool);
     void repeat(bool);
 
+    void password(QString);
+
 signals:
     void errorMessage(QString);
 

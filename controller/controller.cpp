@@ -989,3 +989,14 @@ void Controller::seek(unsigned songid, unsigned time)
     }
     enableIdle();
 }
+
+void Controller::password(QString value)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    if (!mpd_run_password(m_connection, value.toUtf8().constData())) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+}

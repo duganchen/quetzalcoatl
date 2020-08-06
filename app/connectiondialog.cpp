@@ -141,3 +141,13 @@ void ConnectionDialog::restoreDefaults()
     QSettings settings;
     settings.clear();
 }
+
+bool ConnectionDialog::isProtected() const
+{
+    return m_passwordCheck->isChecked();
+}
+
+QString ConnectionDialog::password() const
+{
+    return m_passwordEdit->text();
+}
