@@ -962,3 +962,16 @@ void Controller::deleteSongIds(const QVector<unsigned> &songIds)
     }
     enableIdle();
 }
+
+void Controller::seek(unsigned songid, unsigned time)
+{
+    disableIdle();
+    if (!m_connection) {
+        return;
+    }
+
+    if (!mpd_run_seek_id(m_connection, songid, time)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+    }
+    enableIdle();
+}

@@ -215,3 +215,8 @@ void QueueModel::deleteIndexes(const QModelIndexList &indexes)
     }
     controller()->deleteSongIds(songIds);
 }
+
+int QueueModel::songId() const
+{
+    return m_songId;
+}

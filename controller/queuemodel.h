@@ -33,6 +33,8 @@ public:
 
     void deleteIndexes(const QModelIndexList &);
 
+    int songId() const;
+
 public slots:
     void setQueue(const QVector<Item *> &);
     void setSongId(int);

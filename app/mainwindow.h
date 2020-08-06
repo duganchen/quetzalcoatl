@@ -33,6 +33,7 @@ private:
 
 private:
     void onPaletteChanged();
+    int m_seekPosition;
 private slots:
     void setConnectionState(Controller::ConnectionState);
 };

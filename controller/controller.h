@@ -57,6 +57,8 @@ public:
 
     void deleteSongIds(const QVector<unsigned> &);
 
+    void seek(unsigned, unsigned);
+
 public slots:
     void connectToMPD(QString, int, int);
 

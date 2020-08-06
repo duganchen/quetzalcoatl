@@ -23,6 +23,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , m_seekPosition(0)
 {
     setWindowTitle(tr("Quetzalcoatl"));
 
@@ -137,13 +138,25 @@ MainWindow::MainWindow(QWidget *parent)
     m_connectedActions.append(playbackSettingsAction);
 
     auto layout = new QVBoxLayout();
+
+    // Is the slider being dragged?
+    bool isDragging = false;
+
     m_slider = new QSlider(Qt::Horizontal);
     m_slider->setTracking(false);
 
-    connect(controller, &Controller::sliderMax, m_slider, &QSlider::setMaximum);
-    connect(controller, &Controller::sliderValue, m_slider, &QSlider::setValue);
-    connect(controller, &Controller::statusMessage, statusBar(), &QStatusBar::showMessage);
+    connect(controller, &Controller::sliderMax, [=](int value) {
+        if (!m_slider->isSliderDown()) {
+            m_slider->setMaximum(value);
+        }
+    });
+    connect(controller, &Controller::sliderValue, [=](int value) {
+        if (!m_slider->isSliderDown()) {
+            m_slider->setValue(value);
+        }
+    });
 
+    connect(controller, &Controller::statusMessage, statusBar(), &QStatusBar::showMessage);
     layout->addWidget(m_slider);
     m_slider->setEnabled(false);
     m_connectedWidgets.append(m_slider);
@@ -195,6 +208,11 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     auto queueModel = new QueueModel(controller);
+
+    connect(m_slider, &QSlider::sliderMoved, [=](int value) { m_seekPosition = value; });
+    connect(m_slider, &QSlider::sliderReleased, [=]() {
+        controller->seek(queueModel->songId(), m_seekPosition);
+    });
 
     auto queueView = new QTreeView();
 
