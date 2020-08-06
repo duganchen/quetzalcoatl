@@ -59,6 +59,15 @@ public slots:
 
     void updateStatus();
 
+    void stop();
+    void play();
+    void pause();
+    void skipForth();
+    void skipBack();
+
+    void random(bool);
+    void repeat(bool);
+
 signals:
     void errorMessage(QString);
     void connectionState(Controller::ConnectionState connectionState);

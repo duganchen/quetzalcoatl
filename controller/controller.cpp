@@ -835,3 +835,101 @@ void Controller::deletePlaylist(QString name)
     }
     enableIdle();
 }
+
+void Controller::stop()
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_stop(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+    enableIdle();
+}
+
+void Controller::play()
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_play(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+    enableIdle();
+}
+
+void Controller::pause()
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_toggle_pause(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+    enableIdle();
+}
+
+void Controller::skipForth()
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_next(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+    enableIdle();
+}
+
+void Controller::skipBack()
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_previous(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+    enableIdle();
+}
+
+void Controller::random(bool isRandom)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_random(m_connection, isRandom)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+    enableIdle();
+}
+
+void Controller::repeat(bool isRepeating)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    if (!mpd_run_repeat(m_connection, isRepeating)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+    enableIdle();
+}

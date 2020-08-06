@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setWindowTitle(tr("Quetzalcoatl"));
 
-    qDebug() << "Logging works";
     onPaletteChanged();
 
     setWindowIcon(QIcon::fromTheme(IconNames::Player));
@@ -47,44 +46,52 @@ MainWindow::MainWindow(QWidget *parent)
     auto stopAction = toolBar->addAction(QIcon::fromTheme(IconNames::Stop), "Stop");
     stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
     stopAction->setEnabled(false);
+    connect(stopAction, &QAction::triggered, controller, &Controller::stop);
     m_connectedActions.append(stopAction);
 
     auto playAction = toolBar->addAction(QIcon::fromTheme(IconNames::Start), "Play");
     playAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPlay));
     playAction->setEnabled(false);
+    connect(playAction, &QAction::triggered, controller, &Controller::play);
     m_connectedActions.append(playAction);
 
     auto pauseAction = toolBar->addAction(QIcon::fromTheme(IconNames::Pause), "Pause");
     pauseAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPause));
     pauseAction->setEnabled(false);
+    connect(pauseAction, &QAction::triggered, controller, &Controller::pause);
     m_connectedActions.append(pauseAction);
 
     auto skipBackAction = toolBar->addAction(QIcon::fromTheme(IconNames::SkipBackward), "Previous");
     skipBackAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPrevious));
     skipBackAction->setEnabled(false);
+    connect(skipBackAction, &QAction::triggered, controller, &Controller::skipBack);
     m_connectedActions.append(skipBackAction);
 
     auto skipForthAction = toolBar->addAction(QIcon::fromTheme(IconNames::SkipForward), "Next");
     skipForthAction->setShortcut(QKeySequence(Qt::Key::Key_MediaNext));
     skipForthAction->setEnabled(false);
+    connect(skipForthAction, &QAction::triggered, controller, &Controller::skipForth);
     m_connectedActions.append(skipForthAction);
 
     toolBar->addSeparator();
 
-    auto shuffleAction = toolBar->addAction(QIcon::fromTheme(IconNames::Shuffle), "Shuffle");
-    shuffleAction->setCheckable(true);
-    shuffleAction->setEnabled(false);
-    m_connectedActions.append(shuffleAction);
+    auto randomAction = toolBar->addAction(QIcon::fromTheme(IconNames::Shuffle), "Random");
+    randomAction->setCheckable(true);
+    randomAction->setEnabled(false);
+    connect(randomAction, &QAction::toggled, controller, &Controller::random);
+    m_connectedActions.append(randomAction);
 
     auto repeatAction = toolBar->addAction(QIcon::fromTheme(IconNames::Repeat), "Repeat");
     repeatAction->setCheckable(true);
     repeatAction->setEnabled(false);
+    connect(repeatAction, &QAction::toggled, controller, &Controller::repeat);
+
     m_connectedActions.append(repeatAction);
 
     toolBar->addSeparator();
 
     auto deleteAction = toolBar->addAction(QIcon::fromTheme(IconNames::Remove),
-                                           "[DEL]ete selected playlist items");
+                                           "[DEL]ete selected songs from the queue.");
     deleteAction->setEnabled(false);
 
     deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
@@ -92,7 +99,7 @@ MainWindow::MainWindow(QWidget *parent)
     savePlaylistDialog->setEnabled(false);
 
     auto savePlaylistAction = toolBar->addAction(QIcon::fromTheme(IconNames::SaveAll),
-                                                 "[CTRL-S]ave playlist",
+                                                 "[CTRL-S]ave queue to playlist",
                                                  [=]() { savePlaylistDialog->exec(); });
 
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
@@ -212,7 +219,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(controller, &Controller::repeating, repeatAction, &QAction::setChecked);
-    connect(controller, &Controller::shuffled, shuffleAction, &QAction::setChecked);
+    connect(controller, &Controller::shuffled, randomAction, &QAction::setChecked);
     connect(controller,
             &Controller::volume,
             playbackSettingsDialog,
