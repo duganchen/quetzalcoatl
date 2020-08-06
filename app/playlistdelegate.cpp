@@ -34,5 +34,8 @@ void PlaylistDelegate::setModelData(QWidget *editor,
 {
     auto lineEdit = static_cast<QLineEdit *>(editor);
     auto dbModel = static_cast<DatabaseModel *>(model);
-    dbModel->renamePlaylist(index, lineEdit->text());
+    auto name = lineEdit->text().trimmed();
+    if (!name.isEmpty()) {
+        dbModel->renamePlaylist(index, name);
+    }
 }

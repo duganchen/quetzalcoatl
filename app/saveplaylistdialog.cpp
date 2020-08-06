@@ -28,5 +28,10 @@ SavePlaylistDialog::SavePlaylistDialog(QValidator *validator, QWidget *parent, Q
 
 QString SavePlaylistDialog::name() const
 {
-    return m_nameEdit->text();
+    return m_nameEdit->text().trimmed();
+}
+
+void SavePlaylistDialog::clear()
+{
+    m_nameEdit->clear();
 }

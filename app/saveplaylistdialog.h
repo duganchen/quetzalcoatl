@@ -1,7 +1,5 @@
 #ifndef SAVEPLAYLISTDIALOG_H
 #define SAVEPLAYLISTDIALOG_H
-
-#include "controller.h"
 #include <QDialog>
 #include <QLineEdit>
 
@@ -14,6 +12,8 @@ public:
                                 Qt::WindowFlags f = Qt::WindowFlags());
 
     QString name() const;
+
+    void clear();
 signals:
 private:
     QLineEdit *m_nameEdit;

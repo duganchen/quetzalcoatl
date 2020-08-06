@@ -26,8 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setWindowTitle(tr("Quetzalcoatl"));
 
-    qDebug() << "Logging works";
-
     onPaletteChanged();
 
     setWindowIcon(QIcon::fromTheme(IconNames::Player));
@@ -110,14 +108,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto savePlaylistAction = toolBar->addAction(QIcon::fromTheme(IconNames::SaveAll),
                                                  "[CTRL-S]ave queue to playlist",
-                                                 [=]() { savePlaylistDialog->exec(); });
+                                                 [=]() {
+                                                     savePlaylistDialog->clear();
+                                                     savePlaylistDialog->exec();
+                                                 });
 
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
     savePlaylistAction->setEnabled(false);
     m_connectedActions.append(savePlaylistAction);
 
     connect(savePlaylistDialog, &SavePlaylistDialog::accepted, [=]() {
-        qDebug() << "Saving playlist named " << savePlaylistDialog->name();
+        auto name = savePlaylistDialog->name();
+        if (!name.isEmpty()) {
+            controller->savePlaylist(name);
+        }
+        savePlaylistDialog->clear();
     });
 
     toolBar->addSeparator();
@@ -222,6 +227,7 @@ MainWindow::MainWindow(QWidget *parent)
             });
 
     connect(queueModel, &QueueModel::hasSongs, savePlaylistAction, &QAction::setEnabled);
+    connect(queueModel, &QueueModel::hasSongs, savePlaylistDialog, &SavePlaylistDialog::setEnabled);
 
     m_connectedWidgets.append(queueView);
     layout->addWidget(splitter);
