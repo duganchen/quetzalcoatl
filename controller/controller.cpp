@@ -532,16 +532,17 @@ void Controller::handleIdle(mpd_idle idle)
             statusUpdate = true;
         }
         if (idle & MPD_IDLE_MIXER) {
-            qDebug() << "the volume has been modified";
+            statusUpdate = true;
         }
         if (idle & MPD_IDLE_OUTPUT) {
             qDebug() << "an audio output device has been enabled or disabled";
         }
         if (idle & MPD_IDLE_OPTIONS) {
-            qDebug() << "options have changed: crossfade, random, repeat, ...";
+            statusUpdate = true;
         }
         if (idle & MPD_IDLE_UPDATE) {
             emit updated();
+            statusUpdate = true;
         }
         if (idle & MPD_IDLE_STICKER) {
             qDebug() << "a sticker has been modified.";
@@ -968,10 +969,12 @@ void Controller::deleteSongIds(const QVector<unsigned> &songIds)
 
     if (!mpd_command_list_end(m_connection)) {
         emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
     }
 
     if (!mpd_response_finish(m_connection)) {
         emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
     }
 
     enableIdle();
@@ -986,6 +989,7 @@ void Controller::seek(unsigned songid, unsigned time)
 
     if (!mpd_run_seek_id(m_connection, songid, time)) {
         emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
     }
     enableIdle();
 }
@@ -996,7 +1000,44 @@ void Controller::password(QString value)
         return;
     }
 
+    disableIdle();
+
     if (!mpd_run_password(m_connection, value.toUtf8().constData())) {
         emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
     }
+
+    enableIdle();
+}
+
+void Controller::setCrossfade(unsigned seconds)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+
+    if (!mpd_run_crossfade(m_connection, seconds)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
+    enableIdle();
+}
+
+void Controller::setVolume(unsigned volume)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+
+    if (!mpd_run_set_volume(m_connection, volume)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
+    enableIdle();
 }

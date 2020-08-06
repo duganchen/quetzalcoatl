@@ -287,6 +287,13 @@ MainWindow::MainWindow(QWidget *parent)
             playbackSettingsDialog,
             &PlaybackSettingsDialog::setCrossfade);
 
+    connect(playbackSettingsDialog, &PlaybackSettingsDialog::accepted, [=]() {
+        m_controller->setCrossfade(playbackSettingsDialog->crossfade());
+        if (playbackSettingsDialog->hasVolume()) {
+            m_controller->setVolume(playbackSettingsDialog->volume());
+        }
+    });
+
     QSettings settings;
     if (settings.contains("host") && settings.contains("port")) {
         m_connectionDialog->connectToMPD();

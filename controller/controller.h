@@ -58,7 +58,10 @@ public:
     void deleteSongIds(const QVector<unsigned> &);
 
     void seek(unsigned, unsigned);
+    void password(QString);
 
+    void setCrossfade(unsigned);
+    void setVolume(unsigned);
 public slots:
     void connectToMPD(QString, int, int);
 
@@ -72,8 +75,6 @@ public slots:
 
     void random(bool);
     void repeat(bool);
-
-    void password(QString);
 
 signals:
     void errorMessage(QString);

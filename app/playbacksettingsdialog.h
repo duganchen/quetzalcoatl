@@ -13,6 +13,10 @@ public:
     explicit PlaybackSettingsDialog(Controller *,
                                     QWidget *parent = nullptr,
                                     Qt::WindowFlags f = Qt::WindowFlags());
+
+    unsigned crossfade() const;
+    unsigned volume() const;
+    bool hasVolume() const;
 public slots:
     void setCrossfade(int);
     void setVolume(int);

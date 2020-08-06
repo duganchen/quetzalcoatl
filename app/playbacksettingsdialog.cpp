@@ -41,7 +41,9 @@ PlaybackSettingsDialog::PlaybackSettingsDialog(Controller *controller,
 
 void PlaybackSettingsDialog::setCrossfade(int value)
 {
-    m_fadeSpinner->setValue(value);
+    if (!isVisible()) {
+        m_fadeSpinner->setValue(value);
+    }
 }
 
 void PlaybackSettingsDialog::setVolume(int value)
@@ -49,8 +51,23 @@ void PlaybackSettingsDialog::setVolume(int value)
     if (value == -1) {
         m_volumeSpinner->setValue(0);
         m_volumeSpinner->setEnabled(false);
-    } else {
+    } else if (!isVisible()) {
         m_volumeSpinner->setEnabled(true);
         m_volumeSpinner->setValue(value);
     }
+}
+
+bool PlaybackSettingsDialog::hasVolume() const
+{
+    return m_volumeSpinner->isEnabled();
+}
+
+unsigned PlaybackSettingsDialog::volume() const
+{
+    return static_cast<unsigned>(m_volumeSpinner->value());
+}
+
+unsigned PlaybackSettingsDialog::crossfade() const
+{
+    return static_cast<unsigned>(m_fadeSpinner->value());
 }
