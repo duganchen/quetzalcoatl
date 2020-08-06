@@ -247,6 +247,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(queueModel, &QueueModel::hasSongs, savePlaylistAction, &QAction::setEnabled);
     connect(queueModel, &QueueModel::hasSongs, savePlaylistDialog, &SavePlaylistDialog::setEnabled);
 
+    connect(queueModel, &QueueModel::songIndex, queueView, [=](const QModelIndex &index) {
+        queueView->scrollTo(index);
+    });
+
     m_connectedWidgets.append(queueView);
     layout->addWidget(splitter);
     auto widget = new QWidget();

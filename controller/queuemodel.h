@@ -42,6 +42,8 @@ public slots:
 signals:
     void hasSongs(bool);
 
+    void songIndex(const QModelIndex &);
+
 private:
     int m_songId;
 };

@@ -191,7 +191,11 @@ void QueueModel::setSongId(int songId)
 
         // The currently playing song is now bolded.
         if (m_songId > 0 && id == static_cast<unsigned>(m_songId)) {
-            emit dataChanged(index(i, 0, QModelIndex()), index(i, 0, QModelIndex()), {Qt::FontRole});
+            auto playingIndex = index(i, 0, QModelIndex());
+            emit dataChanged(playingIndex, playingIndex, {Qt::FontRole});
+
+            // Scroll to it.
+            emit songIndex(playingIndex);
         }
     }
 }
