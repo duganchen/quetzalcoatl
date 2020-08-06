@@ -25,7 +25,7 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
 
     setRootItem(dbRootItem);
 
-    connect(controller, &Controller::playlists, this, &DatabaseModel::setPlaylists);
+    connect(controller, &Controller::playlistItems, this, &DatabaseModel::setPlaylists);
     connect(controller, &Controller::connectionState, this, &DatabaseModel::onConnectionChanged);
 }
 

@@ -4,6 +4,7 @@
 #include "iconnames.h"
 #include "playbacksettingsdialog.h"
 #include "playlistdelegate.h"
+#include "playlistvalidator.h"
 #include "queuemodel.h"
 #include "saveplaylistdialog.h"
 #include <QDebug>
@@ -24,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("Quetzalcoatl"));
+
+    qDebug() << "Logging works";
 
     onPaletteChanged();
 
@@ -94,9 +97,16 @@ MainWindow::MainWindow(QWidget *parent)
                                            "[DEL]ete selected songs from the queue.");
     deleteAction->setEnabled(false);
 
+    auto playlistValidator = new PlaylistValidator(this);
+    connect(controller,
+            &Controller::playlistNames,
+            playlistValidator,
+            &PlaylistValidator::setPlaylists);
+
     deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
-    auto savePlaylistDialog = new SavePlaylistDialog(controller, this);
+    auto savePlaylistDialog = new SavePlaylistDialog(playlistValidator, this);
     savePlaylistDialog->setEnabled(false);
+    m_connectedWidgets.append(savePlaylistDialog);
 
     auto savePlaylistAction = toolBar->addAction(QIcon::fromTheme(IconNames::SaveAll),
                                                  "[CTRL-S]ave queue to playlist",
@@ -105,6 +115,10 @@ MainWindow::MainWindow(QWidget *parent)
     savePlaylistAction->setShortcut(QKeySequence("CTRL+S"));
     savePlaylistAction->setEnabled(false);
     m_connectedActions.append(savePlaylistAction);
+
+    connect(savePlaylistDialog, &SavePlaylistDialog::accepted, [=]() {
+        qDebug() << "Saving playlist named " << savePlaylistDialog->name();
+    });
 
     toolBar->addSeparator();
 
@@ -139,7 +153,9 @@ MainWindow::MainWindow(QWidget *parent)
     databaseView->setEnabled(false);
     databaseView->setSelectionMode(QTreeView::ExtendedSelection);
     databaseView->setDragEnabled(true);
-    databaseView->setItemDelegate(new PlaylistDelegate());
+
+    auto playlistDelegate = new PlaylistDelegate(playlistValidator, this);
+    databaseView->setItemDelegate(playlistDelegate);
     m_connectedWidgets.append(databaseView);
     splitter->addWidget(databaseView);
 
@@ -229,6 +245,11 @@ MainWindow::MainWindow(QWidget *parent)
         setConnectionState(Controller::ConnectionState::Disconnected);
         connectAction->setEnabled(false);
         timer->stop();
+    });
+
+    // These are, say, when you rename a playlist to a name that already exists.
+    connect(controller, &Controller::serverErrorMessage, [=](QString message) {
+        QMessageBox::critical(this, "Server error", message);
     });
 
     connect(controller, &Controller::repeating, repeatAction, &QAction::setChecked);

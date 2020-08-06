@@ -4,8 +4,9 @@
 #include <QDebug>
 #include <QLineEdit>
 
-PlaylistDelegate::PlaylistDelegate(QObject *parent)
+PlaylistDelegate::PlaylistDelegate(QValidator *validator, QObject *parent)
     : QStyledItemDelegate(parent)
+    , m_validator(validator)
 {}
 
 QWidget *PlaylistDelegate::createEditor(QWidget *parent,
@@ -13,7 +14,11 @@ QWidget *PlaylistDelegate::createEditor(QWidget *parent,
                                         const QModelIndex &index) const
 {
     auto lineEdit = new QLineEdit(parent);
-    return new QLineEdit(parent);
+    lineEdit->setValidator(m_validator);
+
+    // Plus dot, plus extension, makes 255.
+    lineEdit->setMaxLength(251);
+    return lineEdit;
 }
 
 void PlaylistDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const

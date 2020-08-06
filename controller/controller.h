@@ -33,7 +33,7 @@ public:
 
     QVector<QString> searchTags(mpd_tag_type, const QVector<QPair<mpd_tag_type, QString>>);
 
-    QVector<Item *> listPlaylists();
+    QVector<mpd_playlist *> listPlaylists();
 
     QVector<mpd_entity *> listPlaylist(mpd_playlist *);
 
@@ -51,6 +51,7 @@ public:
     void setCombinedTime(unsigned);
 
     void renamePlaylist(QString, QString);
+    void savePlaylist(QString);
 
     void deletePlaylist(QString);
 
@@ -72,6 +73,9 @@ public slots:
 
 signals:
     void errorMessage(QString);
+
+    void serverErrorMessage(QString);
+
     void connectionState(Controller::ConnectionState connectionState);
 
     void beginMPDCommand();
@@ -97,7 +101,10 @@ signals:
 
     void combinedTime(QString);
 
-    void playlists(const QVector<Item *> &);
+    // There's a technical reason for this: you can't have a signal that
+    // carries a pointer to a libmpdclient pointer (like mpd_playlist *).
+    void playlistItems(const QVector<Item *> &);
+    void playlistNames(const QVector<QString> &);
 
 private:
     void handleIdle(mpd_idle);
@@ -107,6 +114,8 @@ private:
     void disableIdle();
 
     void pollForStatus();
+
+    void checkStoredPlaylists();
 
     QString m_defaultHost;
     unsigned m_defaultPort;
@@ -121,7 +130,7 @@ private:
 
     mpd_state m_mpdPlayerState;
 
-    QVector<Item *> listPlaylistsImpl();
+    QVector<mpd_playlist *> listPlaylistsImpl();
 
 private slots:
     void handleActivation();

@@ -215,9 +215,9 @@ QVector<QString> Controller::searchTags(mpd_tag_type tagType,
     return tags;
 }
 
-QVector<Item *> Controller::listPlaylists()
+QVector<mpd_playlist *> Controller::listPlaylists()
 {
-    QVector<Item *> playlists;
+    QVector<mpd_playlist *> playlists;
 
     if (!m_connection) {
         return playlists;
@@ -230,9 +230,9 @@ QVector<Item *> Controller::listPlaylists()
     return thesePlaylists;
 }
 
-QVector<Item *> Controller::listPlaylistsImpl()
+QVector<mpd_playlist *> Controller::listPlaylistsImpl()
 {
-    QVector<Item *> playlists;
+    QVector<mpd_playlist *> playlists;
     if (!mpd_send_list_playlists(m_connection)) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
@@ -243,7 +243,7 @@ QVector<Item *> Controller::listPlaylistsImpl()
     mpd_playlist *playlist = nullptr;
 
     while ((playlist = mpd_recv_playlist(m_connection))) {
-        playlists.append(new PlaylistItem(playlist));
+        playlists.append(playlist);
     }
 
     if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
@@ -251,8 +251,8 @@ QVector<Item *> Controller::listPlaylistsImpl()
     }
 
     QCollator collator;
-    std::sort(playlists.begin(), playlists.end(), [&collator](Item *a, Item *b) {
-        return collator.compare(a->uri(), b->uri()) < 0;
+    std::sort(playlists.begin(), playlists.end(), [&collator](mpd_playlist *a, mpd_playlist *b) {
+        return collator.compare(mpd_playlist_get_path(a), mpd_playlist_get_path(b)) < 0;
     });
     return playlists;
 }
@@ -493,9 +493,7 @@ mpd_connection *Controller::mpd() const
 
 void Controller::handleIdle(mpd_idle idle)
 {
-    qDebug() << "When handling idle, it is " << idle;
     if (!idle && mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
-        qDebug() << "CLOSED";
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
         m_notifier = nullptr;
@@ -516,14 +514,16 @@ void Controller::handleIdle(mpd_idle idle)
         QVector<Item *> emptyQueue;
         emit queueChanged(emptyQueue);
 
+        QVector<QString> storedPlaylistNames;
+        emit playlistNames(storedPlaylistNames);
+
     } else {
         bool statusUpdate = false;
         if (idle & MPD_IDLE_DATABASE) {
             qDebug() << "song database has been updated";
         }
         if (idle & MPD_IDLE_STORED_PLAYLIST) {
-            qDebug() << "a stored playlist has been modified, created, deleted or renamed";
-            emit playlists(listPlaylistsImpl());
+            checkStoredPlaylists();
         }
         if (idle & MPD_IDLE_QUEUE || idle & MPD_IDLE_PLAYER) {
             qDebug() << "The queue has changed";
@@ -561,6 +561,20 @@ void Controller::handleIdle(mpd_idle idle)
     }
 }
 
+void Controller::checkStoredPlaylists()
+{
+    auto playlists = listPlaylistsImpl();
+    QVector<QString> names;
+    QVector<Item *> items;
+    for (auto playlist : playlists) {
+        names.append(mpd_playlist_get_path(playlist));
+        items.append(new PlaylistItem(playlist));
+    }
+
+    emit playlistNames(names);
+    emit playlistItems(items);
+}
+
 void Controller::createMPD(QString host, int port, int timeout_ms)
 {
     auto connection = mpd_connection_new(host.toUtf8().constData(), port, timeout_ms);
@@ -575,6 +589,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_SUCCESS) {
         emit connectionState(ConnectionState::Connected);
 
+        checkStoredPlaylists();
         pollForStatus();
 
         m_notifier = new QSocketNotifier(mpd_connection_get_fd(m_connection),
@@ -785,37 +800,30 @@ void Controller::renamePlaylist(QString from, QString to)
 
     disableIdle();
 
-    auto newName = to.trimmed();
+    if (!mpd_run_rename(m_connection, from.toUtf8().constData(), to.toUtf8().constData())) {
+        if (mpd_connection_get_error(m_connection) == MPD_ERROR_SERVER) {
+            emit serverErrorMessage(mpd_connection_get_error_message(m_connection));
+        } else {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+        }
+    }
 
-    if (newName.isEmpty()) {
+    enableIdle();
+}
+
+void Controller::savePlaylist(QString name)
+{
+    if (!m_connection) {
         return;
     }
 
-    if (newName.contains("\\")) {
-        return;
-    }
+    disableIdle();
 
-    if (newName.contains("/")) {
-        return;
-    }
-
-    if (newName.startsWith(".")) {
-        return;
-    }
-
-    qDebug() << "renaming from " << from.toUtf8().constData() << " to "
-             << newName.toUtf8().constData();
-    if (mpd_run_rename(m_connection, from.toUtf8().constData(), to.toUtf8().constData())) {
-        emit playlists(listPlaylistsImpl());
-    } else {
-        // This is robust enough, but I'm going to say that I've seen it lock up completely if the
-        // playlist renaming fails.
-        auto error = mpd_connection_get_error(m_connection);
-        if (error == MPD_ERROR_SERVER) {
-            auto serverError = mpd_connection_get_server_error(m_connection);
-            auto message = mpd_connection_get_error_message(m_connection);
-            qDebug() << "The server error is " << serverError << " " << message;
-            emit errorMessage(message);
+    if (!mpd_run_save(m_connection, name.toUtf8().constData())) {
+        if (mpd_connection_get_error(m_connection) == MPD_ERROR_SERVER) {
+            emit serverErrorMessage(mpd_connection_get_error_message(m_connection));
+        } else {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
         }
     }
 
@@ -829,10 +837,15 @@ void Controller::deletePlaylist(QString name)
     }
 
     disableIdle();
+
     if (!mpd_run_rm(m_connection, name.toUtf8().constData())) {
-        emit errorMessage(mpd_connection_get_error_message(m_connection));
-        return;
+        if (mpd_connection_get_error(m_connection) == MPD_ERROR_SERVER) {
+            emit serverErrorMessage(mpd_connection_get_error_message(m_connection));
+        } else {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+        }
     }
+
     enableIdle();
 }
 
