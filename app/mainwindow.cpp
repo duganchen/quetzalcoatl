@@ -187,12 +187,23 @@ MainWindow::MainWindow(QWidget *parent)
     splitter->addWidget(queueView);
     queueView->setEnabled(false);
 
+    connect(deleteAction, &QAction::triggered, [=]() {
+        qDebug() << "Deleting selected songs from the queue";
+        queueModel->deleteIndexes(queueView->selectionModel()->selectedIndexes());
+    });
+
     // This needs to be done after setting the model.
     // https://stackoverflow.com/a/30793898/240515
     connect(queueView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
             queueModel,
             &QueueModel::onSelectionChanged);
+
+    connect(queueView->selectionModel(),
+            &QItemSelectionModel::selectionChanged,
+            [=](const QItemSelection &selected, const QItemSelection &deselected) {
+                deleteAction->setEnabled(selected.count());
+            });
 
     m_connectedWidgets.append(queueView);
     layout->addWidget(splitter);

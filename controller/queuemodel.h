@@ -31,6 +31,8 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const override;
 
+    void deleteIndexes(const QModelIndexList &);
+
 public slots:
     void setQueue(const QVector<Item *> &);
     void setSongId(int);

@@ -204,3 +204,12 @@ void QueueModel::onSelectionChanged(const QItemSelection &selected, const QItemS
 
     controller()->setCombinedTime(combined);
 }
+
+void QueueModel::deleteIndexes(const QModelIndexList &indexes)
+{
+    QVector<unsigned> songIds;
+    for (auto &index : indexes) {
+        songIds << static_cast<Item *>(index.internalPointer())->id();
+    }
+    controller()->deleteSongIds(songIds);
+}

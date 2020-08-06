@@ -933,3 +933,19 @@ void Controller::repeat(bool isRepeating)
     }
     enableIdle();
 }
+
+void Controller::deleteSongIds(const QVector<unsigned> &songIds)
+{
+    if (!m_connection) {
+        return;
+    }
+
+    disableIdle();
+    for (auto id : songIds) {
+        if (!mpd_run_delete_id(m_connection, id)) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+    }
+    enableIdle();
+}
