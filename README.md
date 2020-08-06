@@ -10,11 +10,11 @@ Quetzalcoatl MPD is an MPD client. It targets Linux and OS X.
 
 ## Usage
 
-The left pane is your music database; the right pane is your "queue" (what MPD calls the playlist).
+The left pane is your music "database" (what MPD calls its library); the right pane is your "queue" (what MPD calls the playlist).
 
 Double-click on a song to play it or its album, as appropriate.
 
-Drag songs from the library to the playlist.
+Drag songs from the database to the queue.
 
 Drag songs around in the queue.
 
@@ -23,6 +23,8 @@ Drag the slider to seek within the current song.
 Hover your mouse over any song or toolbar button to get a tooltip.
 
 Select songs in the queue to see their combined time. Very useful if you're picking songs for a mix CD.
+
+Right-click on a stored playlist (in the database pane) for options to rename or delete it.
 
 ## Credits
 
