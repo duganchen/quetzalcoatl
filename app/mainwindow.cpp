@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setWindowTitle(tr("Quetzalcoatl"));
 
+    qDebug() << "Logging works";
+
     onPaletteChanged();
 
     setWindowIcon(QIcon::fromTheme(IconNames::Player));

@@ -347,21 +347,28 @@ QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
     auto directory = entity && mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_DIRECTORY
                          ? mpd_entity_get_directory(entity)
                          : nullptr;
-    auto path = directory ? mpd_directory_get_path(directory) : nullptr;
+    auto path = directory ? mpd_directory_get_path(directory) : "/";
 
     disableIdle();
 
-    mpd_entity *newEntity = nullptr;
-
-    if (!mpd_send_list_all_meta(m_connection, path)) {
+    if (!mpd_send_list_meta(m_connection, path)) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return listing;
         }
     }
+
+    mpd_entity *newEntity = nullptr;
+
     while ((newEntity = mpd_recv_entity(m_connection))) {
         auto entityType = mpd_entity_get_type(newEntity);
         if (entityType == MPD_ENTITY_TYPE_SONG || entityType == MPD_ENTITY_TYPE_DIRECTORY) {
+            if (MPD_ENTITY_TYPE_SONG == entityType) {
+                qDebug() << mpd_song_get_uri(mpd_entity_get_song(newEntity));
+            } else {
+                qDebug() << mpd_directory_get_path(mpd_entity_get_directory(newEntity));
+            }
+
             listing.append(newEntity);
         } else {
             mpd_entity_free(newEntity);
