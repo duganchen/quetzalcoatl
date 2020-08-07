@@ -363,12 +363,6 @@ QVector<mpd_entity *> Controller::listDir(mpd_entity *entity)
     while ((newEntity = mpd_recv_entity(m_connection))) {
         auto entityType = mpd_entity_get_type(newEntity);
         if (entityType == MPD_ENTITY_TYPE_SONG || entityType == MPD_ENTITY_TYPE_DIRECTORY) {
-            if (MPD_ENTITY_TYPE_SONG == entityType) {
-                qDebug() << mpd_song_get_uri(mpd_entity_get_song(newEntity));
-            } else {
-                qDebug() << mpd_directory_get_path(mpd_entity_get_directory(newEntity));
-            }
-
             listing.append(newEntity);
         } else {
             mpd_entity_free(newEntity);
@@ -454,12 +448,10 @@ void Controller::pollForStatus()
     emit repeating(mpd_status_get_repeat(status));
     emit volume(mpd_status_get_volume(status));
     emit crossfade(mpd_status_get_crossfade(status));
-    emit songId(mpd_status_get_song_id(status));
 
     m_mpdPlayerState = mpd_status_get_state(status);
 
     unsigned queueVersion = mpd_status_get_queue_version(status);
-    mpd_status_free(status);
 
     if (m_queueVersion != queueVersion) {
         m_queueVersion = queueVersion;
@@ -490,6 +482,8 @@ void Controller::pollForStatus()
         }
 
         emit queueChanged(queue);
+        emit songId(mpd_status_get_song_id(status));
+        mpd_status_free(status);
     }
 }
 
@@ -541,8 +535,9 @@ void Controller::handleIdle(mpd_idle idle)
 
     } else {
         bool statusUpdate = false;
+        bool dbUpdate = false;
         if (idle & MPD_IDLE_DATABASE) {
-            qDebug() << "song database has been updated";
+            dbUpdate = true;
         }
         if (idle & MPD_IDLE_STORED_PLAYLIST) {
             checkStoredPlaylists();
@@ -563,7 +558,7 @@ void Controller::handleIdle(mpd_idle idle)
             statusUpdate = true;
         }
         if (idle & MPD_IDLE_UPDATE) {
-            emit updated();
+            dbUpdate = true;
             statusUpdate = true;
         }
         if (idle & MPD_IDLE_STICKER) {
@@ -574,6 +569,10 @@ void Controller::handleIdle(mpd_idle idle)
         }
         if (idle & MPD_IDLE_MESSAGE) {
             qDebug() << "a message on a subscribed channel was received";
+        }
+
+        if (dbUpdate) {
+            emit updated();
         }
 
         if (statusUpdate) {
@@ -687,7 +686,7 @@ QVector<QString> Controller::listTags(mpd_tag_type tagType)
 
     if (!mpd_search_commit(m_connection)) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
-            qDebug() << mpd_connection_get_error_message(m_connection);
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
             return tags;
         }
     }
