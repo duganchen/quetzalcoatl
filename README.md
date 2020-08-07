@@ -4,6 +4,8 @@ Quetzalcoatl MPD is an MPD client. It targets Linux and OS X.
 
 ## Screenshots
 
+![KDE Neon](screenshots/kde_neon.jpg)
+
 ![OS X Light Mode](screenshots/osx_light_mode.jpg)
 
 ![OS X Dark Mode](screenshots/osx_dark_mode.jpg)
