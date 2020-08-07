@@ -482,9 +482,10 @@ void Controller::pollForStatus()
         }
 
         emit queueChanged(queue);
-        emit songId(mpd_status_get_song_id(status));
-        mpd_status_free(status);
     }
+
+    emit songId(mpd_status_get_song_id(status));
+    mpd_status_free(status);
 }
 
 QString Controller::defaultHost()
