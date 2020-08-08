@@ -160,14 +160,16 @@ QVariant QueueModel::data(const QModelIndex &index, int role) const
 
 void QueueModel::setQueue(const QVector<Item *> &queue)
 {
-    beginResetModel();
+    beginRemoveRows(QModelIndex(), 0, rootItem()->children().count() - 1);
     rootItem()->clear();
+    endRemoveRows();
+    beginInsertRows(QModelIndex(), 0, queue.count() - 1);
     for (auto songItem : queue) {
         rootItem()->append(songItem);
     }
-    endResetModel();
-    emit columnResized(1);
+    endInsertRows();
     emit columnResized(0);
+    emit columnResized(1);
 
     emit hasSongs(rootItem()->children().count());
 }
