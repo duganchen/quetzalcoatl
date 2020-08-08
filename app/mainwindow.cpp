@@ -41,9 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_connectionDialog = new ConnectionDialog(m_controller, this);
 
-    auto connectAction = toolBar->addAction(QIcon::fromTheme(IconNames::Connect),
-                                            "Connect to MPD",
-                                            [=]() { m_connectionDialog->exec(); });
+    m_connectAction = toolBar->addAction(QIcon::fromTheme(IconNames::Connect),
+                                         "Connect to MPD",
+                                         [=]() { m_connectionDialog->exec(); });
     toolBar->addSeparator();
 
     auto stopAction = toolBar->addAction(QIcon::fromTheme(IconNames::Stop), "Stop");
@@ -275,7 +275,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_controller, &Controller::errorMessage, [=](QString message) {
         QMessageBox::critical(this, "Critical error", message);
         setConnectionState(Controller::ConnectionState::Disconnected);
-        connectAction->setEnabled(false);
+        m_connectAction->setEnabled(false);
         timer->stop();
     });
 
@@ -322,6 +322,11 @@ void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
         for (auto action : m_connectedActions) {
             action->setEnabled(true);
         }
+
+        // Just a heads up that I've never tested this.
+        if (m_connectionDialog->isProtected()) {
+            m_controller->password(m_connectionDialog->password());
+        }
     } else {
         for (auto widget : m_connectedWidgets) {
             widget->setEnabled(false);
@@ -332,12 +337,9 @@ void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
         }
 
         statusBar()->clearMessage();
-
-        // Just a heads up that I've never tested this.
-        if (m_connectionDialog->isProtected()) {
-            m_controller->password(m_connectionDialog->password());
-        }
     }
+
+    m_connectAction->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
 }
 
 void MainWindow::changeEvent(QEvent *event)
