@@ -35,10 +35,14 @@ It currently uses:
 * Breeze icons
 * [Qt Creator's .clang-format](https://github.com/qt-creator/qt-creator/blob/master/.clang-format)
 
+## History
+
 Previous versions are described here:
 
 * [Quetzalcoatl 2.0 Screenshot](http://duganchen.ca/quetzalcoatl-2-0-screenshot/)
 * [Quetzalcoatl Music Player Client For MPD](https://duganchen.ca/project/software-development/quetzalcoatl-mpd-client/)
+
+Those versions have been moved to [quetzalcoatl-legacy](https://github.com/duganchen/quetzalcoatl-legacy). The master branch is the first release, and the experimental branch is the second one.
 
 ## Developer's Guide
 
