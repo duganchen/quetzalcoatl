@@ -786,7 +786,13 @@ void Controller::playAlbum(const QVector<QString> &uris, QString uri)
     }
 
     disableIdle();
-    if (!mpd_run_clear(m_connection)) {
+
+    if (!mpd_command_list_begin(m_connection, false)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
+    if (!mpd_send_clear(m_connection)) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
@@ -795,25 +801,29 @@ void Controller::playAlbum(const QVector<QString> &uris, QString uri)
 
     int returnedId = -1;
     unsigned id = UINT_MAX;
-    for (auto songUri : uris) {
-        if ((returnedId = mpd_run_add_id(m_connection, songUri.toUtf8().constData())) == -1) {
-            if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
+
+    for (unsigned pos = 0; pos < uris.count(); pos++) {
+        if (!mpd_send_add(m_connection, uris[pos].toUtf8().constData())) {
+            emit errorMessage(mpd_connection_get_error_message(m_connection));
+            return;
+        }
+
+        if (uris[pos] == uri) {
+            if (!mpd_send_play_pos(m_connection, pos)) {
                 emit errorMessage(mpd_connection_get_error_message(m_connection));
                 return;
             }
         }
+    }
 
-        id = static_cast<unsigned>(returnedId);
+    if (!mpd_command_list_end(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
 
-        if (songUri == uri) {
-            if (!mpd_run_play_id(m_connection, id)) {
-                if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
-                    emit errorMessage(mpd_connection_get_error_message(m_connection));
-
-                    return;
-                }
-            }
-        }
+    if (!mpd_response_finish(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
     }
 
     enableIdle();
