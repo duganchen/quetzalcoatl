@@ -47,31 +47,31 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar->addSeparator();
 
     auto stopAction = toolBar->addAction(QIcon::fromTheme(IconNames::Stop), "Stop");
-    stopAction->setShortcut(QKeySequence(Qt::Key::Key_MediaStop));
+    stopAction->setShortcut(Qt::Key::Key_MediaStop);
     stopAction->setEnabled(false);
     connect(stopAction, &QAction::triggered, m_controller, &Controller::stop);
     m_connectedActions.append(stopAction);
 
     auto playAction = toolBar->addAction(QIcon::fromTheme(IconNames::Start), "Play");
-    playAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPlay));
+    playAction->setShortcut(Qt::Key::Key_MediaPlay);
     playAction->setEnabled(false);
     connect(playAction, &QAction::triggered, m_controller, &Controller::play);
     m_connectedActions.append(playAction);
 
     auto pauseAction = toolBar->addAction(QIcon::fromTheme(IconNames::Pause), "Pause");
-    pauseAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPause));
+    pauseAction->setShortcut(Qt::Key::Key_MediaPause);
     pauseAction->setEnabled(false);
     connect(pauseAction, &QAction::triggered, m_controller, &Controller::pause);
     m_connectedActions.append(pauseAction);
 
     auto skipBackAction = toolBar->addAction(QIcon::fromTheme(IconNames::SkipBackward), "Previous");
-    skipBackAction->setShortcut(QKeySequence(Qt::Key::Key_MediaPrevious));
+    skipBackAction->setShortcut(Qt::Key::Key_MediaPrevious);
     skipBackAction->setEnabled(false);
     connect(skipBackAction, &QAction::triggered, m_controller, &Controller::skipBack);
     m_connectedActions.append(skipBackAction);
 
     auto skipForthAction = toolBar->addAction(QIcon::fromTheme(IconNames::SkipForward), "Next");
-    skipForthAction->setShortcut(QKeySequence(Qt::Key::Key_MediaNext));
+    skipForthAction->setShortcut(Qt::Key::Key_MediaNext);
     skipForthAction->setEnabled(false);
     connect(skipForthAction, &QAction::triggered, m_controller, &Controller::skipForth);
     m_connectedActions.append(skipForthAction);
