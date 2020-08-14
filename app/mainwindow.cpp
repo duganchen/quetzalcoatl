@@ -103,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
             playlistValidator,
             &PlaylistValidator::setPlaylists);
 
-    deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
+    deleteAction->setShortcut(QKeySequence::Delete);
     auto savePlaylistDialog = new SavePlaylistDialog(playlistValidator, this);
     savePlaylistDialog->setEnabled(false);
     m_connectedWidgets.append(savePlaylistDialog);
