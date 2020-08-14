@@ -11,7 +11,7 @@ CompilationArtistAlbumItem::CompilationArtistAlbumItem(QString albumArtist,
 
 QVector<Item *> CompilationArtistAlbumItem::fetchMore(Controller *controller)
 {
-    QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_ARTIST, m_albumArtist},
+    QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_ALBUM_ARTIST, m_albumArtist},
                                                  {MPD_TAG_ALBUM, m_album}};
     auto songs = controller->searchSongs(filter);
     QVector<Item *> items;
