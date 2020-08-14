@@ -86,18 +86,33 @@ void Controller::moveSongs(const QVector<QPair<unsigned, unsigned>> &sources, un
 
     // I haven't found a problem with the code below yet...
 
+    if (!mpd_command_list_begin(m_connection, false)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
     for (auto it = sources.cbegin(); it != sources.cend() && it->first < to; it++) {
-        if (!mpd_run_move_id(m_connection, it->second, to - 1)) {
+        if (!mpd_send_move_id(m_connection, it->second, to - 1)) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
     }
 
     for (auto it = sources.crbegin(); it != sources.crend() && it->first >= to; it++) {
-        if (!mpd_run_move_id(m_connection, it->second, to)) {
+        if (!mpd_send_move_id(m_connection, it->second, to)) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }
+    }
+
+    if (!mpd_command_list_end(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
+    }
+
+    if (!mpd_response_finish(m_connection)) {
+        emit errorMessage(mpd_connection_get_error_message(m_connection));
+        return;
     }
 
     enableIdle();

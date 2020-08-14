@@ -10,6 +10,8 @@
 
 int main(int argc, char *argv[])
 {
+    qputenv("QT_STYLE_OVERRIDE", "");
+
     QCoreApplication::setOrganizationName("dugan-c");
     QCoreApplication::setOrganizationDomain("duganchen.ca");
     QCoreApplication::setApplicationName("Quetzalcoatl");
