@@ -8,7 +8,6 @@
 #include <QCollator>
 #include <QDebug>
 #include <QtNetwork/QHostInfo>
-#include <QtNetwork/QLocalSocket>
 #include <QtNetwork/QTcpSocket>
 
 Controller::Controller(QObject *parent)
