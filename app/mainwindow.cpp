@@ -176,6 +176,7 @@ MainWindow::MainWindow(QWidget *parent)
     databaseView->setEnabled(false);
     databaseView->setSelectionMode(QTreeView::ExtendedSelection);
     databaseView->setDragEnabled(true);
+    databaseView->setUniformRowHeights(true);
 
     auto playlistDelegate = new PlaylistDelegate(playlistValidator, this);
     databaseView->setItemDelegate(playlistDelegate);
@@ -230,6 +231,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(queueModel, &ItemModel::columnResized, queueView, &QTreeView::resizeColumnToContents);
     splitter->addWidget(queueView);
     queueView->setEnabled(false);
+    queueView->setUniformRowHeights(true);
 
     connect(deleteAction, &QAction::triggered, [=]() {
         queueModel->deleteIndexes(queueView->selectionModel()->selectedIndexes());
