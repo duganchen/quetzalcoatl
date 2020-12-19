@@ -1,7 +1,6 @@
 #ifndef COMPOSERITEM_H
 #define COMPOSERITEM_H
 
-#include "controller.h"
 #include "item.h"
 
 class ComposerItem : public Item

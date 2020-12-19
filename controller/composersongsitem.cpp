@@ -1,4 +1,6 @@
 #include "composersongsitem.h"
+#include "controller.h"
+#include "iconnames.h"
 #include "unorderedmpdsongitem.h"
 
 ComposerSongsItem::ComposerSongsItem(QString composer, Item *parent)

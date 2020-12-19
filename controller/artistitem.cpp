@@ -1,6 +1,8 @@
 #include "artistitem.h"
 #include "artistalbumitem.h"
 #include "artistsongsitem.h"
+#include "controller.h"
+#include "iconnames.h"
 
 ArtistItem::ArtistItem(QString artist, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

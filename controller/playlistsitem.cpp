@@ -1,6 +1,7 @@
 #include "playlistsitem.h"
+#include "controller.h"
+#include "iconnames.h"
 #include "playlistitem.h"
-#include <QDebug>
 
 PlaylistsItem::PlaylistsItem(Item *parent)
     : Item(QIcon::fromTheme(IconNames::Favorites), Qt::ItemIsEnabled, true, true, parent)

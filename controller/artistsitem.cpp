@@ -1,5 +1,7 @@
 #include "artistsitem.h"
 #include "artistitem.h"
+#include "controller.h"
+#include "iconnames.h"
 
 ArtistsItem::ArtistsItem(Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

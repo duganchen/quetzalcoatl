@@ -1,8 +1,7 @@
 #include "genresitem.h"
 #include "controller.h"
 #include "genreitem.h"
-
-#include <QDebug>
+#include "iconnames.h"
 
 GenresItem::GenresItem(Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

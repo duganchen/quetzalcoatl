@@ -1,8 +1,12 @@
 #include "queuemodel.h"
+
+#include "controller.h"
 #include "item.h"
-#include <QByteArray>
-#include <QDebug>
+
 #include <QFont>
+#include <QIcon>
+#include <QItemSelection>
+#include <QMimeData>
 
 QueueModel::QueueModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)

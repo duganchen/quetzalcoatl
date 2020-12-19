@@ -2,10 +2,11 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
-#include "item.h"
 #include <mpd/client.h>
 #include <QObject>
-#include <QSocketNotifier>
+
+class Item;
+class QSocketNotifier;
 
 class CONTROLLER_EXPORT Controller : public QObject
 {

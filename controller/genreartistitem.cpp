@@ -3,8 +3,7 @@
 #include "genreartistalbumitem.h"
 #include "genreartistitem.h"
 #include "genreartistsongsitem.h"
-
-#include <QDebug>
+#include "iconnames.h"
 
 GenreArtistItem::GenreArtistItem(QString genre, QString artist, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

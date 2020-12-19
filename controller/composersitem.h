@@ -1,7 +1,7 @@
 #ifndef COMPOSERSITEM_H
 #define COMPOSERSITEM_H
 
-#include "controller.h"
+#include "item.h"
 
 class ComposersItem : public Item
 {

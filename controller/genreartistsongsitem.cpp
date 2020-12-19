@@ -1,5 +1,6 @@
 #include "genreartistsongsitem.h"
 #include "controller.h"
+#include "iconnames.h"
 #include "unorderedmpdsongitem.h"
 
 GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist, Item *parent)

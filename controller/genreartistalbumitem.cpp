@@ -1,5 +1,6 @@
 #include "genreartistalbumitem.h"
 #include "controller.h"
+#include "iconnames.h"
 #include "orderedmpdsongitem.h"
 
 GenreArtistAlbumItem::GenreArtistAlbumItem(QString genre,

@@ -1,5 +1,7 @@
 #include "composersitem.h"
 #include "composeritem.h"
+#include "controller.h"
+#include "iconnames.h"
 
 ComposersItem::ComposersItem(Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

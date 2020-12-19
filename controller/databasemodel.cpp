@@ -7,7 +7,6 @@
 #include "genresitem.h"
 #include "playlistsitem.h"
 #include "songsitem.h"
-#include <QDebug>
 #include <QMimeData>
 
 DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)

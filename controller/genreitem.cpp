@@ -2,8 +2,7 @@
 #include "controller.h"
 #include "genreartistitem.h"
 #include "genresongsitem.h"
-
-#include <QDebug>
+#include "iconnames.h"
 
 GenreItem::GenreItem(QString genre, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

@@ -1,7 +1,7 @@
 #ifndef ARTISTSITEM_H
 #define ARTISTSITEM_H
 
-#include "controller.h"
+#include "item.h"
 
 class ArtistsItem : public Item
 {

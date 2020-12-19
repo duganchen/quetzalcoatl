@@ -1,8 +1,7 @@
 #include "genresongsitem.h"
 #include "controller.h"
+#include "iconnames.h"
 #include "unorderedmpdsongitem.h"
-
-#include <QDebug>
 
 GenreSongsItem::GenreSongsItem(Item *parent)
     : Item(QIcon(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

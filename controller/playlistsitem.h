@@ -1,7 +1,6 @@
 #ifndef PLAYLISTSITEM_H
 #define PLAYLISTSITEM_H
 
-#include "controller.h"
 #include "item.h"
 
 class PlaylistsItem : public Item

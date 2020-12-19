@@ -1,8 +1,7 @@
 #ifndef PLAYLISTITEM_H
 #define PLAYLISTITEM_H
 
-#include "controller.h"
-#include "playlistitem.h"
+#include "item.h"
 #include <mpd/client.h>
 
 class PlaylistItem : public Item

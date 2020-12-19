@@ -1,9 +1,7 @@
 #include "queueditem.h"
+
 #include "controller.h"
-#include "strformats.h"
-#include <QDebug>
-#include <QStringBuilder>
-#include <QStringLiteral>
+#include "iconnames.h"
 
 QueuedItem::QueuedItem(mpd_entity *entity, Item *parent)
     : SongItem(QIcon::fromTheme(IconNames::Audio),

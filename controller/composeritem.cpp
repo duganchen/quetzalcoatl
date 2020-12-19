@@ -1,6 +1,10 @@
 #include "composeritem.h"
 #include "composeralbumitem.h"
 #include "composersongsitem.h"
+#include "controller.h"
+#include "iconnames.h"
+
+#include <mpd/client.h>
 
 ComposerItem::ComposerItem(QString composer, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

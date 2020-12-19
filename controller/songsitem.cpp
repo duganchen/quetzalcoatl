@@ -1,4 +1,6 @@
 #include "songsitem.h"
+#include "controller.h"
+#include "iconnames.h"
 #include "unorderedentitysongitem.h"
 
 SongsItem::SongsItem(Item *parent)

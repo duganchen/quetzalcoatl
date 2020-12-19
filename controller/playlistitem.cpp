@@ -1,6 +1,7 @@
 #include "playlistitem.h"
+#include "controller.h"
+#include "iconnames.h"
 #include "orderedentitysongitem.h"
-#include <QDebug>
 
 PlaylistItem::PlaylistItem(mpd_playlist *playlist, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Playlist),

@@ -1,7 +1,7 @@
 #ifndef DIRECTORYITEM_H
 #define DIRECTORYITEM_H
 
-#include "controller.h"
+#include "item.h"
 #include <mpd/client.h>
 
 class DirectoryItem : public Item

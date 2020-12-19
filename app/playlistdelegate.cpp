@@ -1,5 +1,6 @@
 #include "playlistdelegate.h"
 #include "databasemodel.h"
+#include "item.h"
 #include <QLineEdit>
 
 PlaylistDelegate::PlaylistDelegate(QValidator *validator, QObject *parent)

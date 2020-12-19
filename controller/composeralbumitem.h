@@ -1,7 +1,7 @@
 #ifndef COMPOSERALBUMITEM_H
 #define COMPOSERALBUMITEM_H
 
-#include "controller.h"
+#include "item.h"
 
 class ComposerAlbumItem : public Item
 {

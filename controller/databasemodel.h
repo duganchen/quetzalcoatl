@@ -1,6 +1,7 @@
 #ifndef DATABASEMODEL_H
 #define DATABASEMODEL_H
 
+#include "controller.h"
 #include "itemmodel.h"
 
 class DatabaseModel : public ItemModel

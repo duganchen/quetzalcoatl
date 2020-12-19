@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "connectiondialog.h"
 #include "databasemodel.h"
+#include "iconnames.h"
+#include "item.h"
 #include "playbacksettingsdialog.h"
 #include "playlistdelegate.h"
 #include "playlistvalidator.h"

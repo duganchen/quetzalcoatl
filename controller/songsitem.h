@@ -1,7 +1,6 @@
 #ifndef SONGSITEM_H
 #define SONGSITEM_H
 
-#include "controller.h"
 #include "item.h"
 
 class SongsItem : public Item

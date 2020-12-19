@@ -2,6 +2,7 @@
 
 #include "albumitem.h"
 #include "controller.h"
+#include "iconnames.h"
 
 AlbumsItem::AlbumsItem(Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

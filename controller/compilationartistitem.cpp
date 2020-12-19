@@ -1,5 +1,7 @@
 #include "compilationartistitem.h"
 #include "compilationartistalbumitem.h"
+#include "controller.h"
+#include "iconnames.h"
 
 CompilationArtistItem::CompilationArtistItem(QString albumArtist, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

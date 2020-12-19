@@ -1,14 +1,13 @@
 #include "controller.h"
-#include "genresitem.h"
-#include "item.h"
 #include "playlistitem.h"
 #include "queueditem.h"
 #include "strformats.h"
+
 #include <mpd/client.h>
+
 #include <QCollator>
-#include <QDebug>
-#include <QtNetwork/QHostInfo>
-#include <QtNetwork/QTcpSocket>
+#include <QHostInfo>
+#include <QSocketNotifier>
 
 Controller::Controller(QObject *parent)
     : QObject(parent)
@@ -24,8 +23,6 @@ Controller::Controller(QObject *parent)
     m_defaultPort = mpd_settings_get_port(settings);
     m_defaultTimeout = mpd_settings_get_timeout_ms(settings);
     mpd_settings_free(settings);
-
-    qDebug() << "Debug is working";
 }
 
 Controller::~Controller()

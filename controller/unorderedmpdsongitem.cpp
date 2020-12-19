@@ -1,4 +1,5 @@
 #include "unorderedmpdsongitem.h"
+#include "iconnames.h"
 
 UnorderedMPDSongItem::UnorderedMPDSongItem(mpd_song *song, Item *parent)
     : UnorderedSongItem(QIcon::fromTheme(IconNames::Audio),

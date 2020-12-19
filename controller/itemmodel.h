@@ -6,11 +6,10 @@
 // https://doc.qt.io/qt-5/qtwidgets-itemviews-simpletreemodel-example.html
 // The nodes are in items.h.
 
-#include "controller.h"
-#include "item.h"
 #include <QAbstractItemModel>
-#include <QModelIndex>
-#include <QVariant>
+
+class Controller;
+class Item;
 
 class ItemModel : public QAbstractItemModel
 {

@@ -1,12 +1,9 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "iconnames.h"
-#include <mpd/client.h>
-#include <QSocketNotifier>
+#include <QIcon>
 #include <QVariant>
 #include <QVector>
-#include <QtGui/QIcon>
 
 class Controller;
 

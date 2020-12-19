@@ -1,5 +1,6 @@
 #include "itemmodel.h"
-#include <QDebug>
+
+#include "item.h"
 
 ItemModel::ItemModel(Controller *myController, QObject *parent)
     : QAbstractItemModel(parent)

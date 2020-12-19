@@ -1,5 +1,6 @@
 #include "albumitem.h"
 #include "controller.h"
+#include "iconnames.h"
 #include "orderedmpdsongitem.h"
 
 AlbumItem::AlbumItem(QString album, Item *parent)

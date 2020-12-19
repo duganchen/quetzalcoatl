@@ -1,4 +1,6 @@
 #include "composeralbumitem.h"
+#include "controller.h"
+#include "iconnames.h"
 #include "orderedmpdsongitem.h"
 
 ComposerAlbumItem::ComposerAlbumItem(QString composer, QString album, Item *parent)

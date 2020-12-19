@@ -1,5 +1,7 @@
 #include "compilationsitem.h"
 #include "compilationartistitem.h"
+#include "controller.h"
+#include "iconnames.h"
 
 CompilationsItem::CompilationsItem(Item *parent)
     : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)

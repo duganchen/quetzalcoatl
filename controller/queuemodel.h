@@ -2,8 +2,8 @@
 #define QUEUEMODEL_H
 
 #include "itemmodel.h"
-#include <QItemSelection>
-#include <QMimeData>
+
+class QItemSelection;
 
 class QueueModel : public ItemModel
 {

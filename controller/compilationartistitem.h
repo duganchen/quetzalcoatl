@@ -1,7 +1,7 @@
 #ifndef COMPILATIONARTISTITEM_H
 #define COMPILATIONARTISTITEM_H
 
-#include "controller.h"
+#include "item.h"
 
 class CompilationArtistItem : public Item
 {

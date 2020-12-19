@@ -1,4 +1,6 @@
 #include "compilationartistalbumitem.h"
+#include "controller.h"
+#include "iconnames.h"
 #include "orderedmpdsongitem.h"
 
 CompilationArtistAlbumItem::CompilationArtistAlbumItem(QString albumArtist,

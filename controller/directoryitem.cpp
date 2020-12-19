@@ -1,6 +1,7 @@
 #include "directoryitem.h"
+#include "controller.h"
+#include "iconnames.h"
 #include "unorderedentitysongitem.h"
-#include <QDebug>
 
 DirectoryItem::DirectoryItem(mpd_entity *entity, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Harddisk), Qt::ItemIsEnabled, true, true, parent)
