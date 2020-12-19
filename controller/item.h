@@ -56,6 +56,8 @@ private:
     Qt::ItemFlags m_flags;
     bool m_hasChildren;
     bool m_canFetchMore;
+
+    Q_DISABLE_COPY(Item)
 };
 
 #endif // ITEM_H

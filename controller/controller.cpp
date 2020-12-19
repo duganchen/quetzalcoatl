@@ -24,6 +24,8 @@ Controller::Controller(QObject *parent)
     m_defaultPort = mpd_settings_get_port(settings);
     m_defaultTimeout = mpd_settings_get_timeout_ms(settings);
     mpd_settings_free(settings);
+
+    qDebug() << "Debug is working";
 }
 
 Controller::~Controller()
@@ -524,6 +526,8 @@ mpd_connection *Controller::mpd() const
 
 void Controller::handleIdle(mpd_idle idle)
 {
+    qDebug() << "####### "
+             << "HANDLING IDLE";
     if (!idle && mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
