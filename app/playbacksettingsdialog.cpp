@@ -1,14 +1,11 @@
 #include "playbacksettingsdialog.h"
-#include <QCheckBox>
+
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QIcon>
-#include <QLineEdit>
 #include <QPushButton>
-
-#include <QTabWidget>
+#include <QSpinBox>
 #include <QVBoxLayout>
-#include <QWidget>
 
 PlaybackSettingsDialog::PlaybackSettingsDialog(Controller *controller,
                                                QWidget *parent,

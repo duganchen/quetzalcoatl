@@ -1,19 +1,17 @@
 #include "mainwindow.h"
-#include "controller.h"
+#include "connectiondialog.h"
 #include "databasemodel.h"
-#include "iconnames.h"
 #include "playbacksettingsdialog.h"
 #include "playlistdelegate.h"
 #include "playlistvalidator.h"
 #include "queuemodel.h"
 #include "saveplaylistdialog.h"
-#include <QDebug>
-#include <QKeySequence>
+
+#include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
-#include <QProgressBar>
-#include <QPushButton>
 #include <QSettings>
+#include <QSlider>
 #include <QSplitter>
 #include <QStatusBar>
 #include <QTimer>

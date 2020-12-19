@@ -1,17 +1,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "connectiondialog.h"
 #include "controller.h"
-#include <QAction>
-#include <QEvent>
-#include <QLabel>
+
 #include <QMainWindow>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QSlider>
 #include <QVector>
-#include <QWidget>
+
+class ConnectionDialog;
+class Controller;
+
+class QAction;
+class QSlider;
+class QWidget;
 
 class MainWindow : public QMainWindow
 {

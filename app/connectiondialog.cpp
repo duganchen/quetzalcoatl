@@ -1,12 +1,14 @@
 #include "connectiondialog.h"
-#include "controller.h"
+
+#include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QFormLayout>
-#include <QIcon>
+#include <QLabel>
+#include <QLineEdit>
+#include <QProgressBar>
 #include <QPushButton>
 #include <QSettings>
 #include <QSpinBox>
-#include <QTabWidget>
 #include <QVBoxLayout>
 
 ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::WindowFlags f)

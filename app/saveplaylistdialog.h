@@ -1,7 +1,10 @@
 #ifndef SAVEPLAYLISTDIALOG_H
 #define SAVEPLAYLISTDIALOG_H
+
 #include <QDialog>
-#include <QLineEdit>
+
+class QLineEdit;
+class QValidator;
 
 class SavePlaylistDialog : public QDialog
 {

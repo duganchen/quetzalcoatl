@@ -1,5 +1,4 @@
 #include "playlistvalidator.h"
-#include <QDebug>
 
 PlaylistValidator::PlaylistValidator(QObject *parent)
     : QValidator(parent)

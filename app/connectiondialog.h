@@ -2,13 +2,13 @@
 #define CONNECTIONDIALOG_H
 
 #include "controller.h"
-#include <QCheckBox>
 #include <QDialog>
-#include <QLabel>
-#include <QLineEdit>
-#include <QObject>
-#include <QProgressBar>
-#include <QSpinBox>
+
+class QCheckBox;
+class QLabel;
+class QLineEdit;
+class QProgressBar;
+class QSpinBox;
 
 class ConnectionDialog : public QDialog
 {
@@ -27,15 +27,15 @@ public slots:
     void restoreDefaults();
 
 private:
-    QCheckBox *m_passwordCheck;
-    QLineEdit *m_hostEdit;
-    QSpinBox *m_portSpinner;
-    QLineEdit *m_passwordEdit;
-    QProgressBar *m_progressBar;
-    QLabel *m_errorLabel;
-    Controller *m_controller;
-    QPushButton *m_connectButton;
-    QPushButton *m_defaultsButton;
+    QCheckBox *m_passwordCheck{};
+    QLineEdit *m_hostEdit{};
+    QSpinBox *m_portSpinner{};
+    QLineEdit *m_passwordEdit{};
+    QProgressBar *m_progressBar{};
+    QLabel *m_errorLabel{};
+    Controller *m_controller{};
+    QPushButton *m_connectButton{};
+    QPushButton *m_defaultsButton{};
 
     Controller::ConnectionState m_connectionState;
 signals:

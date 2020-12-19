@@ -1,10 +1,11 @@
 #ifndef PLAYBACKSETTINGSDIALOG_H
 #define PLAYBACKSETTINGSDIALOG_H
 
-#include "controller.h"
 #include <QDialog>
-#include <QObject>
-#include <QSpinBox>
+
+class Controller;
+
+class QSpinBox;
 
 class PlaybackSettingsDialog : public QDialog
 {

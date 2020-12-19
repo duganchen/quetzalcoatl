@@ -1,12 +1,10 @@
 #include "controller.h"
 #include "mainwindow.h"
+
 #include <QApplication>
 #include <QDir>
-#include <QIcon>
 #include <QLockFile>
 #include <QMessageBox>
-#include <QObject>
-#include <QThread>
 
 int main(int argc, char *argv[])
 {
