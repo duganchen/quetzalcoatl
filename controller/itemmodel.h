@@ -38,8 +38,8 @@ protected:
     Controller *controller() const;
 
 private:
-    Item *m_rootItem;
-    Controller *m_controller;
+    Item *m_rootItem{};
+    Controller *m_controller{};
 };
 
 #endif // ITEMMODEL_H

@@ -24,9 +24,9 @@ public slots:
 
 signals:
 private:
-    Controller *m_controller;
-    QSpinBox *m_fadeSpinner;
-    QSpinBox *m_volumeSpinner;
+    Controller *m_controller{};
+    QSpinBox *m_fadeSpinner{};
+    QSpinBox *m_volumeSpinner{};
 };
 
 #endif // PLAYBACKSETTINGSDIALOG_H

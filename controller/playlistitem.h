@@ -13,7 +13,7 @@ public:
     QString text(int) const override;
 
 private:
-    mpd_playlist *m_playlist;
+    mpd_playlist *m_playlist{};
 };
 
 #endif // PLAYLISTITEM_H

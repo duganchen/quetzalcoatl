@@ -8,7 +8,6 @@
 
 SavePlaylistDialog::SavePlaylistDialog(QValidator *validator, QWidget *parent, Qt::WindowFlags f)
     : QDialog(parent, f)
-    , m_nameEdit(nullptr)
 {
     setWindowTitle("Save Playlist");
     auto layout = new QVBoxLayout();

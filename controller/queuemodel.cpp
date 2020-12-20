@@ -10,7 +10,6 @@
 
 QueueModel::QueueModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
-    , m_songId(-1)
 {
     setRootItem(new Item(QIcon(), Qt::NoItemFlags, true, false));
 

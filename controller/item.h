@@ -10,7 +10,7 @@ class Controller;
 class Item
 {
 public:
-    explicit Item(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
+    Item(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
     virtual ~Item();
 
     void append(Item *at);
@@ -49,10 +49,10 @@ public:
 private:
     QVector<Item *> m_children;
     QIcon m_icon;
-    Item *m_parent;
-    Qt::ItemFlags m_flags;
-    bool m_hasChildren;
-    bool m_canFetchMore;
+    Item *m_parent{};
+    Qt::ItemFlags m_flags{};
+    bool m_hasChildren{};
+    bool m_canFetchMore{};
 
     Q_DISABLE_COPY(Item)
 };

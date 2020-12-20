@@ -45,7 +45,7 @@ signals:
     void songIndex(const QModelIndex &);
 
 private:
-    int m_songId;
+    int m_songId{-1};
 };
 
 #endif // QUEUEMODEL_H

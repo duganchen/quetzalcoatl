@@ -6,14 +6,14 @@
 class OrderedMPDSongItem : public OrderedSongItem
 {
 public:
-    OrderedMPDSongItem(mpd_song *, Item *parent = nullptr);
+    explicit OrderedMPDSongItem(mpd_song *, Item *parent = nullptr);
     ~OrderedMPDSongItem();
 
 protected:
     const mpd_song *song() const override;
 
 private:
-    mpd_song *m_song;
+    mpd_song *m_song{};
 };
 
 #endif // ORDEREDMPDSONGITEM_H

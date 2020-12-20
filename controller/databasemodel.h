@@ -22,8 +22,6 @@ public slots:
     void onConnectionChanged(Controller::ConnectionState);
 
     void reset();
-
-private:
 };
 
 #endif // DATABASEMODEL_H

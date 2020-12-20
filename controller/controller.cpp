@@ -11,10 +11,6 @@
 
 Controller::Controller(QObject *parent)
     : QObject(parent)
-    , m_connection(nullptr)
-    , m_notifier(nullptr)
-    , m_queueVersion(0)
-    , m_mpdPlayerState(MPD_STATE_UNKNOWN)
 {
     qRegisterMetaType<Controller::ConnectionState>();
 

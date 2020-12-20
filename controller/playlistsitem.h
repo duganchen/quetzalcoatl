@@ -6,7 +6,7 @@
 class PlaylistsItem : public Item
 {
 public:
-    explicit PlaylistsItem(Item *parent = nullptr);
+    PlaylistsItem(Item *parent = nullptr);
 
     QString text(int) const override;
     QVector<Item *> fetchMore(Controller *) override;

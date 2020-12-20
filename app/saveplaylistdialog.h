@@ -17,9 +17,9 @@ public:
     QString name() const;
 
     void clear();
-signals:
+
 private:
-    QLineEdit *m_nameEdit;
+    QLineEdit *m_nameEdit{};
 };
 
 #endif // SAVEPLAYLISTDIALOG_H

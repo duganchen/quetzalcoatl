@@ -6,7 +6,7 @@
 class OrderedSongItem : public SongItem
 {
 public:
-    explicit OrderedSongItem(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
+    OrderedSongItem(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
     void onDoubleClicked(Controller *) override;
 };
 

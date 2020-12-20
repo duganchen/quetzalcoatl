@@ -6,7 +6,7 @@
 class ArtistAlbumItem : public Item
 {
 public:
-    explicit ArtistAlbumItem(QString, QString, Item *parent = nullptr);
+    ArtistAlbumItem(QString, QString, Item *parent = nullptr);
     QVector<Item *> fetchMore(Controller *) override;
     QString text(int) const override;
 

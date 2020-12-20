@@ -3,6 +3,7 @@
 
 #include "Controller_global.h"
 #include <mpd/client.h>
+#include <mpd/status.h>
 #include <QObject>
 
 class Item;
@@ -126,17 +127,18 @@ private:
     void checkStoredPlaylists();
 
     QString m_defaultHost;
-    unsigned m_defaultPort;
-    unsigned m_defaultTimeout;
 
-    mpd_connection *m_connection;
-    QSocketNotifier *m_notifier;
+    unsigned m_defaultPort{};
+    unsigned m_defaultTimeout{};
 
-    unsigned m_queueVersion;
+    mpd_connection *m_connection{};
+    QSocketNotifier *m_notifier{};
+
+    unsigned m_queueVersion{};
 
     ConnectionState m_connectionState;
 
-    mpd_state m_mpdPlayerState;
+    mpd_state m_mpdPlayerState{MPD_STATE_UNKNOWN};
 
     QVector<mpd_playlist *> listPlaylistsImpl();
 

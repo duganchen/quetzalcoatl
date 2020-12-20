@@ -4,7 +4,6 @@
 
 ItemModel::ItemModel(Controller *myController, QObject *parent)
     : QAbstractItemModel(parent)
-    , m_rootItem(nullptr)
     , m_controller(myController)
 {}
 

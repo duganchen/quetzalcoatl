@@ -6,7 +6,7 @@
 class PlaylistDelegate : public QStyledItemDelegate
 {
 public:
-    PlaylistDelegate(QValidator *, QObject *parent = nullptr);
+    explicit PlaylistDelegate(QValidator *, QObject *parent = nullptr);
     QWidget *createEditor(QWidget *parent,
                           const QStyleOptionViewItem &option,
                           const QModelIndex &index) const override;
@@ -16,7 +16,7 @@ public:
                       const QModelIndex &index) const override;
 
 private:
-    QValidator *m_validator;
+    QValidator *m_validator{};
 };
 
 #endif // PLAYLISTDELEGATE_H

@@ -23,8 +23,6 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , m_seekPosition(0)
-    , m_controller(nullptr)
 {
     setWindowTitle(tr("Quetzalcoatl"));
 

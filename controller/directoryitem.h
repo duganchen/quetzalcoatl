@@ -14,7 +14,7 @@ public:
     QVector<Item *> fetchMore(Controller *) override;
 
 private:
-    mpd_entity *m_entity;
+    mpd_entity *m_entity{};
 };
 
 #endif // DIRECTORYITEM_H

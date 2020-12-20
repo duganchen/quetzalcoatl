@@ -33,9 +33,9 @@ private:
 
 private:
     void onPaletteChanged();
-    int m_seekPosition;
-    Controller *m_controller;
-    QAction *m_connectAction;
+    int m_seekPosition{};
+    Controller *m_controller{};
+    QAction *m_connectAction{};
 private slots:
     void setConnectionState(Controller::ConnectionState);
 };
