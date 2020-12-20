@@ -127,7 +127,6 @@ private:
     void checkStoredPlaylists();
 
     QString m_defaultHost;
-
     unsigned m_defaultPort{};
     unsigned m_defaultTimeout{};
 
@@ -136,8 +135,6 @@ private:
 
     unsigned m_queueVersion{};
 
-    ConnectionState m_connectionState;
-
     mpd_state m_mpdPlayerState{MPD_STATE_UNKNOWN};
 
     QVector<mpd_playlist *> listPlaylistsImpl();
@@ -145,7 +142,5 @@ private:
 private slots:
     void handleActivation();
 };
-
-Q_DECLARE_METATYPE(Controller::ConnectionState);
 
 #endif // CONTROLLER_H
