@@ -1,5 +1,4 @@
 #include "item.h"
-#include <QDebug>
 
 Item::Item(QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, bool couldFetchMore, Item *parent)
     : m_icon(icon)

@@ -519,8 +519,6 @@ mpd_connection *Controller::mpd() const
 
 void Controller::handleIdle(mpd_idle idle)
 {
-    qDebug() << "####### "
-             << "HANDLING IDLE";
     if (!idle && mpd_connection_get_error(m_connection) == MPD_ERROR_CLOSED) {
         m_notifier->setEnabled(false);
         m_notifier->deleteLater();
@@ -563,9 +561,6 @@ void Controller::handleIdle(mpd_idle idle)
         if (idle & MPD_IDLE_MIXER) {
             statusUpdate = true;
         }
-        if (idle & MPD_IDLE_OUTPUT) {
-            qDebug() << "an audio output device has been enabled or disabled";
-        }
         if (idle & MPD_IDLE_OPTIONS) {
             statusUpdate = true;
         }
@@ -573,16 +568,6 @@ void Controller::handleIdle(mpd_idle idle)
             dbUpdate = true;
             statusUpdate = true;
         }
-        if (idle & MPD_IDLE_STICKER) {
-            qDebug() << "a sticker has been modified.";
-        }
-        if (idle & MPD_IDLE_SUBSCRIPTION) {
-            qDebug() << "a client has subscribed to or unsubscribed from a channel";
-        }
-        if (idle & MPD_IDLE_MESSAGE) {
-            qDebug() << "a message on a subscribed channel was received";
-        }
-
         if (dbUpdate) {
             emit updated();
         }
