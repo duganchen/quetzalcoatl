@@ -14,21 +14,17 @@ class Connection
 public:
     Connection();
     Connection(const char *, unsigned, unsigned);
-    explicit operator bool();
-    mpd_error getError();
-    const char *getErrorMessage();
-    const unsigned *getServerVersion();
-    bool searchDBTags(mpd_tag_type type);
-    bool searchCommit();
-    std::vector<QString> recvValues();
-    bool searchDBSongs(bool);
-    bool searchAddTagConstraint(mpd_operator, mpd_tag_type, const char *);
-    bool mpdSearchCommit();
 
-    // Can we at least mock this?
-    virtual std::unique_ptr<mpd::Song> getASong() { return std::make_unique<mpd::Song>(); };
-
-    // Use this to demonstrate mocking
+    virtual explicit operator bool();
+    virtual mpd_error getError();
+    virtual const char *getErrorMessage();
+    virtual const unsigned *getServerVersion();
+    virtual bool searchDBTags(mpd_tag_type type);
+    virtual bool searchCommit();
+    virtual std::vector<QString> recvValues();
+    virtual bool searchDBSongs(bool);
+    virtual bool searchAddTagConstraint(mpd_operator, mpd_tag_type, const char *);
+    virtual bool mpdSearchCommit();
     virtual std::vector<std::unique_ptr<mpd::Song>> recvSongs();
 
     Connection(const Connection &) = delete;
