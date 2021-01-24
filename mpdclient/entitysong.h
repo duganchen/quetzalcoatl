@@ -1,29 +1,22 @@
-#ifndef song_h
-#define song_h
+#ifndef constsong_h
+#define constsong_h
 
 #include "isong.h"
 
 namespace mpd {
 
-class Song : public ISong
+class ConstSong : public ISong
 {
 public:
+    explicit ConstSong(const mpd_song *);
     explicit operator bool();
-
     const char *getTag(mpd_tag_type, unsigned) override;
     unsigned getId() override;
     const char *getURI() override;
     unsigned getDuration() override;
 
-    Song(mpd_song * = nullptr);
-    Song(const Song &other);
-    Song &operator=(const Song &other);
-    Song(Song &&other);
-    Song &operator=(Song &&other);
-    virtual ~Song();
-
 private:
-    mpd_song *m_song{};
+    const mpd_song *m_song{};
 };
 
 } // namespace mpd
