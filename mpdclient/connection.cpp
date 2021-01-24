@@ -1,4 +1,5 @@
 #include "connection.h"
+#include "song.h"
 
 mpd::Connection::Connection()
     : m_connection{}
@@ -58,9 +59,9 @@ bool mpd::Connection::searchAddTagConstraint(mpd_operator oper, mpd_tag_type typ
     return mpd_search_add_tag_constraint(m_connection, oper, type, value);
 }
 
-std::vector<std::unique_ptr<mpd::Song>> mpd::Connection::recvSongs()
+std::vector<std::unique_ptr<mpd::ISong>> mpd::Connection::recvSongs()
 {
-    std::vector<std::unique_ptr<mpd::Song>> songs;
+    std::vector<std::unique_ptr<mpd::ISong>> songs;
     while (mpd_song *song = mpd_recv_song(m_connection)) {
         songs.push_back(std::make_unique<mpd::Song>(song));
     }

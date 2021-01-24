@@ -1,19 +1,21 @@
 #ifndef entitysong_h
 #define entitysong_h
 
+#include "isong.h"
 #include <mpd/client.h>
 
 namespace mpd {
 
-class EntitySong
+class EntitySong : public ISong
 {
 public:
     explicit EntitySong(const mpd_song *);
     explicit operator bool();
-    virtual const char *getTag(mpd_tag_type, unsigned);
-    virtual unsigned getId();
-    virtual const char *getURI();
-    virtual unsigned getDuration();
+
+    const char *getTag(mpd_tag_type, unsigned) override;
+    unsigned getId() override;
+    const char *getURI() override;
+    unsigned getDuration() override;
 
 private:
     const mpd_song *m_song{};
