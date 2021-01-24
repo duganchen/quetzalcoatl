@@ -1,30 +1,30 @@
-#include "constsong.h"
+#include "entitysong.h"
 
-mpd::ConstSong::ConstSong(const mpd_song *song)
+mpd::EntitySong::EntitySong(const mpd_song *song)
     : m_song{song}
 {}
 
-mpd::ConstSong::operator bool()
+mpd::EntitySong::operator bool()
 {
     return bool(m_song);
 }
 
-const char *mpd::ConstSong::getTag(mpd_tag_type type, unsigned idx)
+const char *mpd::EntitySong::getTag(mpd_tag_type type, unsigned idx)
 {
     return mpd_song_get_tag(m_song, type, idx);
 }
 
-unsigned mpd::ConstSong::getId()
+unsigned mpd::EntitySong::getId()
 {
     return mpd_song_get_id(m_song);
 }
 
-const char *mpd::ConstSong::getURI()
+const char *mpd::EntitySong::getURI()
 {
     return mpd_song_get_uri(m_song);
 }
 
-unsigned mpd::ConstSong::getDuration()
+unsigned mpd::EntitySong::getDuration()
 {
     return mpd_song_get_duration(m_song);
 }
