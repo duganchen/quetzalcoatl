@@ -26,6 +26,8 @@ public:
     virtual bool searchAddTagConstraint(mpd_operator, mpd_tag_type, const char *);
     virtual bool mpdSearchCommit();
     virtual std::vector<std::unique_ptr<mpd::Song>> recvSongs();
+    virtual bool clearError();
+    virtual int getFD();
 
     Connection(const Connection &) = delete;
     Connection &operator=(const Connection &) = delete;
