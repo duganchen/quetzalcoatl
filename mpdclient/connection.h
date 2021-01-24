@@ -28,6 +28,8 @@ public:
     virtual std::vector<std::unique_ptr<mpd::Song>> recvSongs();
     virtual bool clearError();
     virtual int getFD();
+    virtual bool commandListBegin(bool);
+    virtual bool commandListEnd();
 
     Connection(const Connection &) = delete;
     Connection &operator=(const Connection &) = delete;

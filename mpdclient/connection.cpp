@@ -77,6 +77,16 @@ int mpd::Connection::getFD()
     return mpd_connection_get_fd(m_connection);
 }
 
+bool mpd::Connection::commandListBegin(bool discrete_ok)
+{
+    return mpd_command_list_begin(m_connection, discrete_ok);
+}
+
+bool mpd::Connection::commandListEnd()
+{
+    return mpd_command_list_end(m_connection);
+}
+
 mpd::Connection::Connection(mpd::Connection &&other)
     : m_connection(other.m_connection)
 {
