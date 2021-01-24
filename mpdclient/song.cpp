@@ -49,6 +49,10 @@ mpd::Song &mpd::Song::operator=(const mpd::Song &other)
         m_song = nullptr;
     }
 
+    if (other.m_song) {
+        m_song = mpd_song_dup(other.m_song);
+    }
+
     return *this;
 }
 

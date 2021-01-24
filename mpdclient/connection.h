@@ -1,6 +1,7 @@
 #ifndef connection_h
 #define connection_h
 
+#include "playlist.h"
 #include "song.h"
 #include <memory>
 #include <mpd/client.h>
@@ -30,6 +31,8 @@ public:
     virtual int getFD();
     virtual bool commandListBegin(bool);
     virtual bool commandListEnd();
+    virtual bool sendListPlaylists();
+    virtual std::vector<std::unique_ptr<mpd::Playlist>> recvPlaylists();
 
     Connection(const Connection &) = delete;
     Connection &operator=(const Connection &) = delete;

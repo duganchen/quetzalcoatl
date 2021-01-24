@@ -2,6 +2,7 @@ add_library(mpdclient SHARED
   connection.cpp
   song.cpp
   entitysong.cpp
+  playlist.cpp
 )
 
 target_include_directories(mpdclient PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})

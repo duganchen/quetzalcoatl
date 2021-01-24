@@ -87,6 +87,20 @@ bool mpd::Connection::commandListEnd()
     return mpd_command_list_end(m_connection);
 }
 
+bool mpd::Connection::sendListPlaylists()
+{
+    return mpd_send_list_playlists(m_connection);
+}
+
+std::vector<std::unique_ptr<mpd::Playlist>> mpd::Connection::recvPlaylists()
+{
+    std::vector<std::unique_ptr<mpd::Playlist>> playlists;
+    while (auto playlist = mpd_recv_playlist(m_connection)) {
+        playlists.push_back(std::make_unique<Playlist>(playlist));
+    }
+    return playlists;
+}
+
 mpd::Connection::Connection(mpd::Connection &&other)
     : m_connection(other.m_connection)
 {
