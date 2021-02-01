@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     if (!lockFile.tryLock(100)) {
         QMessageBox msgBox;
-        msgBox.msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText("You already have Quetzalcoatl running."
                        "\r\nOnly one instance is allowed.");
         msgBox.exec();

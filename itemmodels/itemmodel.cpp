@@ -2,9 +2,10 @@
 
 #include "item.h"
 
-ItemModel::ItemModel(Controller *myController, QObject *parent)
+ItemModel::ItemModel(Item *rootItem, mpd::Connection &mpdConnection, QObject *parent)
     : QAbstractItemModel(parent)
-    , m_controller(myController)
+    , m_rootItem{rootItem}
+    , m_mpdConnection{mpdConnection}
 {}
 
 ItemModel::~ItemModel()
@@ -25,7 +26,7 @@ void ItemModel::fetchMore(const QModelIndex &parent)
     if (!parent.isValid()) {
         return;
     }
-    auto items = static_cast<Item *>(parent.internalPointer())->fetchMore(m_controller);
+    auto items = static_cast<Item *>(parent.internalPointer())->fetchMore(m_mpdConnection);
     auto parentItem = static_cast<Item *>(parent.internalPointer());
     beginInsertRows(parent, 0, items.count() - 1);
     for (auto item : items) {
@@ -113,22 +114,7 @@ int ItemModel::rowCount(const QModelIndex &parent) const
     return parentItem->count();
 }
 
-void ItemModel::setRootItem(Item *rootItem)
-{
-    m_rootItem = rootItem;
-}
-
-Item *ItemModel::rootItem() const
-{
-    return m_rootItem;
-}
-
-Controller *ItemModel::controller() const
-{
-    return m_controller;
-}
-
 void ItemModel::onDoubleClicked(const QModelIndex &index)
 {
-    static_cast<Item *>(index.internalPointer())->onDoubleClicked(m_controller);
+    static_cast<Item *>(index.internalPointer())->onDoubleClicked(m_mpdConnection);
 }

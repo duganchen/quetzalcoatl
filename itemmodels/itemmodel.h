@@ -8,15 +8,18 @@
 
 #include <QAbstractItemModel>
 
-class Controller;
 class Item;
+
+namespace mpd {
+class Connection;
+}
 
 class ItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit ItemModel(Controller *, QObject *parent = nullptr);
+    explicit ItemModel(Item *, mpd::Connection &, QObject *parent = nullptr);
     ~ItemModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
@@ -32,14 +35,9 @@ public slots:
 signals:
     void columnResized(int);
 
-protected:
-    void setRootItem(Item *);
-    Item *rootItem() const;
-    Controller *controller() const;
-
 private:
     Item *m_rootItem{};
-    Controller *m_controller{};
+    mpd::Connection &m_mpdConnection;
 };
 
 #endif // ITEMMODEL_H
