@@ -14,7 +14,7 @@ pkg_check_modules(LIBMPDCLIENT REQUIRED IMPORTED_TARGET libmpdclient)
 
 add_subdirectory(mpdclient)
 add_subdirectory(controller)
-add_subdirectory(models)
+add_subdirectory(itemmodels)
 add_subdirectory(app)
 enable_testing()
 add_subdirectory(tests)
