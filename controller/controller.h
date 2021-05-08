@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "Controller_global.h"
+#include "connectionstate.h"
 #include <mpd/client.h>
 #include <mpd/status.h>
 #include <QObject>
@@ -16,9 +17,6 @@ class CONTROLLER_EXPORT Controller : public QObject
 public:
     explicit Controller(QObject *parent = nullptr);
     ~Controller();
-
-    enum class ConnectionState { Disconnected, Connecting, Connected };
-    Q_ENUM(ConnectionState)
 
     QString defaultHost();
     unsigned defaultPort();
@@ -83,7 +81,7 @@ signals:
 
     void serverErrorMessage(QString);
 
-    void connectionState(Controller::ConnectionState connectionState);
+    void connectionState(MPDConnection::State connectionState);
 
     void beginMPDCommand();
     void endMPDCommand();

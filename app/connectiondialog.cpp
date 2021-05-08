@@ -14,7 +14,7 @@
 ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::WindowFlags f)
     : QDialog(parent, f)
     , m_controller(controller)
-    , m_connectionState(Controller::ConnectionState::Disconnected)
+    , m_connectionState(MPDConnection::State::Disconnected)
 {
     connect(m_controller, &Controller::connectionState, this, &ConnectionDialog::setConnectionState);
 
@@ -73,8 +73,7 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
 
     connect(m_hostEdit, &QLineEdit::textChanged, [=](const QString &text) {
         m_connectButton->setEnabled(!text.trimmed().isEmpty()
-                                    && m_connectionState
-                                           == Controller::ConnectionState::Disconnected);
+                                    && m_connectionState == MPDConnection::State::Disconnected);
     });
 
     buttonBox->addButton(m_connectButton, QDialogButtonBox::AcceptRole);
@@ -98,7 +97,7 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     setLayout(layout);
 }
 
-void ConnectionDialog::setConnectionState(Controller::ConnectionState connectionState)
+void ConnectionDialog::setConnectionState(MPDConnection::State connectionState)
 {
     if (m_connectionState == connectionState) {
         return;
@@ -106,21 +105,21 @@ void ConnectionDialog::setConnectionState(Controller::ConnectionState connection
 
     m_connectionState = connectionState;
 
-    m_hostEdit->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
-    m_connectButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
-    m_portSpinner->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
-    m_passwordCheck->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
-    m_passwordEdit->setEnabled(Controller::ConnectionState::Disconnected == connectionState
+    m_hostEdit->setEnabled(MPDConnection::State::Disconnected == connectionState);
+    m_connectButton->setEnabled(MPDConnection::State::Disconnected == connectionState);
+    m_portSpinner->setEnabled(MPDConnection::State::Disconnected == connectionState);
+    m_passwordCheck->setEnabled(MPDConnection::State::Disconnected == connectionState);
+    m_passwordEdit->setEnabled(MPDConnection::State::Disconnected == connectionState
                                && m_passwordCheck->isChecked());
-    m_defaultsButton->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
+    m_defaultsButton->setEnabled(MPDConnection::State::Disconnected == connectionState);
 
-    if (Controller::ConnectionState::Connecting == connectionState) {
+    if (MPDConnection::State::Connecting == connectionState) {
         m_progressBar->setMaximum(0);
     } else {
         m_progressBar->setMaximum(1);
     }
 
-    if (Controller::ConnectionState::Connected == connectionState) {
+    if (MPDConnection::State::Connected == connectionState) {
         QSettings settings;
         settings.setValue("host", m_hostEdit->text());
         settings.setValue("port", m_portSpinner->value());

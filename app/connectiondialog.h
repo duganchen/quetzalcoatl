@@ -1,6 +1,7 @@
 #ifndef CONNECTIONDIALOG_H
 #define CONNECTIONDIALOG_H
 
+#include "connectionstate.h"
 #include "controller.h"
 #include <QDialog>
 
@@ -21,7 +22,7 @@ public:
     bool isProtected() const;
     QString password() const;
 public slots:
-    void setConnectionState(Controller::ConnectionState);
+    void setConnectionState(MPDConnection::State);
     void connectToMPD();
 
     void restoreDefaults();
@@ -37,7 +38,7 @@ private:
     QPushButton *m_connectButton{};
     QPushButton *m_defaultsButton{};
 
-    Controller::ConnectionState m_connectionState{};
+    MPDConnection::State m_connectionState{};
 signals:
 };
 

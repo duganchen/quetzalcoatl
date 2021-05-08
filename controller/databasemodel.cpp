@@ -82,9 +82,9 @@ void DatabaseModel::setPlaylists(const QVector<Item *> &playlists)
     }
 }
 
-void DatabaseModel::onConnectionChanged(Controller::ConnectionState connectionState)
+void DatabaseModel::onConnectionChanged(MPDConnection::State connectionState)
 {
-    if (connectionState == Controller::ConnectionState::Disconnected) {
+    if (connectionState == MPDConnection::State::Disconnected) {
         reset();
     }
 }

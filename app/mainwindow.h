@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "connectionstate.h"
 #include "controller.h"
 
 #include <QMainWindow>
@@ -37,6 +38,6 @@ private:
     Controller *m_controller{};
     QAction *m_connectAction{};
 private slots:
-    void setConnectionState(Controller::ConnectionState);
+    void setConnectionState(MPDConnection::State);
 };
 #endif // MAINWINDOW_H

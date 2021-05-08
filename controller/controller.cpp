@@ -12,8 +12,6 @@
 Controller::Controller(QObject *parent)
     : QObject(parent)
 {
-    qRegisterMetaType<Controller::ConnectionState>();
-
     auto settings = mpd_settings_new(nullptr, 0, 0, nullptr, nullptr);
     m_defaultHost = mpd_settings_get_host(settings);
     m_defaultPort = mpd_settings_get_port(settings);
@@ -30,7 +28,7 @@ Controller::~Controller()
 
 void Controller::connectToMPD(QString host, int port, int timeout_ms)
 {
-    emit connectionState(ConnectionState::Connecting);
+    emit connectionState(MPDConnection::State::Connecting);
 
     // This is literally how libmpdclient determines if a host is a Unix socket,
     // at least as of 2.18.
@@ -47,7 +45,7 @@ void Controller::connectToMPD(QString host, int port, int timeout_ms)
             } else {
                 // The expected error is QHostInfo::HostNotFound, "Host not found".
                 emit connectionErrorMessage(hostInfo.errorString());
-                emit connectionState(ConnectionState::Disconnected);
+                emit connectionState(MPDConnection::State::Disconnected);
             }
         });
     }
@@ -532,7 +530,7 @@ void Controller::handleIdle(mpd_idle idle)
 
         mpd_connection_free(m_connection);
         m_connection = nullptr;
-        emit connectionState(ConnectionState::Disconnected);
+        emit connectionState(MPDConnection::State::Disconnected);
         emit sliderMax(0);
         emit sliderValue(0);
         m_mpdPlayerState = MPD_STATE_UNKNOWN;
@@ -604,7 +602,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
     m_connection = connection;
 
     if (mpd_connection_get_error(m_connection) == MPD_ERROR_SUCCESS) {
-        emit connectionState(ConnectionState::Connected);
+        emit connectionState(MPDConnection::State::Connected);
 
         checkStoredPlaylists();
         pollForStatus();
@@ -622,7 +620,7 @@ void Controller::createMPD(QString host, int port, int timeout_ms)
         // we get a MPD_ERROR_SYSTEM. On Linux and OS X (at least), the error message is
         // "Connection refused".
         emit connectionErrorMessage(mpd_connection_get_error_message(m_connection));
-        emit connectionState(ConnectionState::Disconnected);
+        emit connectionState(MPDConnection::State::Disconnected);
         // and we don't need to free it. I checked.
         m_connection = nullptr;
     }

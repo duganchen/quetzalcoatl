@@ -274,7 +274,7 @@ MainWindow::MainWindow(QWidget *parent)
     // let the user shut the program down.
     connect(m_controller, &Controller::errorMessage, [=](QString message) {
         QMessageBox::critical(this, "Critical error", message);
-        setConnectionState(Controller::ConnectionState::Disconnected);
+        setConnectionState(MPDConnection::State::Disconnected);
         m_connectAction->setEnabled(false);
         timer->stop();
     });
@@ -310,11 +310,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
+void MainWindow::setConnectionState(MPDConnection::State connectionState)
 {
     m_connectionDialog->setConnectionState(connectionState);
 
-    if (Controller::ConnectionState::Connected == connectionState) {
+    if (MPDConnection::State::Connected == connectionState) {
         for (auto widget : m_connectedWidgets) {
             widget->setEnabled(true);
         }
@@ -339,7 +339,7 @@ void MainWindow::setConnectionState(Controller::ConnectionState connectionState)
         statusBar()->clearMessage();
     }
 
-    m_connectAction->setEnabled(Controller::ConnectionState::Disconnected == connectionState);
+    m_connectAction->setEnabled(MPDConnection::State::Disconnected == connectionState);
 }
 
 void MainWindow::changeEvent(QEvent *event)

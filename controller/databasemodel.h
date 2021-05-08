@@ -1,6 +1,7 @@
 #ifndef DATABASEMODEL_H
 #define DATABASEMODEL_H
 
+#include "connectionstate.h"
 #include "controller.h"
 #include "itemmodel.h"
 
@@ -19,7 +20,7 @@ public:
     void renamePlaylist(const QModelIndex &, QString);
 public slots:
     void setPlaylists(const QVector<Item *> &);
-    void onConnectionChanged(Controller::ConnectionState);
+    void onConnectionChanged(MPDConnection::State);
 
     void reset();
 };
