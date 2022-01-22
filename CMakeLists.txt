@@ -14,6 +14,4 @@ pkg_check_modules(LIBMPDCLIENT REQUIRED IMPORTED_TARGET libmpdclient)
 
 add_subdirectory(controller)
 add_subdirectory(app)
-enable_testing()
-add_subdirectory(tests)
 
