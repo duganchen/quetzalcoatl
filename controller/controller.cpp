@@ -410,7 +410,13 @@ void Controller::queueUris(const QVector<QString> &uris, int row)
     }
 
     for (auto it = uris.crbegin(); it != uris.crend(); it++) {
-        if (!mpd_send_add_id_to(m_connection, it->toUtf8().constData(), to)) {
+        bool result{false};
+        if (-1 == to) {
+            result = mpd_send_add_id(m_connection, it->toUtf8().constData());
+        } else {
+            result = mpd_send_add_id_to(m_connection, it->toUtf8().constData(), to);
+        }
+        if (!result) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return;
         }

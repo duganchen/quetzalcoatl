@@ -3,6 +3,7 @@
 #include "controller.h"
 #include "item.h"
 
+#include <QDebug>
 #include <QFont>
 #include <QIcon>
 #include <QItemSelection>
@@ -85,12 +86,9 @@ bool QueueModel::canDropMimeData(const QMimeData *data,
     Q_UNUSED(action)
     Q_UNUSED(parent)
 
-    if (row < 0) {
-        return false;
-    }
-
     if (!data->hasFormat("x-application/vnd.mpd.songids")
         && !data->hasFormat("x-application/vnd.mpd.uris")) {
+        qDebug() << "Wrong format";
         return false;
     }
 
@@ -115,7 +113,7 @@ bool QueueModel::dropMimeData(
     // source row, song id
     QVector<QPair<unsigned, unsigned>> sources;
 
-    if (data->hasFormat("x-application/vnd.mpd.songids")) {
+    if (data->hasFormat("x-application/vnd.mpd.songids") && row != -1) {
         QByteArray encodedData = data->data("x-application/vnd.mpd.songids");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
         QVector<unsigned> songs;
