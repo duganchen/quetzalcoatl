@@ -86,17 +86,18 @@ bool QueueModel::canDropMimeData(const QMimeData *data,
     Q_UNUSED(action)
     Q_UNUSED(parent)
 
-    if (!data->hasFormat("x-application/vnd.mpd.songids")
-        && !data->hasFormat("x-application/vnd.mpd.uris")) {
-        qDebug() << "Wrong format";
-        return false;
-    }
-
     if (column > 0) {
         return false;
     }
 
-    return true;
+    if (data->hasFormat("x-application/vnd.mpd.songids") && row != -1) {
+        return true;
+    }
+
+    if (data->hasFormat("x-application/vnd.mpd.uris")) {
+        return true;
+    }
+    return false;
 }
 
 bool QueueModel::dropMimeData(
