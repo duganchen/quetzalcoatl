@@ -19,7 +19,7 @@ QVector<Item *> PlaylistsItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto playlist : controller->listPlaylists()) {
-        items.append(new PlaylistItem(playlist));
+        items.append(new PlaylistItem(mpd_playlist_get_path(playlist)));
     };
 
     return items;

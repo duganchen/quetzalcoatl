@@ -3,27 +3,22 @@
 #include "iconnames.h"
 #include "orderedentitysongitem.h"
 
-PlaylistItem::PlaylistItem(mpd_playlist *playlist, Item *parent)
+PlaylistItem::PlaylistItem(QString path, Item *parent)
     : Item(QIcon::fromTheme(IconNames::Playlist),
            Qt::ItemIsEnabled | Qt::ItemIsEditable,
            true,
            true,
            parent)
-    , m_playlist(playlist)
+    , m_path(path)
 {}
 
-PlaylistItem::~PlaylistItem()
-{
-    if (m_playlist) {
-        mpd_playlist_free(m_playlist);
-    }
-}
+PlaylistItem::~PlaylistItem() {}
 
 QVector<Item *> PlaylistItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
 
-    for (auto entity : controller->listPlaylist(m_playlist)) {
+    for (auto entity : controller->listPlaylist(m_path)) {
         items.append(new OrderedEntitySongItem(entity));
     }
     return items;
@@ -31,9 +26,8 @@ QVector<Item *> PlaylistItem::fetchMore(Controller *controller)
 
 QString PlaylistItem::text(int column) const
 {
-    if (0 == column && m_playlist) {
-        auto path = mpd_playlist_get_path(m_playlist);
-        return path;
+    if (0 == column) {
+        return m_path;
     }
     return QString();
 }

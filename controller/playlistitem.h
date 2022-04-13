@@ -7,13 +7,13 @@
 class PlaylistItem : public Item
 {
 public:
-    explicit PlaylistItem(mpd_playlist *, Item *parent = nullptr);
+    explicit PlaylistItem(QString, Item * = nullptr);
     ~PlaylistItem();
     QVector<Item *> fetchMore(Controller *) override;
     QString text(int) const override;
 
 private:
-    mpd_playlist *m_playlist{};
+    QString m_path;
 };
 
 #endif // PLAYLISTITEM_H

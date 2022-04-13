@@ -264,20 +264,16 @@ QVector<mpd_playlist *> Controller::listPlaylistsImpl()
     return playlists;
 }
 
-QVector<mpd_entity *> Controller::listPlaylist(mpd_playlist *playlist)
+QVector<mpd_entity *> Controller::listPlaylist(QString path)
 {
     QVector<mpd_entity *> songs;
     if (!m_connection) {
         return songs;
     }
 
-    if (!playlist) {
-        return songs;
-    }
-
     disableIdle();
 
-    if (!mpd_send_list_playlist_meta(m_connection, mpd_playlist_get_path(playlist))) {
+    if (!mpd_send_list_playlist_meta(m_connection, path.toUtf8().constData())) {
         if (mpd_connection_get_error(m_connection) != MPD_ERROR_SUCCESS) {
             emit errorMessage(mpd_connection_get_error_message(m_connection));
             return songs;
@@ -588,8 +584,9 @@ void Controller::checkStoredPlaylists()
     QVector<QString> names;
     QVector<Item *> items;
     for (auto playlist : playlists) {
-        names.append(mpd_playlist_get_path(playlist));
-        items.append(new PlaylistItem(playlist));
+        QString name{mpd_playlist_get_path(playlist)};
+        names.append(name);
+        items.append(new PlaylistItem(name));
     }
 
     emit playlistNames(names);

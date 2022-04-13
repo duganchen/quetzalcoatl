@@ -35,7 +35,7 @@ public:
 
     QVector<mpd_playlist *> listPlaylists();
 
-    QVector<mpd_entity *> listPlaylist(mpd_playlist *);
+    QVector<mpd_entity *> listPlaylist(QString);
 
     QVector<mpd_entity *> listSongs();
 
