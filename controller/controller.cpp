@@ -477,7 +477,9 @@ void Controller::pollForStatus()
         mpd_entity *entity = nullptr;
         while ((entity = mpd_recv_entity(m_connection)) != nullptr) {
             if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
-                queue.append(new QueuedItem(entity));
+                queue.append(new QueuedItem({songLabel(mpd_entity_get_song(entity)),
+                                             songDuration(mpd_entity_get_song(entity))},
+                                            entity));
             } else {
                 mpd_entity_free(entity);
             }
@@ -586,7 +588,7 @@ void Controller::checkStoredPlaylists()
     for (auto playlist : playlists) {
         QString name{mpd_playlist_get_path(playlist)};
         names.append(name);
-        items.append(new PlaylistItem(name));
+        items.append(new PlaylistItem({name}, name));
     }
 
     emit playlistNames(names);

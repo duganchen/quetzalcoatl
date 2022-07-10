@@ -2,9 +2,11 @@
 #include "controller.h"
 #include "iconnames.h"
 #include "orderedentitysongitem.h"
+#include "strformats.h"
 
-PlaylistItem::PlaylistItem(QString path, Item *parent)
-    : Item(QIcon::fromTheme(IconNames::Playlist),
+PlaylistItem::PlaylistItem(std::vector<QString> labels, QString path, Item *parent)
+    : Item(labels,
+           QIcon::fromTheme(IconNames::Playlist),
            Qt::ItemIsEnabled | Qt::ItemIsEditable,
            true,
            true,
@@ -19,15 +21,7 @@ QVector<Item *> PlaylistItem::fetchMore(Controller *controller)
     QVector<Item *> items;
 
     for (auto entity : controller->listPlaylist(m_path)) {
-        items.append(new OrderedEntitySongItem(entity));
+        items.append(new OrderedEntitySongItem({songLabel(mpd_entity_get_song(entity))}, entity));
     }
     return items;
-}
-
-QString PlaylistItem::text(int column) const
-{
-    if (0 == column) {
-        return m_path;
-    }
-    return QString();
 }

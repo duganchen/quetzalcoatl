@@ -12,7 +12,7 @@
 QueueModel::QueueModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
 {
-    setRootItem(new Item(QIcon(), Qt::NoItemFlags, true, false));
+    setRootItem(new Item({}, QIcon(), Qt::NoItemFlags, true, false));
 
     connect(controller, &Controller::queueChanged, this, &QueueModel::setQueue);
     connect(controller, &Controller::songId, this, &QueueModel::setSongId);

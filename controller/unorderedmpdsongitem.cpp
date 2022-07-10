@@ -1,8 +1,9 @@
 #include "unorderedmpdsongitem.h"
 #include "iconnames.h"
 
-UnorderedMPDSongItem::UnorderedMPDSongItem(mpd_song *song, Item *parent)
-    : UnorderedSongItem(QIcon::fromTheme(IconNames::Audio),
+UnorderedMPDSongItem::UnorderedMPDSongItem(std::vector<QString> labels, mpd_song *song, Item *parent)
+    : UnorderedSongItem(labels,
+                        QIcon::fromTheme(IconNames::Audio),
                         Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                         false,
                         false,

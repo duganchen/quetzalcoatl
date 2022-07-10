@@ -1,10 +1,16 @@
 #include "genreartistsongsitem.h"
 #include "controller.h"
 #include "iconnames.h"
+#include "strformats.h"
 #include "unorderedmpdsongitem.h"
 
 GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist, Item *parent)
-    : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+    : Item({"All Songs"},
+           QIcon::fromTheme(IconNames::Database),
+           Qt::ItemIsEnabled,
+           true,
+           true,
+           parent)
     , m_genre(genre)
     , m_artist(artist)
 {}
@@ -16,16 +22,7 @@ QVector<Item *> GenreArtistSongsItem::fetchMore(Controller *controller)
                                                  {MPD_TAG_ARTIST, m_artist}};
     QVector<Item *> items;
     for (auto song : controller->searchSongs(filter)) {
-        items.append(new UnorderedMPDSongItem(song));
+        items.append(new UnorderedMPDSongItem({songLabel(song)}, song));
     }
     return items;
-}
-
-QString GenreArtistSongsItem::text(int column) const
-{
-    if (0 == column) {
-        return "All Songs";
-    }
-
-    return QString();
 }

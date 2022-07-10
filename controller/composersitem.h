@@ -7,8 +7,6 @@ class ComposersItem : public Item
 {
 public:
     ComposersItem(Item *parent = nullptr);
-
-    QString text(int) const override;
     QVector<Item *> fetchMore(Controller *) override;
 };
 

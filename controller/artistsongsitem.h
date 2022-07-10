@@ -10,8 +10,6 @@ public:
 
     QVector<Item *> fetchMore(Controller *) override;
 
-    QString text(int) const override;
-
 private:
     QString m_artist;
 };

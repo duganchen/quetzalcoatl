@@ -2,9 +2,10 @@
 #include "controller.h"
 #include "iconnames.h"
 #include "orderedmpdsongitem.h"
+#include "strformats.h"
 
-AlbumItem::AlbumItem(QString album, Item *parent)
-    : Item(QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true, parent)
+AlbumItem::AlbumItem(const std::vector<QString> &labels, QString album, Item *parent)
+    : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true, parent)
     , m_album(album)
 {}
 
@@ -14,16 +15,7 @@ QVector<Item *> AlbumItem::fetchMore(Controller *controller)
     auto songs = controller->searchSongs(filter);
     QVector<Item *> items;
     for (auto song : songs) {
-        items.append(new OrderedMPDSongItem(song));
-    }
-
+        items.append(new OrderedMPDSongItem({songLabel(song)}, song));
+    };
     return items;
-}
-
-QString AlbumItem::text(int column) const
-{
-    if (0 == column) {
-        return m_album;
-    }
-    return QString();
 }

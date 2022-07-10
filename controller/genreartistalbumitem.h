@@ -6,9 +6,9 @@
 class GenreArtistAlbumItem : public Item
 {
 public:
-    GenreArtistAlbumItem(QString, QString, QString, Item *parent = nullptr);
+    GenreArtistAlbumItem(
+        const std::vector<QString> &, QString, QString, QString, Item *parent = nullptr);
     QVector<Item *> fetchMore(Controller *) override;
-    QString text(int) const override;
 
 private:
     QString m_genre;

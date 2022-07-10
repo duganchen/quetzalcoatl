@@ -8,7 +8,6 @@ class AlbumsItem : public Item
 public:
     AlbumsItem(Item *parent = nullptr);
 
-    QString text(int) const override;
     QVector<Item *> fetchMore(Controller *) override;
 };
 

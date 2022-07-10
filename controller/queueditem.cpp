@@ -3,8 +3,9 @@
 #include "controller.h"
 #include "iconnames.h"
 
-QueuedItem::QueuedItem(mpd_entity *entity, Item *parent)
-    : SongItem(QIcon::fromTheme(IconNames::Audio),
+QueuedItem::QueuedItem(std::vector<QString> labels, mpd_entity *entity, Item *parent)
+    : SongItem(labels,
+               QIcon::fromTheme(IconNames::Audio),
                Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                false,
                false,

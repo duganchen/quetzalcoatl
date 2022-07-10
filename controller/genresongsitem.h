@@ -9,8 +9,6 @@ public:
     GenreSongsItem(Item *parent = nullptr);
 
     QVector<Item *> fetchMore(Controller *) override;
-
-    QString text(int) const override;
 };
 
 #endif // GENRESONGSITEM_H

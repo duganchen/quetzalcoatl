@@ -4,8 +4,8 @@
 #include "controller.h"
 #include "iconnames.h"
 
-ArtistItem::ArtistItem(QString artist, Item *parent)
-    : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+ArtistItem::ArtistItem(const std::vector<QString> &labels, QString artist, Item *parent)
+    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
 
     , m_artist(artist)
 {}
@@ -17,16 +17,7 @@ QVector<Item *> ArtistItem::fetchMore(Controller *controller)
 
     QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_ARTIST, m_artist}};
     for (auto album : controller->searchTags(MPD_TAG_ALBUM, filter)) {
-        items.append(new ArtistAlbumItem(m_artist, album));
+        items.append(new ArtistAlbumItem({album}, m_artist, album));
     }
     return items;
-}
-
-QString ArtistItem::text(int column) const
-{
-    if (0 == column) {
-        return m_artist;
-    }
-
-    return QString();
 }

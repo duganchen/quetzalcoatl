@@ -7,10 +7,10 @@
 class DirectoryItem : public Item
 {
 public:
-    explicit DirectoryItem(mpd_entity *entity, Item *parent = nullptr);
+    explicit DirectoryItem(const std::vector<QString> &labels,
+                           mpd_entity *entity,
+                           Item *parent = nullptr);
     ~DirectoryItem();
-
-    QString text(int) const override;
     QVector<Item *> fetchMore(Controller *) override;
 
 private:

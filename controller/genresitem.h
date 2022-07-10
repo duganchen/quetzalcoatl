@@ -8,7 +8,6 @@ class GenresItem : public Item
 public:
     GenresItem(Item *parent = nullptr);
 
-    QString text(int) const override;
     QVector<Item *> fetchMore(Controller *) override;
 };
 

@@ -10,7 +10,12 @@ class Controller;
 class Item
 {
 public:
-    Item(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
+    Item(const std::vector<QString> &labels,
+         QIcon,
+         Qt::ItemFlags,
+         bool,
+         bool,
+         Item *parent = nullptr);
     virtual ~Item();
 
     void append(Item *at);
@@ -48,6 +53,7 @@ public:
 
 private:
     QVector<Item *> m_children;
+    std::vector<QString> m_labels;
     QIcon m_icon;
     Item *m_parent{};
     Qt::ItemFlags m_flags{};

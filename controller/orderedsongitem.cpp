@@ -1,9 +1,13 @@
 #include "orderedsongitem.h"
 #include "controller.h"
 
-OrderedSongItem::OrderedSongItem(
-    QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, bool couldFetchMore, Item *parent)
-    : SongItem(icon, myFlags, hazChildren, couldFetchMore, parent)
+OrderedSongItem::OrderedSongItem(std::vector<QString> labels, QIcon icon,
+                                 Qt::ItemFlags myFlags,
+                                 bool hazChildren,
+                                 bool couldFetchMore,
+                                 Item *parent
+                                 )
+    : SongItem(labels, icon, myFlags, hazChildren, couldFetchMore, parent)
 {}
 
 void OrderedSongItem::onDoubleClicked(Controller *controller)

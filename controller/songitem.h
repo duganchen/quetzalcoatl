@@ -7,9 +7,7 @@
 class SongItem : public Item
 {
 public:
-    SongItem(QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
-    QString text(int column) const override;
-
+    SongItem(const std::vector<QString> &, QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
     QVariant tooltip() override;
 
     QString uri() override;

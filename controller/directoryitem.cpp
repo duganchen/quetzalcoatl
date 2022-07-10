@@ -1,10 +1,11 @@
 #include "directoryitem.h"
 #include "controller.h"
 #include "iconnames.h"
+#include "strformats.h"
 #include "unorderedentitysongitem.h"
 
-DirectoryItem::DirectoryItem(mpd_entity *entity, Item *parent)
-    : Item(QIcon::fromTheme(IconNames::Harddisk), Qt::ItemIsEnabled, true, true, parent)
+DirectoryItem::DirectoryItem(const std::vector<QString> &labels, mpd_entity *entity, Item *parent)
+    : Item(labels, QIcon::fromTheme(IconNames::Harddisk), Qt::ItemIsEnabled, true, true, parent)
     , m_entity(entity)
 {}
 
@@ -15,25 +16,17 @@ DirectoryItem::~DirectoryItem()
     }
 }
 
-QString DirectoryItem::text(int column) const
-{
-    if (0 == column) {
-        if (m_entity && mpd_entity_get_type(m_entity) == MPD_ENTITY_TYPE_DIRECTORY) {
-            return mpd_directory_get_path(mpd_entity_get_directory(m_entity));
-        }
-        return "/";
-    }
-    return QString();
-}
-
 QVector<Item *> DirectoryItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto entity : controller->listDir(m_entity)) {
         if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_DIRECTORY) {
-            items.append(new DirectoryItem(entity));
+            items.append(
+                new DirectoryItem({mpd_directory_get_path(mpd_entity_get_directory(entity))},
+                                  entity));
         } else {
-            items.append(new UnorderedEntitySongItem(entity));
+            items.append(
+                new UnorderedEntitySongItem({songLabel(mpd_entity_get_song(entity))}, entity));
         }
     }
     return items;

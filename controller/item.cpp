@@ -1,7 +1,13 @@
 #include "item.h"
 
-Item::Item(QIcon icon, Qt::ItemFlags myFlags, bool hazChildren, bool couldFetchMore, Item *parent)
-    : m_icon(icon)
+Item::Item(const std::vector<QString> &labels,
+           QIcon icon,
+           Qt::ItemFlags myFlags,
+           bool hazChildren,
+           bool couldFetchMore,
+           Item *parent)
+    : m_labels{labels}
+    , m_icon(icon)
     , m_parent(parent)
     , m_flags(myFlags)
     , m_hasChildren(hazChildren)
@@ -45,8 +51,10 @@ QIcon Item::icon() const
 
 QString Item::text(int column) const
 {
-    Q_UNUSED(column)
-    return QString();
+    if (column < m_labels.size()) {
+        return m_labels[column];
+    }
+    return QStringLiteral("");
 }
 
 Item *Item::parent()

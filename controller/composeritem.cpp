@@ -6,8 +6,8 @@
 
 #include <mpd/client.h>
 
-ComposerItem::ComposerItem(QString composer, Item *parent)
-    : Item(QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+ComposerItem::ComposerItem(const std::vector<QString> &labels, QString composer, Item *parent)
+    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
 
     , m_composer(composer)
 {}
@@ -19,16 +19,7 @@ QVector<Item *> ComposerItem::fetchMore(Controller *controller)
 
     QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_COMPOSER, m_composer}};
     for (auto album : controller->searchTags(MPD_TAG_ALBUM, filter)) {
-        items.append(new ComposerAlbumItem(m_composer, album));
+        items.append(new ComposerAlbumItem({album}, m_composer, album));
     }
     return items;
-}
-
-QString ComposerItem::text(int column) const
-{
-    if (0 == column) {
-        return m_composer;
-    }
-
-    return QString();
 }

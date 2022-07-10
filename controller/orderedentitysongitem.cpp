@@ -1,8 +1,11 @@
 #include "orderedentitysongitem.h"
 #include "iconnames.h"
 
-OrderedEntitySongItem::OrderedEntitySongItem(mpd_entity *entity, Item *parent)
-    : OrderedSongItem(QIcon::fromTheme(IconNames::Audio),
+OrderedEntitySongItem::OrderedEntitySongItem(const std::vector<QString> &labels,
+                                             mpd_entity *entity,
+                                             Item *parent)
+    : OrderedSongItem(labels,
+                      QIcon::fromTheme(IconNames::Audio),
                       Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                       false,
                       false,

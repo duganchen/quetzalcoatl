@@ -12,7 +12,7 @@
 DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
 {
-    auto dbRootItem = new Item(QIcon(), Qt::NoItemFlags, true, false);
+    auto dbRootItem = new Item({}, QIcon(), Qt::NoItemFlags, true, false);
     dbRootItem->append(new PlaylistsItem());
     dbRootItem->append(new ArtistsItem());
     dbRootItem->append(new AlbumsItem());
@@ -20,7 +20,7 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     dbRootItem->append(new SongsItem());
     dbRootItem->append(new GenresItem());
     dbRootItem->append(new ComposersItem);
-    dbRootItem->append(new DirectoryItem(nullptr));
+    dbRootItem->append(new DirectoryItem({"/"}, nullptr));
 
     setRootItem(dbRootItem);
 
