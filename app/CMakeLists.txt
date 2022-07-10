@@ -1,6 +1,7 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
-add_executable(quetzalcoatl
+add_executable(
+  quetzalcoatl
   connectiondialog.cpp
   main.cpp
   mainwindow.cpp
@@ -9,10 +10,9 @@ add_executable(quetzalcoatl
   playlistvalidator.cpp
   playbacksettingsdialog.cpp
   resources.qrc
-  saveplaylistdialog.cpp
-)
+  saveplaylistdialog.cpp)
 
-
-target_link_libraries(quetzalcoatl PRIVATE controller Qt5::Widgets Qt5::Gui PkgConfig::LIBMPDCLIENT)
-target_include_directories(quetzalcoatl PUBLIC "../controller" ${LIBMPDCLIENT_INCLUDE_DIRS})
-
+target_link_libraries(quetzalcoatl PRIVATE controller Qt::Widgets Qt::Gui
+                                           PkgConfig::LIBMPDCLIENT)
+target_include_directories(quetzalcoatl PUBLIC "../controller"
+                                               ${LIBMPDCLIENT_INCLUDE_DIRS})

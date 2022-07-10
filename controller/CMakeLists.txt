@@ -1,4 +1,5 @@
-add_library(controller SHARED
+add_library(
+  controller SHARED
   albumitem.cpp
   albumsitem.cpp
   artistalbumitem.cpp
@@ -36,9 +37,9 @@ add_library(controller SHARED
   strformats.cpp
   unorderedentitysongitem.cpp
   unorderedmpdsongitem.cpp
-  unorderedsongitem.cpp
-)
+  unorderedsongitem.cpp)
 
 target_include_directories(controller PRIVATE ${LIBMPDCLIENT_INCLUDE_DIRS})
-target_link_libraries(controller PRIVATE Qt5::Network Qt5::Gui PkgConfig::LIBMPDCLIENT)
+target_link_libraries(controller PRIVATE Qt::Network Qt::Gui
+                                         PkgConfig::LIBMPDCLIENT)
 target_compile_definitions(controller PRIVATE CONTROLLER_LIBRARY)
