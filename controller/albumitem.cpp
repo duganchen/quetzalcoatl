@@ -4,14 +4,13 @@
 #include "orderedmpdsongitem.h"
 #include "strformats.h"
 
-AlbumItem::AlbumItem(const std::vector<QString> &labels, QString album, Item *parent)
+AlbumItem::AlbumItem(const std::vector<QString> &labels, Item *parent)
     : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true, parent)
-    , m_album(album)
 {}
 
 QVector<Item *> AlbumItem::fetchMore(Controller *controller)
 {
-    QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_ALBUM, m_album}};
+    QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_ALBUM, text(0)}};
     auto songs = controller->searchSongs(filter);
     QVector<Item *> items;
     for (auto song : songs) {

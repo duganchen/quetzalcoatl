@@ -588,7 +588,7 @@ void Controller::checkStoredPlaylists()
     for (auto playlist : playlists) {
         QString name{mpd_playlist_get_path(playlist)};
         names.append(name);
-        items.append(new PlaylistItem({name}, name));
+        items.append(new PlaylistItem({name}));
     }
 
     emit playlistNames(names);

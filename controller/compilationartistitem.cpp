@@ -3,21 +3,18 @@
 #include "controller.h"
 #include "iconnames.h"
 
-CompilationArtistItem::CompilationArtistItem(const std::vector<QString> &labels,
-                                             QString albumArtist,
-                                             Item *parent)
+CompilationArtistItem::CompilationArtistItem(const std::vector<QString> &labels, Item *parent)
     : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
 
-    , m_albumArtist(albumArtist)
 {}
 
 QVector<Item *> CompilationArtistItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
 
-    QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_ALBUM_ARTIST, m_albumArtist}};
+    QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_ALBUM_ARTIST, text(0)}};
     for (auto album : controller->searchTags(MPD_TAG_ALBUM, filter)) {
-        items.append(new CompilationArtistAlbumItem({album}, m_albumArtist, album));
+        items.append(new CompilationArtistAlbumItem({album}, text(0)));
     }
     return items;
 }

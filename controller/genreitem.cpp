@@ -4,9 +4,8 @@
 #include "genresongsitem.h"
 #include "iconnames.h"
 
-GenreItem::GenreItem(const std::vector<QString> &labels, QString genre, Item *parent)
+GenreItem::GenreItem(const std::vector<QString> &labels, Item *parent)
     : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
-    , m_genre(genre)
 {}
 
 QVector<Item *> GenreItem::fetchMore(Controller *controller)
@@ -15,7 +14,7 @@ QVector<Item *> GenreItem::fetchMore(Controller *controller)
     QVector<Item *> items{new GenreSongsItem()};
     QVector<QPair<mpd_tag_type, QString>> filter{{MPD_TAG_GENRE, text(0)}};
     for (auto artist : controller->searchTags(MPD_TAG_ARTIST, filter)) {
-        items.append(new GenreArtistItem({artist}, m_genre, artist, nullptr));
+        items.append(new GenreArtistItem({artist}, text(0), nullptr));
     }
 
     return items;

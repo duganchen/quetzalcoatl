@@ -11,7 +11,7 @@ QVector<Item *> ArtistsItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto artist : controller->listTags(MPD_TAG_ARTIST)) {
-        items.append(new ArtistItem({artist}, artist));
+        items.append(new ArtistItem({artist}));
     }
     return items;
 }

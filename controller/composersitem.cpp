@@ -16,7 +16,7 @@ QVector<Item *> ComposersItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto composer : controller->listTags(MPD_TAG_COMPOSER)) {
-        items.append(new ComposerItem({composer}, composer, nullptr));
+        items.append(new ComposerItem({composer}));
     }
     return items;
 }

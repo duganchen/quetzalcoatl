@@ -12,7 +12,7 @@ QVector<Item *> AlbumsItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto album : controller->listTags(MPD_TAG_ALBUM)) {
-        items.append(new AlbumItem({album}, album));
+        items.append(new AlbumItem({album}));
     }
     return items;
 }

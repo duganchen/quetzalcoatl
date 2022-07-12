@@ -10,7 +10,7 @@ QVector<Item *> GenresItem::fetchMore(Controller *controller)
 {
     QVector<Item *> items;
     for (auto genre : controller->listTags(MPD_TAG_GENRE)) {
-        items.append(new GenreItem({genre}, genre));
+        items.append(new GenreItem({genre}));
     }
     return items;
 }
