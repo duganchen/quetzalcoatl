@@ -11,7 +11,6 @@ class DatabaseModel : public ItemModel
 
 public:
     explicit DatabaseModel(Controller *, QObject *parent = nullptr);
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QStringList mimeTypes() const override;
     QMimeData *mimeData(const QModelIndexList &) const override;

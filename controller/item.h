@@ -51,6 +51,8 @@ public:
 
     virtual void onDoubleClicked(Controller *);
 
+    int columnCount() const;
+
 private:
     QVector<Item *> m_children;
     std::vector<QString> m_labels;

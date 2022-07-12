@@ -113,6 +113,16 @@ int ItemModel::rowCount(const QModelIndex &parent) const
     return parentItem->count();
 }
 
+int ItemModel::columnCount(const QModelIndex &parent) const
+{
+    // Copy and pasted from Qt's SimpleTreeModel example. This needs the root item to have the correct number
+    // of columns.
+    if (parent.isValid()) {
+        return static_cast<Item *>(parent.internalPointer())->columnCount();
+    }
+    return m_rootItem->columnCount();
+}
+
 void ItemModel::setRootItem(Item *rootItem)
 {
     m_rootItem = rootItem;

@@ -16,8 +16,6 @@ public:
                         Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const override;
 
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
     Qt::ItemFlags flags(const QModelIndex &) const override;
 
     QStringList mimeTypes() const override;

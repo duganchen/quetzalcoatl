@@ -12,7 +12,7 @@
 DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
 {
-    auto dbRootItem = new Item({}, QIcon(), Qt::NoItemFlags, true, false);
+    auto dbRootItem = new Item({""}, QIcon(), Qt::NoItemFlags, true, false);
     dbRootItem->append(new PlaylistsItem());
     dbRootItem->append(new ArtistsItem());
     dbRootItem->append(new AlbumsItem());
@@ -27,12 +27,6 @@ DatabaseModel::DatabaseModel(Controller *controller, QObject *parent)
     connect(controller, &Controller::playlistItems, this, &DatabaseModel::setPlaylists);
     connect(controller, &Controller::connectionState, this, &DatabaseModel::onConnectionChanged);
     connect(controller, &Controller::updated, this, &DatabaseModel::reset);
-}
-
-int DatabaseModel::columnCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent)
-    return 1;
 }
 
 QStringList DatabaseModel::mimeTypes() const

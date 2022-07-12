@@ -135,3 +135,8 @@ void Item::onDoubleClicked(Controller *controller)
 {
     // The default is a no-op.
 }
+
+int Item::columnCount() const
+{
+    return m_labels.size();
+}
