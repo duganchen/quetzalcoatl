@@ -1,15 +1,12 @@
 #include "unorderedentitysongitem.h"
 #include "iconnames.h"
 
-UnorderedEntitySongItem::UnorderedEntitySongItem(std::vector<QString> labels,
-                                                 mpd_entity *entity,
-                                                 Item *parent)
+UnorderedEntitySongItem::UnorderedEntitySongItem(std::vector<QString> labels, mpd_entity *entity)
     : UnorderedSongItem(labels,
                         QIcon::fromTheme(IconNames::Audio),
                         Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                         false,
-                        false,
-                        parent)
+                        false)
     , m_entity(entity)
 {}
 

@@ -6,7 +6,7 @@
 class AlbumItem : public Item
 {
 public:
-    explicit AlbumItem(const std::vector<QString> &labels, Item *parent = nullptr);
+    explicit AlbumItem(const std::vector<QString> &labels);
     QVector<Item *> fetchMore(Controller *) override;
 };
 #endif // ALBUMITEM_H

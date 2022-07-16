@@ -5,9 +5,8 @@
 #include "strformats.h"
 
 CompilationArtistAlbumItem::CompilationArtistAlbumItem(const std::vector<QString> &labels,
-                                                       QString albumArtist,
-                                                       Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true, parent)
+                                                       QString albumArtist)
+    : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true)
     , m_albumArtist(albumArtist)
 {}
 

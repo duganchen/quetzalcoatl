@@ -6,7 +6,7 @@
 class ComposerItem : public Item
 {
 public:
-    explicit ComposerItem(const std::vector<QString> &, Item *parent = nullptr);
+    explicit ComposerItem(const std::vector<QString> &);
 
     QVector<Item *> fetchMore(Controller *) override;
 };

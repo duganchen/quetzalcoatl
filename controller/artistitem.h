@@ -6,7 +6,7 @@
 class ArtistItem : public Item
 {
 public:
-    explicit ArtistItem(const std::vector<QString> &labels, Item *parent = nullptr);
+    explicit ArtistItem(const std::vector<QString> &labels);
 
     QVector<Item *> fetchMore(Controller *) override;
 };

@@ -4,13 +4,8 @@
 #include "strformats.h"
 #include "unorderedmpdsongitem.h"
 
-GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist, Item *parent)
-    : Item({"All Songs"},
-           QIcon::fromTheme(IconNames::Database),
-           Qt::ItemIsEnabled,
-           true,
-           true,
-           parent)
+GenreArtistSongsItem::GenreArtistSongsItem(QString genre, QString artist)
+    : Item({"All Songs"}, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
     , m_genre(genre)
     , m_artist(artist)
 {}

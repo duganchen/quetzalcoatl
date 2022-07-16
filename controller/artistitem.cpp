@@ -4,8 +4,8 @@
 #include "controller.h"
 #include "iconnames.h"
 
-ArtistItem::ArtistItem(const std::vector<QString> &labels, Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+ArtistItem::ArtistItem(const std::vector<QString> &labels)
+    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
 {}
 
 QVector<Item *> ArtistItem::fetchMore(Controller *controller)

@@ -6,9 +6,8 @@
 
 GenreArtistAlbumItem::GenreArtistAlbumItem(const std::vector<QString> &labels,
                                            QString genre,
-                                           QString artist,
-                                           Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+                                           QString artist)
+    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
     , m_genre(genre)
     , m_artist(artist)
 {}

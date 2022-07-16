@@ -4,11 +4,9 @@ Item::Item(const std::vector<QString> &labels,
            QIcon icon,
            Qt::ItemFlags myFlags,
            bool hazChildren,
-           bool couldFetchMore,
-           Item *parent)
+           bool couldFetchMore)
     : m_labels{labels}
     , m_icon(icon)
-    , m_parent(parent)
     , m_flags(myFlags)
     , m_hasChildren(hazChildren)
     , m_canFetchMore(couldFetchMore)

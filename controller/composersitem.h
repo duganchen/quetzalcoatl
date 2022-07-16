@@ -6,7 +6,7 @@
 class ComposersItem : public Item
 {
 public:
-    ComposersItem(Item *parent = nullptr);
+    ComposersItem();
     QVector<Item *> fetchMore(Controller *) override;
 };
 

@@ -4,8 +4,8 @@
 #include "orderedmpdsongitem.h"
 #include "strformats.h"
 
-AlbumItem::AlbumItem(const std::vector<QString> &labels, Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true, parent)
+AlbumItem::AlbumItem(const std::vector<QString> &labels)
+    : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true)
 {}
 
 QVector<Item *> AlbumItem::fetchMore(Controller *controller)

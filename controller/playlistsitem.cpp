@@ -3,13 +3,8 @@
 #include "iconnames.h"
 #include "playlistitem.h"
 
-PlaylistsItem::PlaylistsItem(Item *parent)
-    : Item({"Playlists"},
-           QIcon::fromTheme(IconNames::Favorites),
-           Qt::ItemIsEnabled,
-           true,
-           true,
-           parent)
+PlaylistsItem::PlaylistsItem()
+    : Item({"Playlists"}, QIcon::fromTheme(IconNames::Favorites), Qt::ItemIsEnabled, true, true)
 {}
 
 QVector<Item *> PlaylistsItem::fetchMore(Controller *controller)

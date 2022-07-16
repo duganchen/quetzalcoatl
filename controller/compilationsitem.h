@@ -6,7 +6,7 @@
 class CompilationsItem : public Item
 {
 public:
-    CompilationsItem(Item *parent = nullptr);
+    CompilationsItem();
 
     QVector<Item *> fetchMore(Controller *) override;
 };

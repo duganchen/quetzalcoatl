@@ -6,7 +6,7 @@
 class AlbumsItem : public Item
 {
 public:
-    AlbumsItem(Item *parent = nullptr);
+    AlbumsItem();
 
     QVector<Item *> fetchMore(Controller *) override;
 };

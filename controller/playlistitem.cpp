@@ -4,13 +4,12 @@
 #include "orderedentitysongitem.h"
 #include "strformats.h"
 
-PlaylistItem::PlaylistItem(std::vector<QString> labels, Item *parent)
+PlaylistItem::PlaylistItem(std::vector<QString> labels)
     : Item(labels,
            QIcon::fromTheme(IconNames::Playlist),
            Qt::ItemIsEnabled | Qt::ItemIsEditable,
            true,
-           true,
-           parent)
+           true)
 {}
 
 PlaylistItem::~PlaylistItem() {}

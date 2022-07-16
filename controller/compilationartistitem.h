@@ -6,7 +6,7 @@
 class CompilationArtistItem : public Item
 {
 public:
-    explicit CompilationArtistItem(const std::vector<QString> &, Item *parent = nullptr);
+    explicit CompilationArtistItem(const std::vector<QString> &);
 
     QVector<Item *> fetchMore(Controller *) override;
 };

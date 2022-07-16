@@ -6,9 +6,8 @@ SongItem::SongItem(const std::vector<QString> &labels,
                    QIcon icon,
                    Qt::ItemFlags myFlags,
                    bool hazChildren,
-                   bool couldFetchMore,
-                   Item *parent)
-    : Item(labels, icon, myFlags, hazChildren, couldFetchMore, parent)
+                   bool couldFetchMore)
+    : Item(labels, icon, myFlags, hazChildren, couldFetchMore)
 {}
 
 QVariant SongItem::tooltip()

@@ -7,9 +7,7 @@
 class DirectoryItem : public Item
 {
 public:
-    explicit DirectoryItem(const std::vector<QString> &labels,
-                           mpd_entity *entity,
-                           Item *parent = nullptr);
+    explicit DirectoryItem(const std::vector<QString> &labels, mpd_entity *entity);
     ~DirectoryItem();
     QVector<Item *> fetchMore(Controller *) override;
 

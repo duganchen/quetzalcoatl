@@ -1,13 +1,12 @@
 #include "orderedmpdsongitem.h"
 #include "iconnames.h"
 
-OrderedMPDSongItem ::OrderedMPDSongItem(std::vector<QString> labels, mpd_song *song, Item *parent)
+OrderedMPDSongItem ::OrderedMPDSongItem(std::vector<QString> labels, mpd_song *song)
     : OrderedSongItem(labels,
                       QIcon::fromTheme(IconNames::Audio),
                       Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                       false,
-                      false,
-                      parent)
+                      false)
     , m_song(song)
 {}
 

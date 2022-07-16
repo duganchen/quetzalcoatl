@@ -7,7 +7,7 @@
 class PlaylistItem : public Item
 {
 public:
-    explicit PlaylistItem(std::vector<QString>, Item * = nullptr);
+    explicit PlaylistItem(std::vector<QString>);
     ~PlaylistItem();
     QVector<Item *> fetchMore(Controller *) override;
 };

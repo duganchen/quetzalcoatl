@@ -3,8 +3,8 @@
 #include "genreitem.h"
 #include "iconnames.h"
 
-GenresItem::GenresItem(Item *parent)
-    : Item({"Genres"}, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+GenresItem::GenresItem()
+    : Item({"Genres"}, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
 {}
 QVector<Item *> GenresItem::fetchMore(Controller *controller)
 {

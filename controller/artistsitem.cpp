@@ -3,8 +3,8 @@
 #include "controller.h"
 #include "iconnames.h"
 
-ArtistsItem::ArtistsItem(Item *parent)
-    : Item({"Artists"}, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+ArtistsItem::ArtistsItem()
+    : Item({"Artists"}, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
 {}
 
 QVector<Item *> ArtistsItem::fetchMore(Controller *controller)

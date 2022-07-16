@@ -4,8 +4,8 @@
 #include "strformats.h"
 #include "unorderedentitysongitem.h"
 
-DirectoryItem::DirectoryItem(const std::vector<QString> &labels, mpd_entity *entity, Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::Harddisk), Qt::ItemIsEnabled, true, true, parent)
+DirectoryItem::DirectoryItem(const std::vector<QString> &labels, mpd_entity *entity)
+    : Item(labels, QIcon::fromTheme(IconNames::Harddisk), Qt::ItemIsEnabled, true, true)
     , m_entity(entity)
 {}
 

@@ -6,7 +6,7 @@
 class OrderedMPDSongItem : public OrderedSongItem
 {
 public:
-    explicit OrderedMPDSongItem(std::vector<QString> labels, mpd_song *, Item *parent = nullptr);
+    explicit OrderedMPDSongItem(std::vector<QString> labels, mpd_song *);
     ~OrderedMPDSongItem();
 
 protected:

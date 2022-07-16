@@ -3,13 +3,8 @@
 #include "controller.h"
 #include "iconnames.h"
 
-CompilationsItem::CompilationsItem(Item *parent)
-    : Item({"Compilations"},
-           QIcon::fromTheme(IconNames::Database),
-           Qt::ItemIsEnabled,
-           true,
-           true,
-           parent)
+CompilationsItem::CompilationsItem()
+    : Item({"Compilations"}, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
 {}
 
 QVector<Item *> CompilationsItem::fetchMore(Controller *controller)

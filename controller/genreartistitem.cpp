@@ -5,8 +5,8 @@
 #include "genreartistsongsitem.h"
 #include "iconnames.h"
 
-GenreArtistItem::GenreArtistItem(const std::vector<QString> &labels, QString genre, Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+GenreArtistItem::GenreArtistItem(const std::vector<QString> &labels, QString genre)
+    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
 
     , m_genre(genre)
 {}

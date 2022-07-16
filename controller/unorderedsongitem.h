@@ -6,8 +6,7 @@
 class UnorderedSongItem : public SongItem
 {
 public:
-    UnorderedSongItem(
-        std::vector<QString> labels, QIcon, Qt::ItemFlags, bool, bool, Item *parent = nullptr);
+    UnorderedSongItem(std::vector<QString> labels, QIcon, Qt::ItemFlags, bool, bool);
     void onDoubleClicked(Controller *) override;
 };
 

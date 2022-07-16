@@ -4,10 +4,8 @@
 #include "orderedmpdsongitem.h"
 #include "strformats.h"
 
-ComposerAlbumItem::ComposerAlbumItem(const std::vector<QString> &labels,
-                                     QString composer,
-                                     Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true, parent)
+ComposerAlbumItem::ComposerAlbumItem(const std::vector<QString> &labels, QString composer)
+    : Item(labels, QIcon::fromTheme(IconNames::OpticalAudio), Qt::ItemIsEnabled, true, true)
     , m_composer(composer)
 {}
 

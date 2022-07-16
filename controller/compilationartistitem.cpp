@@ -3,8 +3,8 @@
 #include "controller.h"
 #include "iconnames.h"
 
-CompilationArtistItem::CompilationArtistItem(const std::vector<QString> &labels, Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+CompilationArtistItem::CompilationArtistItem(const std::vector<QString> &labels)
+    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
 
 {}
 

@@ -4,8 +4,8 @@
 #include "strformats.h"
 #include "unorderedmpdsongitem.h"
 
-GenreSongsItem::GenreSongsItem(Item *parent)
-    : Item({"All Songs"}, QIcon(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+GenreSongsItem::GenreSongsItem()
+    : Item({"All Songs"}, QIcon(IconNames::Database), Qt::ItemIsEnabled, true, true)
 {}
 
 QVector<Item *> GenreSongsItem::fetchMore(Controller *controller)

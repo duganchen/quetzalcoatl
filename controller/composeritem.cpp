@@ -6,8 +6,8 @@
 
 #include <mpd/client.h>
 
-ComposerItem::ComposerItem(const std::vector<QString> &labels, Item *parent)
-    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true, parent)
+ComposerItem::ComposerItem(const std::vector<QString> &labels)
+    : Item(labels, QIcon::fromTheme(IconNames::Database), Qt::ItemIsEnabled, true, true)
 {}
 
 QVector<Item *> ComposerItem::fetchMore(Controller *controller)
