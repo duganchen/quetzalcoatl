@@ -12,10 +12,6 @@ class QueueModel : public ItemModel
 public:
     explicit QueueModel(Controller *, QObject *parent = nullptr);
 
-    QVariant headerData(int section,
-                        Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const override;
-
     Qt::ItemFlags flags(const QModelIndex &) const override;
 
     QStringList mimeTypes() const override;

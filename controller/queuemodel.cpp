@@ -12,30 +12,10 @@
 QueueModel::QueueModel(Controller *controller, QObject *parent)
     : ItemModel(controller, parent)
 {
-    setRootItem(new Item({"", ""}, QIcon(), Qt::NoItemFlags, true, false));
+    setRootItem(new Item({"Name", "Time"}, QIcon(), Qt::NoItemFlags, true, false));
 
     connect(controller, &Controller::queueChanged, this, &QueueModel::setQueue);
     connect(controller, &Controller::songId, this, &QueueModel::setSongId);
-}
-
-QVariant QueueModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    if (orientation == Qt::Horizontal) {
-        switch (section) {
-        case 0:
-            return QStringLiteral("Name");
-
-        case 1:
-            return QStringLiteral("Time");
-
-        default:
-            return QVariant();
-        }
-    }
-    return QVariant();
 }
 
 Qt::ItemFlags QueueModel::flags(const QModelIndex &index) const

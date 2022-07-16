@@ -12,6 +12,15 @@ ItemModel::~ItemModel()
     delete m_rootItem;
 }
 
+QVariant ItemModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (Qt::DisplayRole != role || Qt::Horizontal != orientation) {
+        return QVariant();
+    }
+
+    return m_rootItem->text(section);
+}
+
 bool ItemModel::canFetchMore(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
