@@ -1,8 +1,10 @@
 #include "controller.h"
+#include "mpd.h"
 #include "playlistitem.h"
 #include "queueditem.h"
 #include "strformats.h"
 
+#include <memory>
 #include <mpd/client.h>
 
 #include <QCollator>
@@ -12,11 +14,10 @@
 Controller::Controller(QObject *parent)
     : QObject(parent)
 {
-    auto settings = mpd_settings_new(nullptr, 0, 0, nullptr, nullptr);
-    m_defaultHost = mpd_settings_get_host(settings);
-    m_defaultPort = mpd_settings_get_port(settings);
-    m_defaultTimeout = mpd_settings_get_timeout_ms(settings);
-    mpd_settings_free(settings);
+    mpd::settings settings{mpd_settings_new(nullptr, 0, 0, nullptr, nullptr)};
+    m_defaultHost = mpd_settings_get_host(settings.get());
+    m_defaultPort = mpd_settings_get_port(settings.get());
+    m_defaultTimeout = mpd_settings_get_timeout_ms(settings.get());
 }
 
 Controller::~Controller()
