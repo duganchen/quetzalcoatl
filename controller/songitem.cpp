@@ -6,14 +6,10 @@ SongItem::SongItem(const std::vector<QString> &labels,
                    QIcon icon,
                    Qt::ItemFlags myFlags,
                    bool hazChildren,
-                   bool couldFetchMore)
-    : Item(labels, icon, myFlags, hazChildren, couldFetchMore)
+                   bool couldFetchMore,
+                   QString tooltip)
+    : Item(labels, icon, myFlags, hazChildren, couldFetchMore, tooltip)
 {}
-
-QVariant SongItem::tooltip()
-{
-    return songToolTip(song());
-}
 
 QString SongItem::uri()
 {

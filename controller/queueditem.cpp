@@ -3,12 +3,13 @@
 #include "controller.h"
 #include "iconnames.h"
 
-QueuedItem::QueuedItem(std::vector<QString> labels, mpd_entity *entity)
+QueuedItem::QueuedItem(std::vector<QString> labels, mpd_entity *entity, QString tooltip)
     : SongItem(labels,
                QIcon::fromTheme(IconNames::Audio),
                Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                false,
-               false)
+               false,
+               tooltip)
     , m_entity(entity)
 {}
 

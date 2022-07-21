@@ -480,7 +480,8 @@ void Controller::pollForStatus()
             if (mpd_entity_get_type(entity) == MPD_ENTITY_TYPE_SONG) {
                 queue.append(new QueuedItem({songLabel(mpd_entity_get_song(entity)),
                                              songDuration(mpd_entity_get_song(entity))},
-                                            entity));
+                                            entity,
+                                            songToolTip(mpd_entity_get_song(entity))));
             } else {
                 mpd_entity_free(entity);
             }

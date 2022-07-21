@@ -19,7 +19,8 @@ QVector<Item *> PlaylistItem::fetchMore(Controller *controller)
     QVector<Item *> items;
 
     for (auto entity : controller->listPlaylist(text(0))) {
-        items.append(new OrderedEntitySongItem({songLabel(mpd_entity_get_song(entity))}, entity));
+        auto song = mpd_entity_get_song(entity);
+        items.append(new OrderedEntitySongItem({songLabel(song)}, entity, songToolTip(song)));
     }
     return items;
 }

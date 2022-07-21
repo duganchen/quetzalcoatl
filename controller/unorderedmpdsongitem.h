@@ -6,7 +6,7 @@
 class UnorderedMPDSongItem : public UnorderedSongItem
 {
 public:
-    explicit UnorderedMPDSongItem(std::vector<QString> labels, mpd_song *);
+    explicit UnorderedMPDSongItem(std::vector<QString>, mpd_song *, QString);
     ~UnorderedMPDSongItem();
 
 protected:

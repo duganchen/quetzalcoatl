@@ -7,7 +7,7 @@
 class UnorderedEntitySongItem : public UnorderedSongItem
 {
 public:
-    explicit UnorderedEntitySongItem(std::vector<QString>, mpd_entity *);
+    explicit UnorderedEntitySongItem(std::vector<QString>, mpd_entity *, QString);
     ~UnorderedEntitySongItem();
 
 protected:

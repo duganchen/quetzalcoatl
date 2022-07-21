@@ -25,8 +25,8 @@ QVector<Item *> DirectoryItem::fetchMore(Controller *controller)
                 new DirectoryItem({mpd_directory_get_path(mpd_entity_get_directory(entity))},
                                   entity));
         } else {
-            items.append(
-                new UnorderedEntitySongItem({songLabel(mpd_entity_get_song(entity))}, entity));
+            auto song = mpd_entity_get_song(entity);
+            items.append(new UnorderedEntitySongItem({songLabel(song)}, entity, songToolTip(song)));
         }
     }
     return items;

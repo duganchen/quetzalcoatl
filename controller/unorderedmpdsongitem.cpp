@@ -1,12 +1,15 @@
 #include "unorderedmpdsongitem.h"
 #include "iconnames.h"
 
-UnorderedMPDSongItem::UnorderedMPDSongItem(std::vector<QString> labels, mpd_song *song)
+UnorderedMPDSongItem::UnorderedMPDSongItem(std::vector<QString> labels,
+                                           mpd_song *song,
+                                           QString tooltip)
     : UnorderedSongItem(labels,
                         QIcon::fromTheme(IconNames::Audio),
                         Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled,
                         false,
-                        false)
+                        false,
+                        tooltip)
     , m_song(song)
 {}
 

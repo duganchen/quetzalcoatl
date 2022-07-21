@@ -10,7 +10,7 @@ class Controller;
 class Item
 {
 public:
-    Item(const std::vector<QString> &labels, QIcon, Qt::ItemFlags, bool, bool);
+    Item(const std::vector<QString> &labels, QIcon, Qt::ItemFlags, bool, bool, QString = QString());
     virtual ~Item();
 
     void append(Item *at);
@@ -25,7 +25,7 @@ public:
 
     void clear();
 
-    virtual QVariant tooltip();
+    QVariant tooltip();
 
     Qt::ItemFlags flags() const;
 
@@ -56,6 +56,7 @@ private:
     Qt::ItemFlags m_flags{};
     bool m_hasChildren{};
     bool m_canFetchMore{};
+    QString m_tooltip;
 
     Q_DISABLE_COPY(Item)
 };

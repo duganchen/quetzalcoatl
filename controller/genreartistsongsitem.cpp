@@ -17,7 +17,7 @@ QVector<Item *> GenreArtistSongsItem::fetchMore(Controller *controller)
                                                  {MPD_TAG_ARTIST, m_artist}};
     QVector<Item *> items;
     for (auto song : controller->searchSongs(filter)) {
-        items.append(new UnorderedMPDSongItem({songLabel(song)}, song));
+        items.append(new UnorderedMPDSongItem({songLabel(song)}, song, songToolTip(song)));
     }
     return items;
 }

@@ -4,12 +4,14 @@ Item::Item(const std::vector<QString> &labels,
            QIcon icon,
            Qt::ItemFlags myFlags,
            bool hazChildren,
-           bool couldFetchMore)
+           bool couldFetchMore,
+           QString tooltip)
     : m_labels{labels}
     , m_icon(icon)
     , m_flags(myFlags)
     , m_hasChildren(hazChildren)
     , m_canFetchMore(couldFetchMore)
+    , m_tooltip(tooltip)
 {}
 
 Item::~Item()
@@ -76,6 +78,10 @@ int Item::row() const
 
 QVariant Item::tooltip()
 {
+    // Yah this could probably be simplified. I've yet to test that.
+    if (m_tooltip != QString()) {
+        return m_tooltip;
+    }
     return QVariant();
 }
 

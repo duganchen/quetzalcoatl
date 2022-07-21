@@ -7,7 +7,7 @@
 class QueuedItem : public SongItem
 {
 public:
-    explicit QueuedItem(std::vector<QString>, mpd_entity *);
+    explicit QueuedItem(std::vector<QString>, mpd_entity *, QString);
     ~QueuedItem();
 
     void onDoubleClicked(Controller *) override;

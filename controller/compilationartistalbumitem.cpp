@@ -17,7 +17,7 @@ QVector<Item *> CompilationArtistAlbumItem::fetchMore(Controller *controller)
     auto songs = controller->searchSongs(filter);
     QVector<Item *> items;
     for (auto song : songs) {
-        items.append(new OrderedMPDSongItem({songLabel(song)}, song));
+        items.append(new OrderedMPDSongItem({songLabel(song)}, song, songToolTip(song)));
     }
 
     return items;

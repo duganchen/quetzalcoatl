@@ -5,8 +5,9 @@ UnorderedSongItem::UnorderedSongItem(std::vector<QString> labels,
                                      QIcon icon,
                                      Qt::ItemFlags myFlags,
                                      bool hazChildren,
-                                     bool couldFetchMore)
-    : SongItem(labels, icon, myFlags, hazChildren, couldFetchMore)
+                                     bool couldFetchMore,
+                                     QString tooltip)
+    : SongItem(labels, icon, myFlags, hazChildren, couldFetchMore, tooltip)
 {}
 
 void UnorderedSongItem::onDoubleClicked(Controller *controller)
