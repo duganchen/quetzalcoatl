@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(
   Qt5 5.15
-  COMPONENTS Core Widgets Gui Network Test
+  COMPONENTS Core Widgets Gui Network
   REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBMPDCLIENT REQUIRED IMPORTED_TARGET libmpdclient)
