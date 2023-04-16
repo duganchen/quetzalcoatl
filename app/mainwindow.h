@@ -37,6 +37,8 @@ private:
     int m_seekPosition{};
     Controller *m_controller{};
     QAction *m_connectAction{};
+
+    bool m_iconsAreThere{true};
 private slots:
     void setConnectionState(MPDConnection::State);
 };

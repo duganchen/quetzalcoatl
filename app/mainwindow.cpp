@@ -24,6 +24,86 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    if (QIcon::fromTheme(IconNames::Player).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Connect).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Stop).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Start).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Pause).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::SkipForward).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::SkipBackward).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Shuffle).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Repeat).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Remove).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::SaveAll).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Configure).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Playlist).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Audio).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Favorites).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Documents).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Database).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Harddisk).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Sound).isNull()) {
+        m_iconsAreThere = false;
+    }
+
+    if (QIcon::fromTheme(IconNames::OpticalAudio).isNull()) {
+        m_iconsAreThere = false;
+    }
+
     setWindowTitle(tr("Quetzalcoatl"));
 
     onPaletteChanged();
@@ -349,16 +429,15 @@ void MainWindow::changeEvent(QEvent *event)
 
 void MainWindow::onPaletteChanged()
 {
-#ifndef Q_OS_LINUX
+    if (!m_iconsAreThere) {
+        constexpr int OSX_LIGHT_MODE = 236;
+        constexpr int OSX_DARK_MODE = 50;
+        constexpr int THRESHOLD = OSX_LIGHT_MODE / 2 - OSX_DARK_MODE / 2;
 
-    constexpr int OSX_LIGHT_MODE = 236;
-    constexpr int OSX_DARK_MODE = 50;
-    constexpr int THRESHOLD = OSX_LIGHT_MODE / 2 - OSX_DARK_MODE / 2;
-
-    if (palette().color(QPalette::Active, QPalette::Window).lightness() < THRESHOLD) {
-        QIcon::setThemeName(IconNames::Dark);
-    } else {
-        QIcon::setThemeName(IconNames::Light);
+        if (palette().color(QPalette::Active, QPalette::Window).lightness() < THRESHOLD) {
+            QIcon::setThemeName(IconNames::Dark);
+        } else {
+            QIcon::setThemeName(IconNames::Light);
+        }
     }
-#endif
 }
