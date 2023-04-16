@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QFont>
 #include <QIcon>
+#include <QIODevice>
 #include <QItemSelection>
 #include <QMimeData>
 
