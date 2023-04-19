@@ -3,11 +3,11 @@
 
 #include "Controller_global.h"
 #include "connectionstate.h"
+#include "item.h"
 #include <mpd/client.h>
 #include <mpd/status.h>
 #include <QObject>
 
-class Item;
 class QSocketNotifier;
 
 class CONTROLLER_EXPORT Controller : public QObject
