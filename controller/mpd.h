@@ -10,6 +10,10 @@ The idea is to free the programmer from managing the lifetimes of libmpdclient's
 It is not to be an abstraction layer on top of libmpdclient.
 
 Handle errors the way you usually would (e.g. mpd_connection_get_error).
+
+For reference, the definitive list of ways to implement this is here:
+https://www.reddit.com/r/cpp/comments/18zyae6/comment/kgkp9fw/?utm_source=share&utm_medium=web2x&context=3
+
 */
 
 #include <memory>
