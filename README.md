@@ -1,6 +1,6 @@
 # Quetzalcoatl
 
-Quetzalcoatl MPD is an MPD client. It targets Linux and OS X.
+Quetzalcoatl is an MPD client.
 
 ## Screenshots
 
@@ -27,6 +27,8 @@ Hover your mouse over any song or toolbar button to get a tooltip.
 Select songs in the queue to see their combined time. Very useful if you're picking songs for a mix CD.
 
 Right-click on a stored playlist (in the database pane) for options to rename or delete it.
+
+Its design assumes a properly tagged music library. I recommend working over your collection with [Beets](https://beets.io/).
 
 ## Credits
 
