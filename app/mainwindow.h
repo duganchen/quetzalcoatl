@@ -22,8 +22,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void changeEvent(QEvent *);
-
 private:
     QVector<QWidget *> m_connectedWidgets;
     QVector<QAction *> m_connectedActions;
@@ -33,13 +31,13 @@ private:
     ConnectionDialog *m_connectionDialog;
 
 private:
-    void onPaletteChanged();
+    static bool iconsAreThere();
     int m_seekPosition{};
     Controller *m_controller{};
     QAction *m_connectAction{};
 
-    bool m_iconsAreThere{true};
 private slots:
     void setConnectionState(MPDConnection::State);
+    void setIconTheme(Qt::ColorScheme);
 };
 #endif // MAINWINDOW_H

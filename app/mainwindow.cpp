@@ -9,6 +9,7 @@
 #include "queuemodel.h"
 #include "saveplaylistdialog.h"
 
+#include <QApplication>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
@@ -16,6 +17,7 @@
 #include <QSlider>
 #include <QSplitter>
 #include <QStatusBar>
+#include <QStyleHints>
 #include <QTimer>
 #include <QToolBar>
 #include <QTreeView>
@@ -24,89 +26,17 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    if (QIcon::fromTheme(IconNames::Player).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Connect).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Stop).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Start).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Pause).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::SkipForward).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::SkipBackward).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Shuffle).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Repeat).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Remove).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::SaveAll).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Configure).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Playlist).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Audio).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Favorites).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Documents).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Database).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Harddisk).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::Sound).isNull()) {
-        m_iconsAreThere = false;
-    }
-
-    if (QIcon::fromTheme(IconNames::OpticalAudio).isNull()) {
-        m_iconsAreThere = false;
-    }
-
     setWindowTitle(tr("Quetzalcoatl"));
 
-    onPaletteChanged();
+    // On non-Linux system, we use the bundled Breeze icons. They need to change as the system switches between
+    // Light and Dark mode.
+    if (!iconsAreThere()) {
+        setIconTheme(qApp->styleHints()->colorScheme());
+        connect(qApp->styleHints(),
+                &QStyleHints::colorSchemeChanged,
+                this,
+                &MainWindow::setIconTheme);
+    }
 
     setWindowIcon(QIcon::fromTheme(IconNames::Player));
 
@@ -390,6 +320,91 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {}
 
+bool MainWindow::iconsAreThere()
+{
+    if (QIcon::fromTheme(IconNames::Player).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Connect).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Stop).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Start).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Pause).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::SkipForward).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::SkipBackward).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Shuffle).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Repeat).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Remove).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::SaveAll).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Configure).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Playlist).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Audio).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Favorites).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Documents).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Database).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Harddisk).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::Sound).isNull()) {
+        return false;
+    }
+
+    if (QIcon::fromTheme(IconNames::OpticalAudio).isNull()) {
+        return false;
+    }
+
+    return true;
+}
+
 void MainWindow::setConnectionState(MPDConnection::State connectionState)
 {
     m_connectionDialog->setConnectionState(connectionState);
@@ -422,22 +437,11 @@ void MainWindow::setConnectionState(MPDConnection::State connectionState)
     m_connectAction->setEnabled(MPDConnection::State::Disconnected == connectionState);
 }
 
-void MainWindow::changeEvent(QEvent *event)
+void MainWindow::setIconTheme(Qt::ColorScheme colorScheme)
 {
-    onPaletteChanged();
-}
-
-void MainWindow::onPaletteChanged()
-{
-    if (!m_iconsAreThere) {
-        constexpr int OSX_LIGHT_MODE = 236;
-        constexpr int OSX_DARK_MODE = 50;
-        constexpr int THRESHOLD = OSX_LIGHT_MODE / 2 - OSX_DARK_MODE / 2;
-
-        if (palette().color(QPalette::Active, QPalette::Window).lightness() < THRESHOLD) {
-            QIcon::setThemeName(IconNames::Dark);
-        } else {
-            QIcon::setThemeName(IconNames::Light);
-        }
+    if (Qt::ColorScheme::Dark == colorScheme) {
+        QIcon::setThemeName(IconNames::Dark);
+    } else {
+        QIcon::setThemeName(IconNames::Light);
     }
 }

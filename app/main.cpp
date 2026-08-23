@@ -1,4 +1,3 @@
-#include "controller.h"
 #include "mainwindow.h"
 
 #include <QApplication>
