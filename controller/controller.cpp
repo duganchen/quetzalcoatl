@@ -820,7 +820,7 @@ void Controller::setCombinedTime(unsigned duration)
     if (duration) {
         emit combinedTime(timeStr(duration));
     } else {
-        emit combinedTime("");
+        emit combinedTime(QString());
     }
 }
 

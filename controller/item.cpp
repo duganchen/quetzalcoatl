@@ -54,7 +54,7 @@ QString Item::text(int column) const
     if (column < m_labels.size()) {
         return m_labels[column];
     }
-    return QStringLiteral("");
+    return QString();
 }
 
 Item *Item::parent()

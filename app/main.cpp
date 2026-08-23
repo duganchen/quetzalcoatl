@@ -11,10 +11,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("dugan-c");
     QCoreApplication::setOrganizationDomain("duganchen.ca");
     QCoreApplication::setApplicationName("Quetzalcoatl");
-
-    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QApplication app(argc, argv);
 
     // I'm just going to make this a single-instance application. This avoids so many bugs...

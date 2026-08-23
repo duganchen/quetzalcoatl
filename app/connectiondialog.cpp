@@ -58,10 +58,10 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
         m_passwordEdit->setText(settings.value("password").toString());
     }
 
-    connect(m_passwordCheck, &QCheckBox::stateChanged, [=](int state) {
+    connect(m_passwordCheck, &QCheckBox::checkStateChanged, [=](int state) {
         m_passwordEdit->setEnabled(state != Qt::Unchecked);
         if (state == Qt::Unchecked) {
-            m_passwordEdit->setText("");
+            m_passwordEdit->setText(QString());
         }
     });
 
@@ -80,7 +80,7 @@ ConnectionDialog::ConnectionDialog(Controller *controller, QWidget *parent, Qt::
     connect(m_connectButton, &QPushButton::clicked, this, &ConnectionDialog::connectToMPD);
     auto cancelButton = buttonBox->addButton(QDialogButtonBox::Cancel);
     connect(cancelButton, &QPushButton::clicked, this, [=]() {
-        m_errorLabel->setText("");
+        m_errorLabel->setText(QString());
         QDialog::reject();
     });
     m_defaultsButton = buttonBox->addButton(QDialogButtonBox::RestoreDefaults);
@@ -129,14 +129,14 @@ void ConnectionDialog::setConnectionState(MPDConnection::State connectionState)
 
 void ConnectionDialog::connectToMPD()
 {
-    m_errorLabel->setText("");
+    m_errorLabel->setText(QString());
     m_hostEdit->setText(m_hostEdit->text().trimmed());
     m_controller->connectToMPD(m_hostEdit->text(), m_portSpinner->value(), 200);
 }
 
 void ConnectionDialog::restoreDefaults()
 {
-    m_errorLabel->setText("");
+    m_errorLabel->setText(QString());
     m_hostEdit->setText(m_controller->defaultHost());
     m_portSpinner->setValue(m_controller->defaultPort());
     QSettings settings;
